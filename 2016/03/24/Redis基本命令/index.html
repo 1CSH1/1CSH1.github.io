@@ -1,0 +1,940 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Redis,技术人生," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="set/get命令（如果已经存在该key，则替换）
+1&amp;#62; set key &amp;#34;abc&amp;#34;&amp;#10;OK&amp;#10;&amp;#62; get key&amp;#10;&amp;#34;abc&amp;#34;
+如果健存在，则执行失败；如果健不存在，则执行成功：
+1&amp;#62; set key newval nx&amp;#10;(nil)&amp;#10;&amp;#62; set key newval xx&amp;#10;OK
+设置Inte">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis基本命令">
+<meta property="og:url" content="https://1csh1.github.io/2016/03/24/Redis基本命令/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="set/get命令（如果已经存在该key，则替换）
+1&amp;#62; set key &amp;#34;abc&amp;#34;&amp;#10;OK&amp;#10;&amp;#62; get key&amp;#10;&amp;#34;abc&amp;#34;
+如果健存在，则执行失败；如果健不存在，则执行成功：
+1&amp;#62; set key newval nx&amp;#10;(nil)&amp;#10;&amp;#62; set key newval xx&amp;#10;OK
+设置Inte">
+<meta property="og:updated_time" content="2016-03-24T14:11:40.418Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis基本命令">
+<meta name="twitter:description" content="set/get命令（如果已经存在该key，则替换）
+1&amp;#62; set key &amp;#34;abc&amp;#34;&amp;#10;OK&amp;#10;&amp;#62; get key&amp;#10;&amp;#34;abc&amp;#34;
+如果健存在，则执行失败；如果健不存在，则执行成功：
+1&amp;#62; set key newval nx&amp;#10;(nil)&amp;#10;&amp;#62; set key newval xx&amp;#10;OK
+设置Inte">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Redis基本命令 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Redis基本命令
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-24T21:48:06+08:00" content="2016-03-24">
+              2016-03-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Redis/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/24/Redis基本命令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/24/Redis基本命令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/03/24/Redis基本命令/" class="leancloud_visitors" data-flag-title="Redis基本命令">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>set/get命令（如果已经存在该key，则替换）</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; set key &#34;abc&#34;&#10;OK&#10;&#62; get key&#10;&#34;abc&#34;</span><br></pre></td></tr></table></figure>
+<p>如果健存在，则执行失败；如果健不存在，则执行成功：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; set key newval nx&#10;(nil)&#10;&#62; set key newval xx&#10;OK</span><br></pre></td></tr></table></figure>
+<p>设置Integer值，原子性增减</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; set count 100&#10;OK&#10;&#62; incr count&#10;(integer)101&#10;&#62; incr count&#10;(integer)102&#10;&#62; incrby count 50&#10;(integer)152&#10;&#62; decr count 2&#10;(integer)150&#10;&#62; decrby count 50&#10;(integer)100</span><br></pre></td></tr></table></figure>
+<p><strong>mset/mget命令</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; mset a 10 b 20 c 30&#10;OK&#10;&#62; mget a b c&#10;1) &#34;10&#34;&#10;2) &#34;20&#34;&#10;3) &#34;30&#34;</span><br></pre></td></tr></table></figure>
+<p><strong>exists命令【返回1表示数据库中存在，返回0表示数据库中不存在】</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; set mykey hello&#10;OK&#10;&#62; exists mykey&#10;(integer) 1&#10;&#62; del mykey&#10;(integer) 1&#10;&#62; exists mykey&#10;(integer) 0</span><br></pre></td></tr></table></figure>
+<p><strong>type命令【返回某个键的值的类型】</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; set key x&#10;OK&#10;&#62; type key&#10;string&#10;&#62; del key&#10;(integer) 1&#10;&#62; type key&#10;none</span><br></pre></td></tr></table></figure>
+<p><strong>expire命令</strong><br>过期时间可以设置为秒或者毫秒精度。<br>过期时间分辨率总是 1 毫秒。<br>过期信息被复制和持久化到磁盘，当 Redis 停止时时间仍然在计算 (也就是说 Redis 保存了过期时间)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; set key &#34;expire&#34;&#10;OK&#10;&#62; expire key 5&#10;(integer) 1&#10;&#62; get key &#10;&#34;expire&#34;&#10;&#62; get key //5&#31186;&#36807;&#21518;&#10;(nil)&#10;//&#35774;&#32622;&#36807;&#26399;&#26102;&#38388; 10 &#31186;&#10;&#62; set key 100 ex 10&#10;OK&#10;//&#26597;&#30475;&#21097;&#20313;&#26102;&#38388;&#10;&#62; ttl key&#10;(integer) 6&#10;&#62; ttl key&#10;(integer) 3&#10;//&#35774;&#32622;&#27627;&#31186;&#32423;&#65292;&#29992;pexpire/pttl&#21629;&#20196;&#10;&#62;set key &#34;expire&#34;&#10;OK&#10;&#62; pexpire key 10000&#10;(integer) 1&#10;&#62; pttl key&#10;(integer) 4107&#10;&#62; pttl key&#10;(integer) 1108</span><br></pre></td></tr></table></figure>
+<p><strong>lpush / rpush / lrange / lpop / rpop 命令</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//rpush &#20174;&#21491;&#36793;&#28155;&#21152;&#19968;&#20010;&#20803;&#32032;&#10;&#62; rpush list A&#10;(integer) 1&#10;&#62; rpush list B&#10;(integer) 2&#10;//lpush &#20174;&#24038;&#36793;&#28155;&#21152;&#19968;&#20010;&#20803;&#32032;&#10;&#62; lpush list C&#10;(integer) 3&#10;//lrange x[&#24320;&#22987;&#20803;&#32032;] y[&#32467;&#26463;&#20803;&#32032;] &#21487;&#20197;&#26159;&#36127;&#25968;&#65292;-1&#34920;&#31034;&#26368;&#21518;&#19968;&#20010;&#20803;&#32032;&#65292;-2&#34920;&#31034;&#20498;&#25968;&#31532;&#20108;&#20010;&#20803;&#32032;&#10;&#62; lrange list 0 -1&#10;1) &#34;C&#34;&#10;2) &#34;A&#34;&#10;3) &#34;B&#34;&#10;&#62; lrange list 0 1&#10;1) &#34;C&#34;&#10;2) &#34;A&#34;&#10;&#62; lrange list 0 2&#10;1) &#34;C&#34;&#10;2) &#34;A&#34;&#10;3) &#34;B&#34;&#10;//&#21487;&#20197;&#21516;&#26102;&#28155;&#21152;&#22810;&#20010;&#20803;&#32032;&#10;&#62; rpush mlist 1 2 3 4 5 6 &#34;abc&#34;&#10;(integer) 7&#10;&#62; lrange mlist 0 -1&#10;1) &#34;1&#34;&#10;2) &#34;2&#34;&#10;3) &#34;3&#34;&#10;4) &#34;4&#34;&#10;5) &#34;5&#34;&#10;6) &#34;6&#34;&#10;7) &#34;abc&#34;&#10;//lpop &#20174;&#24038;&#36793;&#24377;&#20986;&#20803;&#32032;&#10;&#62; lpop mlist&#10;&#34;1&#34;&#10;//rpop &#20174;&#21491;&#36793;&#24377;&#20986;&#20803;&#32032;&#10;&#62; rpop mlist&#10;&#34;abc&#34;</span><br></pre></td></tr></table></figure>
+<p><strong>ltrim 命令</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; rpush nlist 1 2 3 4 5&#10;(integer) 5&#10;//&#20445;&#23384;0 - 2 &#30340;&#20803;&#32032;&#65292;&#20854;&#20182;&#20803;&#32032;&#20002;&#24323;&#25481;&#10;&#62; ltrim nlist 0 2&#10;OK&#10;&#62; lrange nlist 0 -1&#10;1) &#34;1&#34;&#10;2) &#34;2&#34;&#10;3) &#34;3&#34;</span><br></pre></td></tr></table></figure>
+<p>列表阻塞操作<br><strong>BRPOP 和 BLPOP 两个命令</strong><br>它们是当列表为空时 RPOP 和 LPOP 的会阻塞版本：仅当<br>一个新元素被添加到列表时，或者到达了用户的指定超时时间，才返回给调用者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//&#20808;&#23558;tasks&#22635;&#20837;&#20803;&#32032;&#10;&#62; rpush tasks 1 2 3&#10;(integer) 3&#10;//&#22914;&#26524;tasks&#26377;&#20803;&#32032;&#65292;&#21017;&#24377;&#20986;&#21491;&#36793;&#30340;&#19968;&#20010;&#20803;&#32032;&#65292;&#22914;&#26524;tasks&#26080;&#20803;&#32032;&#65292;&#21017;&#31561;&#24453;5&#31186;&#65292;&#22914;&#26524;5&#31186;&#20869;&#27809;&#26377;&#20803;&#32032;&#28155;&#21152;&#21040;tasks&#65292;&#21017;&#36820;&#22238;null&#10;&#62; brpop tasks 5&#10;1) &#34;tasks&#34;&#10;2) &#34;3&#34;&#10;&#62; blpop tasks 5&#10;1) &#34;tasks&#34;&#10;2) &#34;1&#34;&#10;&#62; blpop tasks 5&#10;1) &#34;tasks&#34;&#10;2) &#34;2&#34;&#10;&#62; blpop tasks 5&#10;(nil)&#10;(5.08s)</span><br></pre></td></tr></table></figure>
+<p>集合、有序集合、哈希三条规则：</p>
+<ol>
+<li>当我们向聚合(aggregate)数据类型添加一个元素，如果目标键不存在，添加元素前将创建一个空的聚合数<br>据类型。</li>
+<li>当我们从聚合数据类型删除一个元素，如果值为空，则键也会被销毁。</li>
+<li>调用一个像 LLEN 的只读命令(返回列表的长度)，或者一个写命令从空键删除元素，总是产生和操作一个持<br>有空聚合类型值的键一样的结果。</li>
+</ol>
+<p>规则1：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; del mylist&#10;(integer) 1&#10;&#62; lpush mylist 1 2 3&#10;(integer) 3</span><br></pre></td></tr></table></figure>
+<p>不能执行一个错误键类型的操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; set foo bar&#10;OK&#10;&#62; lpush foo 1 2 3&#10;(error) WRONGTYPE Operation against a key holding the wrong kind of value&#10;&#62; type foo&#10;string</span><br></pre></td></tr></table></figure>
+<p>规则2：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; lpush mylist 1 2 3&#10;(integer) 3&#10;&#62; exists mylist&#10;(integer) 1&#10;&#62; lpop mylist&#10;&#34;3&#34;&#10;&#62; lpop mylist&#10;&#34;2&#34;&#10;&#62; lpop mylist&#10;&#34;1&#34;&#10;&#62; exists mylist&#10;(integer) 0</span><br></pre></td></tr></table></figure></p>
+<p>当所有元素弹出后，键就不存在了</p>
+<p>规则3：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; del mylist&#10;(integer) 0&#10;&#62; llen mylist&#10;(integer) 0&#10;&#62; lpop mylist&#10;(nil)</span><br></pre></td></tr></table></figure>
+<p><strong>哈希/散列</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; hmset user:1000 username csh birthday 1993 address GZ&#10;OK&#10;&#62; hget user:1000 username&#10;&#34;csh&#34;&#10;&#62; hget user:1000 birthday&#10;&#34;1993&#34;&#10;&#62; hget user:1000 address&#10;&#34;GZ&#34;&#10;//&#33719;&#21462;&#25152;&#26377;&#38190;&#20540;&#23545;&#10;&#62; hgetall user:1000&#10;1) &#34;username&#34;&#10;2) &#34;csh&#34;&#10;3) &#34;birthday&#34;&#10;4) &#34;1993&#34;&#10;5) &#34;address&#34;&#10;6) &#34;GZ&#34;&#10;//&#26681;&#25454;&#20256;&#20837;&#30340;&#22810;&#20010;&#38190;&#33719;&#21462;&#30456;&#24212;&#30340;&#20540;&#65292;&#22914;&#26524;&#27809;&#26377;&#35813;&#38190;&#20540;&#23545;&#65292;&#21017;&#36820;&#22238;(nil)&#10;&#62; hmget user:1000 username birthday no-such-field&#10;1) &#34;csh&#34;&#10;2) &#34;1993&#34;&#10;3) (nil)&#10;//&#33258;&#22686;&#38190;&#20540;&#23545;&#30340;&#20540;&#10;&#62; hincrby user:1000 birthday 10&#10;(integer) 2003&#10;&#62; hincrby user:1000 birthday 10&#10;(integer) 2013</span><br></pre></td></tr></table></figure>
+<p>Set操作</p>
+<p><strong>SADD 命令【添加元素到集合】</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; sadd myset 1 2 3&#10;(integer) 3&#10;&#62; smembers myset&#10;1. 3&#10;2. 1&#10;3. 2</span><br></pre></td></tr></table></figure>
+<p><strong>sismember 命令【判断元素是否在set中】</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; sismember myset 3&#10;(integer) 1&#10;&#62; sismember myset 30&#10;(integer) 0</span><br></pre></td></tr></table></figure>
+<p>假设，我们想标记新闻。如果我们的 ID 为 1000 的新闻，被标签 1，2，5 和 77 标记，我们可以有一个这篇新闻<br>被关联标记 ID 的集合：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; sadd news:1000:tags 1 2 5 77&#10;(integer) 4</span><br></pre></td></tr></table></figure>
+<p>然而有时候我们也想要一些反向的关系：被某个标签标记的所有文章：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; sadd tag:1:news 1000&#10;(integer) 1&#10;&#62; sadd tag:2:news 1000&#10;(integer) 1&#10;&#62; sadd tag:5:news 1000&#10;(integer) 1&#10;&#62; sadd tag:77:news 1000&#10;(integer) 1</span><br></pre></td></tr></table></figure></p>
+<p><strong>smembers 命令【获取指定对象的标签】</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; smembers news:1000:tags&#10;1. 5&#10;2. 1&#10;3. 77&#10;4. 2</span><br></pre></td></tr></table></figure>
+<p><strong>sinter 命令【获取同时被1,2,10,27标记的新闻】</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; sinter tag:1:news tag:2:news tag:10:news tag:27:news&#10;... results here ...</span><br></pre></td></tr></table></figure></p>
+<p>扑克例子：<br>&emsp;&emsp;抽取一个元素的命令是 SPOP，就方便为很多问题建模。<br>&emsp;&emsp;例如，为了实现一个基于 web 的扑克游戏，你可以将你的一副牌表示为集合。假设我们使用一个字符前缀表示(C)lubs 梅花， (D)iamonds 方块，(H)earts 红心，(S)pades 黑桃。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; sadd deck C1 C2 C3 C4 C5 C6 C7 C8 C9 C10 CJ CQ CK&#10;D1 D2 D3 D4 D5 D6 D7 D8 D9 D10 DJ DQ DK H1 H2 H3&#10;H4 H5 H6 H7 H8 H9 H10 HJ HQ HK S1 S2 S3 S4 S5 S6&#10;S7 S8 S9 S10 SJ SQ SK&#10;(integer) 52</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp;现在我们为每位选手提供 5 张牌。SPOP 命令删除一个随机元素，返回给客户端，是这个场景下的最佳操作。<br>&emsp;&emsp;然而，如果我们直接对这副牌调用，下一局我们需要再填充一副牌，这个可能不太理想。所以我们一开始要复制一下 deck 键的集合到 game:1:deck 键。<br>&emsp;&emsp;这是通过使用 SUNIONSTORE 命令完成的，这个命令通常对多个集合执行交集，然后把结果存储在另一个集合中。而对单个集合求交集就是其自身，于是我可以这样拷贝我的这副牌：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; sunionstore game:1:deck deck&#10;(integer) 52</span><br></pre></td></tr></table></figure>
+<p>现在我们准备好为第一个选手提供 5 张牌：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; spop game:1:deck&#10;&#34;C6&#34;&#10;&#62; spop game:1:deck&#10;&#34;CQ&#34;&#10;&#62; spop game:1:deck&#10;&#34;D1&#34;&#10;&#62; spop game:1:deck&#10;&#34;CJ&#34;&#10;&#62; spop game:1:deck&#10;&#34;SJ&#34;</span><br></pre></td></tr></table></figure></p>
+<p>&emsp;&emsp;只有一对 jack，不太理想……<br>&emsp;&emsp;现在是时候介绍提供集合中元素数量的命令。这个在集合理论中称为集合的基数(cardinality，也称集合的势)，所以相应的 Redis 命令称为 SCARD。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; scard game:1:deck&#10;(integer) 47</span><br></pre></td></tr></table></figure>
+<p>数学计算式为：52 - 5 = 47。<br>&emsp;&emsp;当你只需要获得随机元素而不需要从集合中删除，SRANDMEMBER 命令则适合你完成任务。它具有返回重复的和非重复的元素的能力。</p>
+<p>有序集合（Sorted Sets）<br>按照如下规则排序：<br>• 如果 A 和 B 是拥有不同分数的元素，A.score &gt; B.score，则 A &gt; B。<br>• 如果 A 和 B 是有相同的分数的元素，如果按字典顺序 A 大于 B，则 A &gt; B。A 和 B 不能相同，因为排序集合只能有唯一元素。</p>
+<p><strong>zadd命令【添加有序集合元素】</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; zadd hackers 1940 &#34;Alan Kay&#34;&#10;(integer) 1&#10;&#62; zadd hackers 1957 &#34;Sophie Wilson&#34;&#10;(integer 1)&#10;&#62; zadd hackers 1953 &#34;Richard Stallman&#34;&#10;(integer) 1&#10;&#62; zadd hackers 1949 &#34;Anita Borg&#34;&#10;(integer) 1&#10;&#62; zadd hackers 1965 &#34;Yukihiro Matsumoto&#34;&#10;(integer) 1&#10;&#62; zadd hackers 1914 &#34;Hedy Lamarr&#34;&#10;(integer) 1&#10;&#62; zadd hackers 1916 &#34;Claude Shannon&#34;&#10;(integer) 1&#10;&#62; zadd hackers 1969 &#34;Linus Torvalds&#34;&#10;(integer) 1&#10;&#62; zadd hackers 1912 &#34;Alan Turing&#34;&#10;(integer) 1</span><br></pre></td></tr></table></figure>
+<p><strong>zrange命令【获取有序集合的一个范围】</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; zrange hackers 0 -1&#10;1) &#34;Alan Turing&#34;&#10;2) &#34;Hedy Lamarr&#34;&#10;3) &#34;Claude Shannon&#34;&#10;4) &#34;Alan Kay&#34;&#10;5) &#34;Anita Borg&#34;&#10;6) &#34;Richard Stallman&#34;&#10;7) &#34;Sophie Wilson&#34;&#10;8) &#34;Yukihiro Matsumoto&#34;&#10;9) &#34;Linus Torvalds&#34;</span><br></pre></td></tr></table></figure>
+<p><strong>zrevrange命令【反顺序】</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; zrevrange hackers 0 -1&#10;1) &#34;Linus Torvalds&#34;&#10;2) &#34;Yukihiro Matsumoto&#34;&#10;3) &#34;Sophie Wilson&#34;&#10;4) &#34;Richard Stallman&#34;&#10;5) &#34;Anita Borg&#34;&#10;6) &#34;Alan Kay&#34;&#10;7) &#34;Claude Shannon&#34;&#10;8) &#34;Hedy Lamarr&#34;&#10;9) &#34;Alan Turing&#34;&#10;//&#28155;&#21152;withscores&#26469;&#26174;&#31034;&#20998;&#25968;&#10;&#62; zrange hackers 0 -1 withscores&#10;1) &#34;Alan Turing&#34;&#10;2) &#34;1912&#34;&#10;3) &#34;Hedy Lamarr&#34;&#10;4) &#34;1914&#34;&#10;5) &#34;Claude Shannon&#34;&#10;6) &#34;1916&#34;&#10;7) &#34;Alan Kay&#34;&#10;8) &#34;1940&#34;&#10;9) &#34;Anita Borg&#34;&#10;10) &#34;1949&#34;&#10;11) &#34;Richard Stallman&#34;&#10;12) &#34;1953&#34;&#10;13) &#34;Sophie Wilson&#34;&#10;14) &#34;1957&#34;&#10;15) &#34;Yukihiro Matsumoto&#34;&#10;16) &#34;1965&#34;&#10;17) &#34;Linus Torvalds&#34;&#10;18) &#34;1969&#34;</span><br></pre></td></tr></table></figure>
+<p><strong>zrangebyscore / zremrangebyscore / zrank 命令</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//&#36820;&#22238;&#20998;&#25968;&#22312;&#36127;&#26080;&#31351;&#21040; 1950 &#20043;&#38388;&#30340;&#25152;&#26377;&#20803;&#32032;(&#21253;&#25324;&#20004;&#20010;&#26497;&#31471;)&#10;&#62; zrangebyscore hackers -inf 1950&#10;1) &#34;Alan Turing&#34;&#10;2) &#34;Hedy Lamarr&#34;&#10;3) &#34;Claude Shannon&#34;&#10;4) &#34;Alan Kay&#34;&#10;5) &#34;Anita Borg&#34;&#10;//&#21024;&#38500;&#20986;&#29983;&#20110;1940&#21040;1960&#30340;&#20154;&#10;&#62; zremrangebyscore hackers 1940 1960&#10;(integer) 4&#10;//&#36820;&#22238;&#25490;&#34892;&#10;&#62; zrank hackers &#34;Anita Borg&#34;&#10;(integer) 4</span><br></pre></td></tr></table></figure>
+<p>字典分数<br>如果集合中有相同的分数，允许按字典顺序获取范围</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; zadd hackers 0 &#34;Alan Kay&#34; 0 &#34;Sophie Wilson&#34; 0 &#34;Richard Stallman&#34; 0&#10;&#34;Anita Borg&#34; 0 &#34;Yukihiro Matsumoto&#34; 0 &#34;Hedy Lamarr&#34; 0 &#34;Claude Shannon&#34;&#10;0 &#34;Linus Torvalds&#34; 0 &#34;Alan Turing&#34;&#10;//&#20998;&#25968;&#30456;&#21516;&#30340;&#25353;&#29031;&#23383;&#27597;&#23383;&#20856;&#39034;&#24207;&#25490;&#10;&#62; zrange hackers 0 -1&#10;1) &#34;Alan Kay&#34;&#10;2) &#34;Alan Turing&#34;&#10;3) &#34;Anita Borg&#34;&#10;4) &#34;Claude Shannon&#34;&#10;5) &#34;Hedy Lamarr&#34;&#10;6) &#34;Linus Torvalds&#34;&#10;7) &#34;Richard Stallman&#34;&#10;8) &#34;Sophie Wilson&#34;&#10;9) &#34;Yukihiro Matsumoto&#34;&#10;//&#26597;&#35810;&#20174;B&#21040;P&#30340;&#20803;&#32032;&#10;&#62; zrangebylex hackers [B [P&#10;1) &#34;Claude Shannon&#34;&#10;2) &#34;Hedy Lamarr&#34;&#10;3) &#34;Linus Torvalds</span><br></pre></td></tr></table></figure>
+<p>位图（Bitmaps）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#62; setbit key 10 1&#10;(integer) 1&#10;&#62; getbit key 10&#10;(integer) 1&#10;&#62; getbit key 11&#10;(integer) 0&#10;&#62; setbit key 0 1&#10;(integer) 0&#10;&#62; setbit key 100 1&#10;(integer) 0&#10;//&#33719;&#21462;&#20010;&#25968;&#10;&#62; bitcount key&#10;(integer) 2</span><br></pre></td></tr></table></figure>
+<p><strong>回收策略(Eviction policies)</strong><br>&emsp;&emsp;当 maxmemory 限制到达的时候，Redis 将采取的准确行为是由 maxmemory-policy 配置指令配置的。<br>以下策略可用：<br>• noeviction：当到达内存限制时返回错误。当客户端尝试执行命令时会导致更多内存占用(大多数写命令，除<br>了 DEL 和一些例外)。<br>• allkeys-lru：回收最近最少使用(LRU)的键，为新数据腾出空间。<br>• volatile-lru：回收最近最少使用(LRU)的键，但是只回收有设置过期的键，为新数据腾出空间。<br>• allkeys-random：回收随机的键，为新数据腾出空间。<br>• volatile-random：回收随机的键，但是只回收有设置过期的键，为新数据腾出空间。<br>• volatile-ttl：回收有设置过期的键，尝试先回收离 TTL 最短时间的键，为新数据腾出空间。<br>&emsp;&emsp;当没有满足前提条件的话，volatile-lru，volatile-random 和 volatile-ttl 策略就表现得和 noeviction 一样了。<br>&emsp;&emsp;选择正确的回收策略是很重要的，取决于你的应用程序的访问模式，但是，你可以在程序运行时重新配置策略，使用 INFO 输出来监控缓存命中和错过的次数，以调优你的设置。<br>一般经验规则：<br>&emsp;&emsp;• 如果你期待你的用户请求呈现幂律分布(power-law distribution)，也就是，你期待一部分子集元素被访问得远比其他元素多，可以使用 allkeys-lru 策略。在你不确定时这是一个好的选择。<br>&emsp;&emsp;• 如果你是循环周期的访问，所有的键被连续扫描，或者你期待请求正常分布(每个元素以相同的概率被访问)，可以使用 allkeys-random 策略。<br>&emsp;&emsp;• 如果你想能给 Redis 提供建议，通过使用你创建缓存对象的时候设置的 TTL 值，确定哪些对象应该被过期，你可以使用 volatile-ttl 策略。<br>&emsp;&emsp;当你想使用单个实例来实现缓存和持久化一些键，allkeys-lru 和 volatile-random 策略会很有用。但是，通常最好是运行两个 Redis 实例来解决这个问题。<br>&emsp;&emsp;另外值得注意的是，为键设置过期时间需要消耗内存，所以使用像 allkeys-lru 这样的策略会更高效，因为在内存压力下没有必要为键的回收设置过期时间。</p>
+<p><strong>回收过程 (Eviction process)</strong><br>&emsp;&emsp;理解回收的过程是这么运作的非常的重要：<br>&emsp;&emsp;&emsp;• 一个客户端运行一个新命令，添加了新数据。<br>&emsp;&emsp;&emsp;• Redis 检查内存使用情况，如果大于 maxmemory 限制，根据策略来回收键。<br>&emsp;&emsp;&emsp;• 一个新的命令被执行，如此等等。<br>&emsp;&emsp;我们通过检查，然后回收键以返回到限制以下，来连续不断的穿越内存限制的边界。<br>&emsp;&emsp;如果一个命令导致大量的内存被占用 (像一个很大的集合交集保存到一个新的键)，一会功夫内存限制就会被这个明显的内存量所超越。</p>
+<p>参考文章：<br><a href="http://wiki.jikexueyuan.com/project/redis-guide/" target="_blank" rel="external">Redis 3.0 中文版</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag">#Redis</a>
+          
+            <a href="/tags/技术人生/" rel="tag">#技术人生</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/22/LVS的3种负载均衡技术的测试/" rel="next" title="LVS的3种负载均衡技术的测试">
+                <i class="fa fa-chevron-left"></i> LVS的3种负载均衡技术的测试
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/25/配置Hadoop2-x的HDFS、MapReduce来运行WordCount程序/" rel="prev" title="配置Hadoop2.x的HDFS、MapReduce来运行WordCount程序">
+                配置Hadoop2.x的HDFS、MapReduce来运行WordCount程序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/24/Redis基本命令/"
+           data-title="Redis基本命令" data-url="https://1csh1.github.io/2016/03/24/Redis基本命令/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>  
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

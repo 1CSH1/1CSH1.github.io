@@ -1,0 +1,881 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RPC,Thrift,封装," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="摘要：前面几篇文章简单介绍了Thrift的基本知识和小案例。接下来这篇文章讲述在项目中使用Thrift框架作为RPC通信的时候，如何去封装Thrift，使我们在项目中使用的时候可以更简单易用。文中的代码不一定是真的项目应用中的代码，只是写了一个粗糙的例子，提供一个封装思想。
+
+ 目标 ：从前面的文章的几个例子可以看出，我们在调用一个接口的一个方法的时候，需要写多几行代码来设置RPC通信的信息，而我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thrift封装">
+<meta property="og:url" content="https://1csh1.github.io/2017/03/16/Thrift封装/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="摘要：前面几篇文章简单介绍了Thrift的基本知识和小案例。接下来这篇文章讲述在项目中使用Thrift框架作为RPC通信的时候，如何去封装Thrift，使我们在项目中使用的时候可以更简单易用。文中的代码不一定是真的项目应用中的代码，只是写了一个粗糙的例子，提供一个封装思想。
+
+ 目标 ：从前面的文章的几个例子可以看出，我们在调用一个接口的一个方法的时候，需要写多几行代码来设置RPC通信的信息，而我">
+<meta property="og:updated_time" content="2017-03-17T00:03:28.896Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Thrift封装">
+<meta name="twitter:description" content="摘要：前面几篇文章简单介绍了Thrift的基本知识和小案例。接下来这篇文章讲述在项目中使用Thrift框架作为RPC通信的时候，如何去封装Thrift，使我们在项目中使用的时候可以更简单易用。文中的代码不一定是真的项目应用中的代码，只是写了一个粗糙的例子，提供一个封装思想。
+
+ 目标 ：从前面的文章的几个例子可以看出，我们在调用一个接口的一个方法的时候，需要写多几行代码来设置RPC通信的信息，而我">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Thrift封装 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Thrift封装
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-03-16T08:00:00+08:00" content="2017-03-16">
+              2017-03-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Thrift/" itemprop="url" rel="index">
+                    <span itemprop="name">Thrift</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/16/Thrift封装/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/16/Thrift封装/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/03/16/Thrift封装/" class="leancloud_visitors" data-flag-title="Thrift封装">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>摘要：前面几篇文章简单介绍了Thrift的基本知识和小案例。接下来这篇文章讲述在项目中使用Thrift框架作为RPC通信的时候，如何去封装Thrift，使我们在项目中使用的时候可以更简单易用。文中的代码不一定是真的项目应用中的代码，只是写了一个粗糙的例子，提供一个封装思想。</p>
+</blockquote>
+<p><strong> 目标 </strong>：从前面的文章的几个例子可以看出，我们在调用一个接口的一个方法的时候，需要写多几行代码来设置RPC通信的信息，而我们调用本地的某个类的一个方法的时候，我们只需要2行代码就可以了，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HelloService helloService = new HelloService();&#10;helloService.sayHello();</span><br></pre></td></tr></table></figure></p>
+<p>我们肯定是希望在使用Thrift作为RPC通信的时候，不管是Server端还是Client端，都可以像上面调用本地方法一样，只需要2行代码就搞定。带着这个目的，我们通过下面的代码来实现它。</p>
+<p><strong> 使用手段 </strong>：当我想到希望不管在Server端还是Client端，都用2行代码来实现Thrift调用的时候，我想到了Spring的AOP，我觉得跟它很相似，首先我们在调用一个方法的时候，需要设置一大堆东西，执行完方法的时候，又要把通讯关掉，这很符合AOP面向切面编程的思维。我们可以通过AOP把除了执行业务的代码给封装掉，让使用的时候只需要new一个对象然后就可以调用它的方法。AOP是用动态代理实现的，而动态代理跟反射息息相关。这个案例可以让我们重新回顾一下这些知识点。</p>
+<h1 id="IDL_u63A5_u53E3_u5B9A_u4E49"><a href="#IDL_u63A5_u53E3_u5B9A_u4E49" class="headerlink" title="IDL接口定义"></a>IDL接口定义</h1><p>HelloService.thrift<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">namespace java com.thrift.demo.service &#10;service HelloService &#123;&#10;    i32 sayInt(1:i32 param)&#10;    string sayString(1:string param)&#10;    bool sayBoolean(1:bool param)&#10;    void sayVoid()&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>TestService.thrift<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">struct Test &#123;&#10;  1: required bool bool_; //required &#24517;&#39035;&#22635;&#20805;&#20063;&#24517;&#39035;&#24207;&#21015;&#21270;&#10;  2: optional i8 i8_; //optional &#19981;&#22635;&#20805;&#21017;&#19981;&#24207;&#21015;&#21270;&#10;  3: i16 i16_;&#10;  4: i32 i32_;&#10;  5: i64 i64_;&#10;  6: double double_;&#10;  7: string string_;&#10;  8: binary binary_;&#10;&#125;&#10;&#10;service TestService &#123;&#10;  void getVoid(1:Test test);&#10;  bool getBool(1:Test test);&#10;  i8 getI8(1:Test test);&#10;  i16 getI16(1:Test test);&#10;  i32 getI32(1:Test test);&#10;  i64 getI64(1:Test test);&#10;  double getDouble(1:Test test);&#10;  string getString(1:Test test);&#10;  binary getBinary(1:Test test);&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Client_u7AEF"><a href="#Client_u7AEF" class="headerlink" title="Client端"></a>Client端</h1><p>ThriftProxy.java<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftProxy implements InvocationHandler &#123;&#10;&#10;&#9;//Client&#31867;&#10;&#9;private Class clientClass;&#10;&#9;//Service&#31867;&#10;&#9;private Class classs;&#10;&#9;private String[] hostPorts;&#10;&#9;&#10;&#9;public Object newInstance(Class classs, String[] hostPorts) &#123;&#10;&#9;&#9;try &#123;&#10;&#9;&#9;&#9;this.clientClass = Class.forName(classs.getName() + &#34;$Client&#34;);&#10;&#9;&#9;&#125; catch (ClassNotFoundException e) &#123;&#10;&#9;&#9;&#9;e.printStackTrace();&#10;&#9;&#9;&#125;&#10;&#9;&#9;this.classs = classs;&#10;&#9;&#9;this.hostPorts = hostPorts;&#10;&#9;&#9;return Proxy.newProxyInstance(clientClass.getClassLoader(), clientClass.getInterfaces(), this);&#10;&#9;&#125;&#10;&#9;&#10;&#9;@Override&#10;&#9;public Object invoke(Object obj, Method method, Object[] objs) throws Throwable &#123;&#10;&#9;&#9;if (null != hostPorts &#38;&#38; hostPorts.length &#62; 0) &#123;&#10;&#9;&#9;&#9;for (String hostPort : hostPorts) &#123;&#10;&#9;&#9;&#9;&#9;if (null != hostPort &#38;&#38; &#34;&#34; != hostPort.trim()) &#123;&#10;&#9;&#9;&#9;&#9;&#9;TSocket socket = null;&#10;&#9;&#9;&#9;&#9;&#9;try &#123;&#10;&#9;&#9;&#9;&#9;&#9;&#9;int index = hostPort.indexOf(&#34;:&#34;);&#10;&#9;&#9;&#9;&#9;&#9;&#9;String host = hostPort.substring(0, index);&#10;&#9;&#9;&#9;&#9;&#9;&#9;String port = hostPort.substring(index+1, hostPort.length());&#10;&#9;&#9;&#9;&#9;&#9;    socket = new TSocket(host, Integer.valueOf(port));&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#10;&#9;&#9;&#9;&#9;&#9;&#9;TProtocol tProtocol = new TBinaryProtocol(socket);&#10;&#9;&#9;&#9;&#9;&#9;&#9;TMultiplexedProtocol multiplexedProtocol = new TMultiplexedProtocol(tProtocol, classs.getSimpleName());&#10;&#9;&#9;&#9;&#9;&#9;&#9;Class[] classes = new Class[]&#123;TProtocol.class&#125;;&#10;&#9;&#9;&#9;&#9;&#9;&#9;socket.open();&#10;&#9;&#9;&#9;&#9;&#9;&#9;return method.invoke(clientClass.getConstructor(classes).newInstance(multiplexedProtocol), objs);&#10;&#9;&#9;&#9;&#9;&#9;&#125; finally &#123;&#10;&#9;&#9;&#9;&#9;&#9;&#9;if (null != socket) &#123;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;socket.close();&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#125;&#10;&#9;&#9;&#10;&#9;&#9;return null;&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>ThriftProxyFactory.java<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftProxyFactory &#123;&#10;&#9;&#10;&#9;public static Object newInstance(Class classT, String[] hostPorts) &#123;&#10;&#9;&#9;ThriftProxy thriftProxy = new ThriftProxy();&#10;&#9;&#9;return thriftProxy.newInstance(classT, hostPorts);&#10;&#9;&#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="Server_u7AEF"><a href="#Server_u7AEF" class="headerlink" title="Server端"></a>Server端</h1><p>ThriftServer.java<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftServer &#123;&#10;&#10;&#9;public static void start(Class[] classes, String localhost, int port) &#123;&#10;&#9;&#9;//classes HelloServiceImpl.class&#10;&#9;&#9;try &#123;&#10;&#9;&#9;&#9;Pattern pattern = Pattern.compile(&#34;^(.+)\\$Iface$&#34;);&#10;&#9;&#9;&#9;Matcher matcher = null;&#10;&#9;&#9;&#9;TServerSocket serverTransport = new TServerSocket(port);&#10;&#9;&#9;&#9;Factory protocolFactory = new TBinaryProtocol.Factory();&#10;&#9;&#9;&#9;TMultiplexedProcessor processors = new TMultiplexedProcessor();&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;for (int i=0; i&#60;classes.length; i++) &#123;&#10;&#9;&#9;&#9;&#9;Class&#60;?&#62; classT = classes[i]; // classT HelloServiceImpl.class&#10;&#9;&#9;&#9;&#9;Class&#60;?&#62;[] interfaces = classT.getInterfaces();&#10;&#9;&#9;&#9;&#9;for (Class&#60;?&#62; interfacez : interfaces) &#123;  // interfacez HelloService.Iface&#10;&#9;&#9;&#9;&#9;&#9;String interfacezName = interfacez.getName();&#10;&#9;&#9;&#9;&#9;&#9;matcher = pattern.matcher(interfacezName);&#10;&#9;&#9;&#9;&#9;&#9;if (matcher.find()) &#123;&#10;&#9;&#9;&#9;&#9;&#9;&#9;String classTName = matcher.group(1);    //classTName HelloService&#10;&#9;&#9;&#9;&#9;&#9;&#9;Object classTObject = Class.forName(classTName).newInstance(); //classTObject HelloService&#10;&#9;&#9;&#9;&#9;&#9;&#9;Class iface = Class.forName(classTName + &#34;$Iface&#34;);&#10;&#9;&#9;&#9;&#9;&#9;&#9;Object object = classT.newInstance();&#10;&#9;&#9;&#9;&#9;&#9;&#9;TProcessor processor = (TProcessor) Class.forName(classTName + &#34;$Processor&#34;)&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;.getDeclaredConstructor(iface)&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;.newInstance(object);&#10;&#9;&#9;&#9;&#9;&#9;&#9;processors.registerProcessor(classTObject.getClass().getSimpleName(), processor);&#10;&#9;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#125;&#10;&#9;&#9;&#9;&#10;&#9;&#9;&#9;TThreadPoolServer.Args args = new TThreadPoolServer.Args(serverTransport);&#10;&#9;&#9;&#9;args.protocolFactory(protocolFactory);&#10;&#9;&#9;&#9;args.processor(processors);&#10;&#9;&#9;&#9;args.minWorkerThreads(1000);&#10;&#9;&#9;&#9;args.maxWorkerThreads(1000);&#10;&#9;&#9;&#9;TServer server = new TThreadPoolServer(args);&#10;System.out.println(&#34;&#24320;&#21551;thrift&#26381;&#21153;&#22120;&#65292;&#30417;&#21548;&#31471;&#21475;&#65306;9090&#34;);&#10;&#9;&#9;&#9;server.serve();&#10;&#9;&#9;&#125; catch (Exception e) &#123;&#10;&#9;&#9;&#9;e.printStackTrace();&#10;&#9;&#9;&#125;&#10;&#9;&#125;&#10;&#9;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="u8FD0_u884C"><a href="#u8FD0_u884C" class="headerlink" title="运行"></a>运行</h1><p>Server端启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void startServer() &#123;&#10;&#9;ThriftServer.start(new Class[]&#123;HelloServiceImpl.class, TestServiceImpl.class&#125;, &#34;localhost&#34;, 9090);&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Client端启动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void startClient() throws TException &#123;&#10;&#9;String[] hostPorts = new String[]&#123;&#34;localhost:9090&#34;&#125;;&#10;&#9;TestService.Iface client = (TestService.Iface) ThriftProxyFactory.newInstance(TestService.class, hostPorts);&#10;&#9;Test test = new Test();&#10;&#9;test.setI32_(100000);&#10;&#9;System.out.println(client.getI32(test));&#10;&#9;&#10;&#9;HelloService.Iface hello = (Iface) ThriftProxyFactory.newInstance(HelloService.class, hostPorts);&#10;&#9;hello.sayString(&#34;&#21704;&#21704;&#21704;&#21704;&#34;);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="u7ED3_u679C"><a href="#u7ED3_u679C" class="headerlink" title="结果"></a>结果</h1><p>我们可以看出，Server端只需要ThriftServer.start(xxx)就可以将Thrift Server启动起来，而Client端也像在调用本地方法一样可以通过2行代码就实现调用远程接口的方法。</p>
+<p>参考文章<br><a href="http://www.vccoo.com/v/7cea5b" target="_blank" rel="external">thrift生产环境服务端使用的正确姿势</a><br><a href="http://www.cnblogs.com/mumuxinfei/p/3876187.html" target="_blank" rel="external">Thrift 个人实战–Thrift 服务化 Client的改造 </a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RPC/" rel="tag">#RPC</a>
+          
+            <a href="/tags/Thrift/" rel="tag">#Thrift</a>
+          
+            <a href="/tags/封装/" rel="tag">#封装</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/27/Thrift多接口支持例子/" rel="next" title="Thrift多接口支持例子">
+                <i class="fa fa-chevron-left"></i> Thrift多接口支持例子
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/21/HTTP工具类/" rel="prev" title="HTTP工具类">
+                HTTP工具类 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/16/Thrift封装/"
+           data-title="Thrift封装" data-url="https://1csh1.github.io/2017/03/16/Thrift封装/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#IDL_u63A5_u53E3_u5B9A_u4E49"><span class="nav-number">1.</span> <span class="nav-text">IDL接口定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Client_u7AEF"><span class="nav-number">2.</span> <span class="nav-text">Client端</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Server_u7AEF"><span class="nav-number">3.</span> <span class="nav-text">Server端</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u8FD0_u884C"><span class="nav-number">4.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u7ED3_u679C"><span class="nav-number">5.</span> <span class="nav-text">结果</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>  
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

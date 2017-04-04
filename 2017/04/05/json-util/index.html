@@ -1,0 +1,886 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,Json," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="个人博客原文：代码：JsonUtil.java
+
+摘要：文中使用了阿里的Json转换工具fastjson来做封装，实现了对象和Json互转，对象数组和Json互转，list和Json互转，Map和Json互转。在项目中可以直接使用该工具类来做Json和其他对象的转换。
+
+maven1&amp;#60;!-- fastjson --&amp;#62;&amp;#10;&amp;#60;dependency&amp;#62;&amp;#10;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Json 工具类">
+<meta property="og:url" content="https://1csh1.github.io/2017/04/05/json-util/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="个人博客原文：代码：JsonUtil.java
+
+摘要：文中使用了阿里的Json转换工具fastjson来做封装，实现了对象和Json互转，对象数组和Json互转，list和Json互转，Map和Json互转。在项目中可以直接使用该工具类来做Json和其他对象的转换。
+
+maven1&amp;#60;!-- fastjson --&amp;#62;&amp;#10;&amp;#60;dependency&amp;#62;&amp;#10;">
+<meta property="og:updated_time" content="2017-04-04T23:39:03.275Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Json 工具类">
+<meta name="twitter:description" content="个人博客原文：代码：JsonUtil.java
+
+摘要：文中使用了阿里的Json转换工具fastjson来做封装，实现了对象和Json互转，对象数组和Json互转，list和Json互转，Map和Json互转。在项目中可以直接使用该工具类来做Json和其他对象的转换。
+
+maven1&amp;#60;!-- fastjson --&amp;#62;&amp;#10;&amp;#60;dependency&amp;#62;&amp;#10;">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Json 工具类 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Json 工具类
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-04-05T08:00:00+08:00" content="2017-04-05">
+              2017-04-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Java/Json/" itemprop="url" rel="index">
+                    <span itemprop="name">Json</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/04/05/json-util/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/05/json-util/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/04/05/json-util/" class="leancloud_visitors" data-flag-title="Json 工具类">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>个人博客原文：<a href="https://1csh1.github.io/2017/04/05/json-util/"></a><br>代码：<a href="https://github.com/1CSH1/util/blob/master/src/main/java/com/example/util/json/JsonUtil.java" target="_blank" rel="external">JsonUtil.java</a></p>
+<blockquote>
+<p>摘要：文中使用了阿里的Json转换工具fastjson来做封装，实现了对象和Json互转，对象数组和Json互转，list和Json互转，Map和Json互转。在项目中可以直接使用该工具类来做Json和其他对象的转换。</p>
+</blockquote>
+<h1 id="maven"><a href="#maven" class="headerlink" title="maven"></a>maven</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!-- fastjson --&#62;&#10;&#60;dependency&#62;&#10;    &#60;groupId&#62;com.alibaba&#60;/groupId&#62;&#10;    &#60;artifactId&#62;fastjson&#60;/artifactId&#62;&#10;    &#60;version&#62;1.2.30&#60;/version&#62;&#10;&#60;/dependency&#62;</span><br></pre></td></tr></table></figure>
+<h1 id="u5DE5_u5177_u7C7B_u4EE3_u7801_uFF1A"><a href="#u5DE5_u5177_u7C7B_u4EE3_u7801_uFF1A" class="headerlink" title="工具类代码："></a>工具类代码：</h1><p>JsonUtil.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">package com.example.util.json;&#10;&#10;import com.alibaba.fastjson.JSON;&#10;import com.alibaba.fastjson.JSONObject;&#10;import com.alibaba.fastjson.serializer.JSONLibDataFormatSerializer;&#10;import com.alibaba.fastjson.serializer.SerializeConfig;&#10;import com.alibaba.fastjson.serializer.SerializerFeature;&#10;&#10;import java.util.List;&#10;import java.util.Map;&#10;import java.util.Objects;&#10;&#10;/**&#10; * @author James-CSH&#10; * @since 17-3-29 &#19979;&#21320;10:41&#10; */&#10;public class JsonUtil &#123;&#10;&#10;    private static final SerializeConfig config;&#10;&#10;    static &#123;&#10;        config = new SerializeConfig();&#10;        // compatible with the java.util.Date and the java.sql.Date&#10;        config.put(java.util.Date.class, new JSONLibDataFormatSerializer());&#10;        config.put(java.sql.Date.class, new JSONLibDataFormatSerializer());&#10;    &#125;&#10;&#10;    /**&#10;     * set the default value of the object which the value is null&#10;     */&#10;    private static final SerializerFeature[] features = &#123;&#10;            SerializerFeature.WriteMapNullValue,&#10;            SerializerFeature.WriteNullListAsEmpty,&#10;            SerializerFeature.WriteNullBooleanAsFalse,&#10;            SerializerFeature.WriteNullStringAsEmpty,&#10;    &#125;;&#10;&#10;    /**&#10;     * list to json&#10;     *&#10;     * @param list&#10;     *          the list that will transform to json string&#10;     * @return&#10;     *          the json string of list transform&#10;     */&#10;    public static String list2json(List list) &#123;&#10;        return JSON.toJSONString(list);&#10;    &#125;&#10;&#10;    /**&#10;     * map to json&#10;     * @param map&#10;     *          the map that will transform to json string&#10;     * @return&#10;     *          the json string of map transform&#10;     */&#10;    public static String map2json(Map map) &#123;&#10;        return JSONObject.toJSONString(map);&#10;    &#125;&#10;&#10;    /**&#10;     * object array to json&#10;     *&#10;     * @param objects&#10;     *          the object array that will transform to json string&#10;     * @return&#10;     *          the json string of array transform&#10;     */&#10;    public static String array2json(Object[] objects) &#123;&#10;        return JSON.toJSONString(objects);&#10;    &#125;&#10;&#10;    /**&#10;     * object to json&#10;     *&#10;     * @param object&#10;     *          the object that will transform to json string&#10;     * @return&#10;     *          the json string of object&#10;     */&#10;    public static String object2json(Object object) &#123;&#10;        return JSON.toJSONString(object, config, features);&#10;    &#125;&#10;&#10;&#10;    /**&#10;     * json to list&#10;     *&#10;     * @param json&#10;     *          the json string that will transform to list&#10;     * @param clazz&#10;     *          the class of the list&#39;s element&#10;     * @param &#60;T&#62;&#10;     *          the generic of the class&#10;     * @return&#10;     *          the list that json string transform&#10;     */&#10;    public static &#60;T&#62; List&#60;T&#62; json2list(String json, Class&#60;T&#62; clazz) &#123;&#10;        return JSON.parseArray(json, clazz);&#10;    &#125;&#10;&#10;    /**&#10;     * json to map&#10;     *&#10;     * @param json&#10;     *          json string that will transform to map&#10;     * @return&#10;     *          the map fo json string&#10;     */&#10;    public static Map json2map(String json) &#123;&#10;        return JSONObject.parseObject(json);&#10;    &#125;&#10;&#10;&#10;    /**&#10;     * json string to object array&#10;     *&#10;     * @param json&#10;     *          the json string will transform to object array&#10;     * @param clazz&#10;     *          the class of the json will transform&#10;     * @param ts&#10;     *          the real object array&#10;     * @param &#60;T&#62;&#10;     *          the real object&#10;     * @return&#10;     *          the object array of the json string&#10;     *&#10;     * @param json&#10;     * @param clazz&#10;     * @param ts&#10;     * @param &#60;T&#62;&#10;     * @return&#10;     */&#10;    public static &#60;T&#62; T[] json2array(String json, Class&#60;T&#62; clazz, T[] ts) &#123;&#10;        return JSON.parseArray(json, clazz).toArray(ts);&#10;    &#125;&#10;&#10;    /**&#10;     * json string to object&#10;     *&#10;     * @param json&#10;     *          the json string that will transform to object&#10;     * @param clazz&#10;     *          the class that json will transform&#10;     * @param &#60;T&#62;&#10;     *          the object class&#10;     * @return&#10;     *          the object of json string&#10;     */&#10;    public static &#60;T&#62; Object json2object(String json, Class&#60;T&#62; clazz) &#123;&#10;        return JSON.parseObject(json, clazz);&#10;    &#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="u6D4B_u8BD5_u4EE3_u7801_uFF1A"><a href="#u6D4B_u8BD5_u4EE3_u7801_uFF1A" class="headerlink" title="测试代码："></a>测试代码：</h1><p>TestJsonUtil.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">package com.example.util.json;&#10;&#10;import org.junit.Test;&#10;&#10;import java.util.ArrayList;&#10;import java.util.HashMap;&#10;import java.util.List;&#10;import java.util.Map;&#10;&#10;/**&#10; * @author James-CSH&#10; * @since 17-3-31 &#19979;&#21320;10:47&#10; */&#10;public class TestJsonUtil &#123;&#10;&#10;    @Test&#10;    public void testObject() &#123;&#10;        Person person = new Person();&#10;        person.setId(1);&#10;        person.setName(&#34;James&#38472;&#34;);&#10;        person.setAge(23);&#10;        person.setGender(1);&#10;&#10;        Person child = new Person();&#10;        child.setId(2);&#10;        child.setName(&#34;James&#38472; &#20799;&#23376;&#34;);&#10;        child.setAge(2);&#10;        child.setGender(1);&#10;&#10;        List&#60;Person&#62; children = new ArrayList&#60;Person&#62;();&#10;        children.add(child);&#10;        person.setChildren(children);&#10;&#10;        String personsJson = JsonUtil.object2json(person);&#10;System.out.println(personsJson); //&#123;&#34;age&#34;:23,&#34;children&#34;:[&#123;&#34;age&#34;:2,&#34;children&#34;:[],&#34;gender&#34;:1,&#34;id&#34;:2,&#34;name&#34;:&#34;James&#38472; &#20799;&#23376;&#34;&#125;],&#34;gender&#34;:1,&#34;id&#34;:1,&#34;name&#34;:&#34;James&#38472;&#34;&#125;&#10;        Person person2 = (Person) JsonUtil.json2object(personsJson, Person.class);&#10;System.out.println(person2.toString()); //Person&#123;id=1, name=&#39;James&#38472;&#39;, age=23, gender=1, children=[Person&#123;id=2, name=&#39;James&#38472; &#20799;&#23376;&#39;, age=2, gender=1, children=[]&#125;]&#125;&#10;    &#125;&#10;&#10;    @Test&#10;    public void testArray() &#123;&#10;        Person[] persons = new Person[10];&#10;        Person person;&#10;        Person child;&#10;        for (int i=0; i&#60;persons.length; i++) &#123;&#10;            person = new Person();&#10;            person.setId(i);&#10;            person.setName(&#34;James&#38472;&#34; + i);&#10;            person.setAge(20 + i);&#10;            person.setGender(i &#62; 5 ? 1 : 0);&#10;&#10;            child = new Person();&#10;            child.setId(100 + i);&#10;            child.setName(&#34;James&#38472; &#34; + i + &#34;&#20799;&#23376;&#34;);&#10;            child.setAge(i);&#10;            child.setGender(i &#60; 5 ? 1 : 0);&#10;&#10;            List&#60;Person&#62; children = new ArrayList&#60;Person&#62;(1);&#10;            children.add(child);&#10;            person.setChildren(children);&#10;&#10;            persons[i] = person;&#10;        &#125;&#10;&#10;        String personsJson = JsonUtil.array2json(persons);&#10;System.out.println(personsJson);&#10;//[&#123;&#34;age&#34;:20,&#34;children&#34;:[&#123;&#34;age&#34;:0,&#34;gender&#34;:1,&#34;id&#34;:100,&#34;name&#34;:&#34;James&#38472; 0&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:0,&#34;name&#34;:&#34;James&#38472;0&#34;&#125;,&#123;&#34;age&#34;:21,&#34;children&#34;:[&#123;&#34;age&#34;:1,&#34;gender&#34;:1,&#34;id&#34;:101,&#34;name&#34;:&#34;James&#38472; 1&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:1,&#34;name&#34;:&#34;James&#38472;1&#34;&#125;,&#123;&#34;age&#34;:22,&#34;children&#34;:[&#123;&#34;age&#34;:2,&#34;gender&#34;:1,&#34;id&#34;:102,&#34;name&#34;:&#34;James&#38472; 2&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:2,&#34;name&#34;:&#34;James&#38472;2&#34;&#125;,&#123;&#34;age&#34;:23,&#34;children&#34;:[&#123;&#34;age&#34;:3,&#34;gender&#34;:1,&#34;id&#34;:103,&#34;name&#34;:&#34;James&#38472; 3&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:3,&#34;name&#34;:&#34;James&#38472;3&#34;&#125;,&#123;&#34;age&#34;:24,&#34;children&#34;:[&#123;&#34;age&#34;:4,&#34;gender&#34;:1,&#34;id&#34;:104,&#34;name&#34;:&#34;James&#38472; 4&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:4,&#34;name&#34;:&#34;James&#38472;4&#34;&#125;,&#123;&#34;age&#34;:25,&#34;children&#34;:[&#123;&#34;age&#34;:5,&#34;gender&#34;:0,&#34;id&#34;:105,&#34;name&#34;:&#34;James&#38472; 5&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:5,&#34;name&#34;:&#34;James&#38472;5&#34;&#125;,&#123;&#34;age&#34;:26,&#34;children&#34;:[&#123;&#34;age&#34;:6,&#34;gender&#34;:0,&#34;id&#34;:106,&#34;name&#34;:&#34;James&#38472; 6&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:1,&#34;id&#34;:6,&#34;name&#34;:&#34;James&#38472;6&#34;&#125;,&#123;&#34;age&#34;:27,&#34;children&#34;:[&#123;&#34;age&#34;:7,&#34;gender&#34;:0,&#34;id&#34;:107,&#34;name&#34;:&#34;James&#38472; 7&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:1,&#34;id&#34;:7,&#34;name&#34;:&#34;James&#38472;7&#34;&#125;,&#123;&#34;age&#34;:28,&#34;children&#34;:[&#123;&#34;age&#34;:8,&#34;gender&#34;:0,&#34;id&#34;:108,&#34;name&#34;:&#34;James&#38472; 8&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:1,&#34;id&#34;:8,&#34;name&#34;:&#34;James&#38472;8&#34;&#125;,&#123;&#34;age&#34;:29,&#34;children&#34;:[&#123;&#34;age&#34;:9,&#34;gender&#34;:0,&#34;id&#34;:109,&#34;name&#34;:&#34;James&#38472; 9&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:1,&#34;id&#34;:9,&#34;name&#34;:&#34;James&#38472;9&#34;&#125;]&#10;        Person[] persons2 = new Person[]&#123;&#125;;&#10;        persons2 = JsonUtil.json2array(personsJson, Person.class, persons2);&#10;        for (int i=0; i&#60;persons2.length; i++) &#123;&#10;System.out.println(persons2[i].toString());&#10;/*&#10;Person&#123;id=0, name=&#39;James&#38472;0&#39;, age=20, gender=0, children=[Person&#123;id=100, name=&#39;James&#38472; 0&#20799;&#23376;&#39;, age=0, gender=1, children=null&#125;]&#125;&#10;Person&#123;id=1, name=&#39;James&#38472;1&#39;, age=21, gender=0, children=[Person&#123;id=101, name=&#39;James&#38472; 1&#20799;&#23376;&#39;, age=1, gender=1, children=null&#125;]&#125;&#10;Person&#123;id=2, name=&#39;James&#38472;2&#39;, age=22, gender=0, children=[Person&#123;id=102, name=&#39;James&#38472; 2&#20799;&#23376;&#39;, age=2, gender=1, children=null&#125;]&#125;&#10;Person&#123;id=3, name=&#39;James&#38472;3&#39;, age=23, gender=0, children=[Person&#123;id=103, name=&#39;James&#38472; 3&#20799;&#23376;&#39;, age=3, gender=1, children=null&#125;]&#125;&#10;Person&#123;id=4, name=&#39;James&#38472;4&#39;, age=24, gender=0, children=[Person&#123;id=104, name=&#39;James&#38472; 4&#20799;&#23376;&#39;, age=4, gender=1, children=null&#125;]&#125;&#10;Person&#123;id=5, name=&#39;James&#38472;5&#39;, age=25, gender=0, children=[Person&#123;id=105, name=&#39;James&#38472; 5&#20799;&#23376;&#39;, age=5, gender=0, children=null&#125;]&#125;&#10;Person&#123;id=6, name=&#39;James&#38472;6&#39;, age=26, gender=1, children=[Person&#123;id=106, name=&#39;James&#38472; 6&#20799;&#23376;&#39;, age=6, gender=0, children=null&#125;]&#125;&#10;Person&#123;id=7, name=&#39;James&#38472;7&#39;, age=27, gender=1, children=[Person&#123;id=107, name=&#39;James&#38472; 7&#20799;&#23376;&#39;, age=7, gender=0, children=null&#125;]&#125;&#10;Person&#123;id=8, name=&#39;James&#38472;8&#39;, age=28, gender=1, children=[Person&#123;id=108, name=&#39;James&#38472; 8&#20799;&#23376;&#39;, age=8, gender=0, children=null&#125;]&#125;&#10;Person&#123;id=9, name=&#39;James&#38472;9&#39;, age=29, gender=1, children=[Person&#123;id=109, name=&#39;James&#38472; 9&#20799;&#23376;&#39;, age=9, gender=0, children=null&#125;]&#125;&#10; */&#10;        &#125;&#10;    &#125;&#10;&#10;    @Test&#10;    public void testList() &#123;&#10;        List&#60;Person&#62; persons = new ArrayList&#60;Person&#62;(10);&#10;        Person person;&#10;        Person child;&#10;        for (int i=0; i&#60;10; i++) &#123;&#10;            person = new Person();&#10;            person.setId(i);&#10;            person.setName(&#34;James&#38472;&#34; + i);&#10;            person.setAge(20 + i);&#10;            person.setGender(i &#62; 5 ? 1 : 0);&#10;&#10;            child = new Person();&#10;            child.setId(100 + i);&#10;            child.setName(&#34;James&#38472; &#34; + i + &#34;&#20799;&#23376;&#34;);&#10;            child.setAge(i);&#10;            child.setGender(i &#60; 5 ? 1 : 0);&#10;&#10;            List&#60;Person&#62; children = new ArrayList&#60;Person&#62;(1);&#10;            children.add(child);&#10;            person.setChildren(children);&#10;&#10;            persons.add(person);&#10;        &#125;&#10;&#10;        String personsJson = JsonUtil.list2json(persons);&#10;System.out.println(personsJson);&#10;//[&#123;&#34;age&#34;:20,&#34;children&#34;:[&#123;&#34;age&#34;:0,&#34;gender&#34;:1,&#34;id&#34;:100,&#34;name&#34;:&#34;James&#38472; 0&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:0,&#34;name&#34;:&#34;James&#38472;0&#34;&#125;,&#123;&#34;age&#34;:21,&#34;children&#34;:[&#123;&#34;age&#34;:1,&#34;gender&#34;:1,&#34;id&#34;:101,&#34;name&#34;:&#34;James&#38472; 1&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:1,&#34;name&#34;:&#34;James&#38472;1&#34;&#125;,&#123;&#34;age&#34;:22,&#34;children&#34;:[&#123;&#34;age&#34;:2,&#34;gender&#34;:1,&#34;id&#34;:102,&#34;name&#34;:&#34;James&#38472; 2&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:2,&#34;name&#34;:&#34;James&#38472;2&#34;&#125;,&#123;&#34;age&#34;:23,&#34;children&#34;:[&#123;&#34;age&#34;:3,&#34;gender&#34;:1,&#34;id&#34;:103,&#34;name&#34;:&#34;James&#38472; 3&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:3,&#34;name&#34;:&#34;James&#38472;3&#34;&#125;,&#123;&#34;age&#34;:24,&#34;children&#34;:[&#123;&#34;age&#34;:4,&#34;gender&#34;:1,&#34;id&#34;:104,&#34;name&#34;:&#34;James&#38472; 4&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:4,&#34;name&#34;:&#34;James&#38472;4&#34;&#125;,&#123;&#34;age&#34;:25,&#34;children&#34;:[&#123;&#34;age&#34;:5,&#34;gender&#34;:0,&#34;id&#34;:105,&#34;name&#34;:&#34;James&#38472; 5&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:0,&#34;id&#34;:5,&#34;name&#34;:&#34;James&#38472;5&#34;&#125;,&#123;&#34;age&#34;:26,&#34;children&#34;:[&#123;&#34;age&#34;:6,&#34;gender&#34;:0,&#34;id&#34;:106,&#34;name&#34;:&#34;James&#38472; 6&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:1,&#34;id&#34;:6,&#34;name&#34;:&#34;James&#38472;6&#34;&#125;,&#123;&#34;age&#34;:27,&#34;children&#34;:[&#123;&#34;age&#34;:7,&#34;gender&#34;:0,&#34;id&#34;:107,&#34;name&#34;:&#34;James&#38472; 7&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:1,&#34;id&#34;:7,&#34;name&#34;:&#34;James&#38472;7&#34;&#125;,&#123;&#34;age&#34;:28,&#34;children&#34;:[&#123;&#34;age&#34;:8,&#34;gender&#34;:0,&#34;id&#34;:108,&#34;name&#34;:&#34;James&#38472; 8&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:1,&#34;id&#34;:8,&#34;name&#34;:&#34;James&#38472;8&#34;&#125;,&#123;&#34;age&#34;:29,&#34;children&#34;:[&#123;&#34;age&#34;:9,&#34;gender&#34;:0,&#34;id&#34;:109,&#34;name&#34;:&#34;James&#38472; 9&#20799;&#23376;&#34;&#125;],&#34;gender&#34;:1,&#34;id&#34;:9,&#34;name&#34;:&#34;James&#38472;9&#34;&#125;]&#10;        List&#60;Person&#62; persons2 = JsonUtil.json2list(personsJson, Person.class);&#10;        for (int i=0; i&#60;persons2.size(); i++) &#123;&#10;System.out.println(persons2.get(i).toString());&#10;/*&#10;Person&#123;id=0, name=&#39;James&#38472;0&#39;, age=20, gender=0, children=[Person&#123;id=100, name=&#39;James&#38472; 0&#20799;&#23376;&#39;, age=0, gender=1, children=null&#125;]&#125;&#10;Person&#123;id=1, name=&#39;James&#38472;1&#39;, age=21, gender=0, children=[Person&#123;id=101, name=&#39;James&#38472; 1&#20799;&#23376;&#39;, age=1, gender=1, children=null&#125;]&#125;&#10;Person&#123;id=2, name=&#39;James&#38472;2&#39;, age=22, gender=0, children=[Person&#123;id=102, name=&#39;James&#38472; 2&#20799;&#23376;&#39;, age=2, gender=1, children=null&#125;]&#125;&#10;Person&#123;id=3, name=&#39;James&#38472;3&#39;, age=23, gender=0, children=[Person&#123;id=103, name=&#39;James&#38472; 3&#20799;&#23376;&#39;, age=3, gender=1, children=null&#125;]&#125;&#10;Person&#123;id=4, name=&#39;James&#38472;4&#39;, age=24, gender=0, children=[Person&#123;id=104, name=&#39;James&#38472; 4&#20799;&#23376;&#39;, age=4, gender=1, children=null&#125;]&#125;&#10;Person&#123;id=5, name=&#39;James&#38472;5&#39;, age=25, gender=0, children=[Person&#123;id=105, name=&#39;James&#38472; 5&#20799;&#23376;&#39;, age=5, gender=0, children=null&#125;]&#125;&#10;Person&#123;id=6, name=&#39;James&#38472;6&#39;, age=26, gender=1, children=[Person&#123;id=106, name=&#39;James&#38472; 6&#20799;&#23376;&#39;, age=6, gender=0, children=null&#125;]&#125;&#10;Person&#123;id=7, name=&#39;James&#38472;7&#39;, age=27, gender=1, children=[Person&#123;id=107, name=&#39;James&#38472; 7&#20799;&#23376;&#39;, age=7, gender=0, children=null&#125;]&#125;&#10;Person&#123;id=8, name=&#39;James&#38472;8&#39;, age=28, gender=1, children=[Person&#123;id=108, name=&#39;James&#38472; 8&#20799;&#23376;&#39;, age=8, gender=0, children=null&#125;]&#125;&#10;Person&#123;id=9, name=&#39;James&#38472;9&#39;, age=29, gender=1, children=[Person&#123;id=109, name=&#39;James&#38472; 9&#20799;&#23376;&#39;, age=9, gender=0, children=null&#125;]&#125;&#10; */&#10;        &#125;&#10;    &#125;&#10;&#10;    @Test&#10;    public void testMap() &#123;&#10;        Person person = new Person();&#10;        person.setId(1);&#10;        person.setName(&#34;James&#38472;&#34;);&#10;        person.setAge(23);&#10;        person.setGender(1);&#10;&#10;        Person child = new Person();&#10;        child.setId(2);&#10;        child.setName(&#34;James&#38472; &#20799;&#23376;&#34;);&#10;        child.setAge(2);&#10;        child.setGender(1);&#10;&#10;        List&#60;Person&#62; children = new ArrayList&#60;Person&#62;();&#10;        children.add(child);&#10;        person.setChildren(children);&#10;&#10;        Map&#60;String, Person&#62; map1 = new HashMap&#60;String, Person&#62;();&#10;        map1.put(&#34;key1&#34;, person);&#10;        String personJson = JsonUtil.map2json(map1);&#10;System.out.println(personJson);&#10;//&#123;&#34;key1&#34;:&#123;&#34;age&#34;:23,&#34;children&#34;:[&#123;&#34;age&#34;:2,&#34;gender&#34;:1,&#34;id&#34;:2,&#34;name&#34;:&#34;James&#38472; &#20799;&#23376;&#34;&#125;],&#34;gender&#34;:1,&#34;id&#34;:1,&#34;name&#34;:&#34;James&#38472;&#34;&#125;&#125;&#10;        Map map2 = JsonUtil.json2map(personJson);&#10;System.out.println(map2.get(&#34;key1&#34;));&#10;//&#123;&#34;gender&#34;:1,&#34;children&#34;:[&#123;&#34;gender&#34;:1,&#34;name&#34;:&#34;James&#38472; &#20799;&#23376;&#34;,&#34;id&#34;:2,&#34;age&#34;:2&#125;],&#34;name&#34;:&#34;James&#38472;&#34;,&#34;id&#34;:1,&#34;age&#34;:23&#125;&#10;    &#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+            <a href="/tags/Json/" rel="tag">#Json</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/21/HTTP工具类/" rel="next" title="HTTP工具类">
+                <i class="fa fa-chevron-left"></i> HTTP工具类
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/05/json-util/"
+           data-title="Json 工具类" data-url="https://1csh1.github.io/2017/04/05/json-util/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#maven"><span class="nav-number">1.</span> <span class="nav-text">maven</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u5DE5_u5177_u7C7B_u4EE3_u7801_uFF1A"><span class="nav-number">2.</span> <span class="nav-text">工具类代码：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u6D4B_u8BD5_u4EE3_u7801_uFF1A"><span class="nav-number">3.</span> <span class="nav-text">测试代码：</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>  
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

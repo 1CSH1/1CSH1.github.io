@@ -1,0 +1,893 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RabbitMQ,SpringBoot,技术人生," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="闲话&amp;emsp;&amp;emsp;好久没有写博客了，6月份毕业，因为工作原因，公司上网受限，一直没能把学到的知识点写下来，工作了半年，其实学到的东西也不少，但是现在回忆起来的东西少之又少，有时甚至能在同个问题中踩了几次，越来越觉得及时记录一下学到的东西很重要。&amp;emsp;&amp;emsp;好了，闲话少说，写下这段时间学习的东西，先记录一下用Spring Boot配置多个RabbitMQ的情况。。。&amp;emsp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Boot 配置多个RabbitMQ">
+<meta property="og:url" content="https://1csh1.github.io/2017/01/19/Spring Boot 配置多个RabbitMQ/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="闲话&amp;emsp;&amp;emsp;好久没有写博客了，6月份毕业，因为工作原因，公司上网受限，一直没能把学到的知识点写下来，工作了半年，其实学到的东西也不少，但是现在回忆起来的东西少之又少，有时甚至能在同个问题中踩了几次，越来越觉得及时记录一下学到的东西很重要。&amp;emsp;&amp;emsp;好了，闲话少说，写下这段时间学习的东西，先记录一下用Spring Boot配置多个RabbitMQ的情况。。。&amp;emsp;">
+<meta property="og:image" content="https://1csh1.github.io/img/Spring Boot 配置多个RabbitMQ/项目代码结构.jpg">
+<meta property="og:updated_time" content="2017-01-19T13:59:01.881Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring Boot 配置多个RabbitMQ">
+<meta name="twitter:description" content="闲话&amp;emsp;&amp;emsp;好久没有写博客了，6月份毕业，因为工作原因，公司上网受限，一直没能把学到的知识点写下来，工作了半年，其实学到的东西也不少，但是现在回忆起来的东西少之又少，有时甚至能在同个问题中踩了几次，越来越觉得及时记录一下学到的东西很重要。&amp;emsp;&amp;emsp;好了，闲话少说，写下这段时间学习的东西，先记录一下用Spring Boot配置多个RabbitMQ的情况。。。&amp;emsp;">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Spring Boot 配置多个RabbitMQ | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Spring Boot 配置多个RabbitMQ
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-01-19T19:53:14+08:00" content="2017-01-19">
+              2017-01-19
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/SpringBoot/RabbitMQ/" itemprop="url" rel="index">
+                    <span itemprop="name">RabbitMQ</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/19/Spring Boot 配置多个RabbitMQ/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/19/Spring Boot 配置多个RabbitMQ/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/01/19/Spring Boot 配置多个RabbitMQ/" class="leancloud_visitors" data-flag-title="Spring Boot 配置多个RabbitMQ">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="u95F2_u8BDD"><a href="#u95F2_u8BDD" class="headerlink" title="闲话"></a>闲话</h3><p>&emsp;&emsp;好久没有写博客了，6月份毕业，因为工作原因，公司上网受限，一直没能把学到的知识点写下来，工作了半年，其实学到的东西也不少，但是现在回忆起来的东西少之又少，有时甚至能在同个问题中踩了几次，越来越觉得及时记录一下学到的东西很重要。<br>&emsp;&emsp;好了，闲话少说，写下这段时间学习的东西，先记录一下用Spring Boot配置多个RabbitMQ的情况。。。<br>&emsp;&emsp;最近公司新启动一个新平台的项目，需要用微服务这个这几年很火的概念来做，所以就学习了Spring Boot方面的知识，给同事展示Spring Boot的一些小事例的时候，同事提出了可不可以配置多个RabbitMQ？下面就是在Spring Boot配置多个RabbitMQ的例子。是自己摸索搭建的，也不知道对不对，有其他好的实现方法的网友可以互相交流一下。</p>
+<h3 id="u9879_u76EE_u4EE3_u7801_u6784_u9020"><a href="#u9879_u76EE_u4EE3_u7801_u6784_u9020" class="headerlink" title="项目代码构造"></a>项目代码构造</h3><p><img src="https://1csh1.github.io/img/Spring Boot 配置多个RabbitMQ/项目代码结构.jpg" alt="项目代码构造"></p>
+<p>关注点在红框的代码。。。</p>
+<h3 id="u4EE3_u7801"><a href="#u4EE3_u7801" class="headerlink" title="代码"></a>代码</h3><p>下面就把项目的代码展示下来</p>
+<h4 id="application-properties"><a href="#application-properties" class="headerlink" title="application.properties"></a>application.properties</h4><p>配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spring.application.name=rabbitmq-hello&#10;&#10;# RabbitMQ&#10;spring.rabbitmq.first.host=node9&#10;spring.rabbitmq.first.port=5670&#10;spring.rabbitmq.first.username=guest&#10;spring.rabbitmq.first.password=guest&#10;&#10;spring.rabbitmq.second.host=localhost&#10;spring.rabbitmq.second.port=5672&#10;spring.rabbitmq.second.username=guest&#10;spring.rabbitmq.second.password=guest&#10;&#10;&#10;# MySQL&#10;spring.datasource.url = jdbc:mysql://localhost:3306/cloudtest&#10;spring.datasource.username = root&#10;spring.datasource.password = root&#10;spring.datasource.driverClassName = com.mysql.jdbc.Driver</span><br></pre></td></tr></table></figure></p>
+<h4 id="HelloApplication-java"><a href="#HelloApplication-java" class="headerlink" title="HelloApplication.java"></a>HelloApplication.java</h4><p>程序入口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">package com.paas.springboot.demo01;&#10;&#10;import org.springframework.boot.SpringApplication;&#10;import org.springframework.boot.autoconfigure.SpringBootApplication;&#10;&#10;@SpringBootApplication&#10;public class HelloApplication &#123;&#10;&#10;    public static void main(String[] args) &#123;&#10;        SpringApplication.run(HelloApplication.class, args);&#10;    &#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="RabbitConfig-java"><a href="#RabbitConfig-java" class="headerlink" title="RabbitConfig.java"></a>RabbitConfig.java</h4><p>RabbitMQ配置类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">package com.paas.springboot.demo01;&#10;&#10;import org.springframework.amqp.core.Queue;&#10;import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;&#10;import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;&#10;import org.springframework.amqp.rabbit.connection.ConnectionFactory;&#10;import org.springframework.amqp.rabbit.core.RabbitTemplate;&#10;import org.springframework.beans.factory.annotation.Qualifier;&#10;import org.springframework.beans.factory.annotation.Value;&#10;import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;&#10;import org.springframework.context.annotation.Bean;&#10;import org.springframework.context.annotation.Configuration;&#10;import org.springframework.context.annotation.Primary;&#10;&#10;@Configuration&#10;public class RabbitConfig &#123;&#10;&#10;&#9;@Bean(name=&#34;firstConnectionFactory&#34;)&#10;&#9;@Primary&#10;    public ConnectionFactory firstConnectionFactory(&#10;    &#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Value(&#34;$&#123;spring.rabbitmq.first.host&#125;&#34;) String host, &#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Value(&#34;$&#123;spring.rabbitmq.first.port&#125;&#34;) int port,&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Value(&#34;$&#123;spring.rabbitmq.first.username&#125;&#34;) String username,&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Value(&#34;$&#123;spring.rabbitmq.first.password&#125;&#34;) String password&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;)&#123;&#10;&#9;&#9;CachingConnectionFactory connectionFactory = new CachingConnectionFactory();&#10;&#9;&#9;connectionFactory.setHost(host);&#10;&#9;&#9;connectionFactory.setPort(port);&#10;&#9;&#9;connectionFactory.setUsername(username);&#10;&#9;&#9;connectionFactory.setPassword(password);&#10;&#9;&#9;return connectionFactory;&#10;    &#125;&#10;&#9;&#10;&#9;@Bean(name=&#34;secondConnectionFactory&#34;)&#10;&#9;public ConnectionFactory secondConnectionFactory(&#10;  &#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Value(&#34;$&#123;spring.rabbitmq.second.host&#125;&#34;) String host, &#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Value(&#34;$&#123;spring.rabbitmq.second.port&#125;&#34;) int port,&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Value(&#34;$&#123;spring.rabbitmq.second.username&#125;&#34;) String username,&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Value(&#34;$&#123;spring.rabbitmq.second.password&#125;&#34;) String password&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;)&#123;&#10;&#9;&#9;CachingConnectionFactory connectionFactory = new CachingConnectionFactory();&#10;&#9;&#9;connectionFactory.setHost(host);&#10;&#9;&#9;connectionFactory.setPort(port);&#10;&#9;&#9;connectionFactory.setUsername(username);&#10;&#9;&#9;connectionFactory.setPassword(password);&#10;&#9;&#9;return connectionFactory;&#10;&#9;&#125;&#10;&#9;&#10;&#9;@Bean(name=&#34;firstRabbitTemplate&#34;)&#10;&#9;@Primary&#10;&#9;public RabbitTemplate firstRabbitTemplate(&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Qualifier(&#34;firstConnectionFactory&#34;) ConnectionFactory connectionFactory&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;)&#123;&#10;&#9;&#9;RabbitTemplate firstRabbitTemplate = new RabbitTemplate(connectionFactory);&#10;&#9;&#9;return firstRabbitTemplate;&#10;&#9;&#125;&#10;&#9;&#10;&#9;@Bean(name=&#34;secondRabbitTemplate&#34;)&#10;&#9;public RabbitTemplate secondRabbitTemplate(&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Qualifier(&#34;secondConnectionFactory&#34;) ConnectionFactory connectionFactory&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;)&#123;&#10;&#9;&#9;RabbitTemplate secondRabbitTemplate = new RabbitTemplate(connectionFactory);&#10;&#9;&#9;return secondRabbitTemplate;&#10;&#9;&#125;&#10;&#9;&#10;&#9;@Bean(name=&#34;firstFactory&#34;)&#10;&#9;public SimpleRabbitListenerContainerFactory firstFactory(&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;SimpleRabbitListenerContainerFactoryConfigurer configurer,&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Qualifier(&#34;firstConnectionFactory&#34;) ConnectionFactory connectionFactory&#9;&#9;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;) &#123;&#10;&#9;&#9;SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();&#10;&#9;&#9;configurer.configure(factory, connectionFactory);&#10;&#9;&#9;return factory;&#10;&#9;&#125;&#10;&#9;&#10;&#9;@Bean(name=&#34;secondFactory&#34;)&#10;&#9;public SimpleRabbitListenerContainerFactory secondFactory(&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;SimpleRabbitListenerContainerFactoryConfigurer configurer,&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;@Qualifier(&#34;secondConnectionFactory&#34;) ConnectionFactory connectionFactory&#9;&#9;&#9;&#10;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;&#9;) &#123;&#10;&#9;&#9;SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();&#10;&#9;&#9;configurer.configure(factory, connectionFactory);&#10;&#9;&#9;return factory;&#10;&#9;&#125;&#10;&#9;&#10;    @Bean&#10;    public Queue firstQueue() &#123;&#10;    &#9;System.out.println(&#34;configuration firstQueue ........................&#34;);&#10;        return new Queue(&#34;hello1&#34;);&#10;    &#125;&#10;    &#10;    @Bean&#10;    public Object secondQueue() &#123;&#10;    &#9;System.out.println(&#34;configuration secondQueue ........................&#34;);&#10;    &#9;return new Queue(&#34;hello2&#34;);&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Receiver-java"><a href="#Receiver-java" class="headerlink" title="Receiver.java"></a>Receiver.java</h4><p>RabbitMQ中的消费者，接收first RabbitMQ中的队列hello1的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">package com.paas.springboot.demo01;&#10;&#10;import org.springframework.amqp.rabbit.annotation.RabbitHandler;&#10;import org.springframework.amqp.rabbit.annotation.RabbitListener;&#10;import org.springframework.stereotype.Component;&#10;&#10;@Component&#10;@RabbitListener(queues = &#34;hello1&#34;, containerFactory=&#34;firstFactory&#34;)&#10;public class Receiver &#123;&#10;&#10;    @RabbitHandler&#10;    public void process(String hello) &#123;&#10;        System.out.println(&#34;Receiver : &#34; + hello);&#10;    &#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Receiver2-java"><a href="#Receiver2-java" class="headerlink" title="Receiver2.java"></a>Receiver2.java</h4><p>RabbitMQ中的消费者，接收second RabbitMQ中的队列hello2的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">package com.paas.springboot.demo01;&#10;&#10;import org.springframework.amqp.rabbit.annotation.RabbitHandler;&#10;import org.springframework.amqp.rabbit.annotation.RabbitListener;&#10;import org.springframework.stereotype.Component;&#10;&#10;@Component&#10;@RabbitListener(queues = &#34;hello2&#34;, containerFactory=&#34;secondFactory&#34; )&#10;public class Receiver2 &#123;&#10;   &#10;&#9;@RabbitHandler&#10;    public void process(String hello) &#123;&#10;        System.out.println(&#34;Receiver : &#34; + hello);&#10;    &#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Sender-java"><a href="#Sender-java" class="headerlink" title="Sender.java"></a>Sender.java</h4><p>RabbitMQ中的生产者，发送消息到first RabbitMQ中的队列hello1和hello2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">package com.paas.springboot.demo01;&#10;&#10;import java.util.Date;&#10;import javax.annotation.Resource;&#10;import org.springframework.amqp.rabbit.core.RabbitTemplate;&#10;import org.springframework.stereotype.Component;&#10;&#10;@Component&#10;public class Sender &#123;&#10;&#10;&#9;@Resource(name=&#34;firstRabbitTemplate&#34;)&#10;    private RabbitTemplate firstRabbitTemplate;&#10;&#10;    public void send1() &#123;&#10;        String context = &#34;hello1 &#34; + new Date();&#10;        System.out.println(&#34;Sender : &#34; + context);&#10;        this.firstRabbitTemplate.convertAndSend(&#34;hello1&#34;, context);&#10;    &#125;&#10;    &#10;    public void send2() &#123;&#10;        String context = &#34;hello2 &#34; + new Date();&#10;        System.out.println(&#34;Sender : &#34; + context);&#10;        this.firstRabbitTemplate.convertAndSend(&#34;hello2&#34;, context);&#10;    &#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Sender2-java"><a href="#Sender2-java" class="headerlink" title="Sender2.java"></a>Sender2.java</h4><p>RabbitMQ中的生产者，发送消息到second RabbitMQ中的队列hello1和hello2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">package com.paas.springboot.demo01;&#10;&#10;import java.util.Date;&#10;import javax.annotation.Resource;&#10;import org.springframework.amqp.rabbit.core.RabbitTemplate;&#10;import org.springframework.stereotype.Component;&#10;&#10;@Component&#10;public class Sender &#123;&#10;&#10;&#9;@Resource(name=&#34;firstRabbitTemplate&#34;)&#10;    private RabbitTemplate firstRabbitTemplate;&#10;&#10;    public void send1() &#123;&#10;        String context = &#34;hello1 &#34; + new Date();&#10;        System.out.println(&#34;Sender : &#34; + context);&#10;        this.firstRabbitTemplate.convertAndSend(&#34;hello1&#34;, context);&#10;    &#125;&#10;    &#10;    public void send2() &#123;&#10;        String context = &#34;hello2 &#34; + new Date();&#10;        System.out.println(&#34;Sender : &#34; + context);&#10;        this.firstRabbitTemplate.convertAndSend(&#34;hello2&#34;, context);&#10;    &#125;&#10;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="TestDemo01-java"><a href="#TestDemo01-java" class="headerlink" title="TestDemo01.java"></a>TestDemo01.java</h4><p>测试类，调用Sender发送消息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">package com.paas.springboot.demo01;&#10;&#10;import org.junit.Test;&#10;import org.junit.runner.RunWith;&#10;import org.springframework.beans.factory.annotation.Autowired;&#10;import org.springframework.boot.test.SpringApplicationConfiguration;&#10;import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;&#10;&#10;@RunWith(SpringJUnit4ClassRunner.class)&#10;@SpringApplicationConfiguration(classes = HelloApplication.class)&#10;public class TestDemo01 &#123;&#10;&#10;    @Autowired&#10;    private Sender sender;&#10;    &#10;    @Autowired&#10;    private Sender2 sender2;&#10;&#10;    @Test&#10;    public void hello() throws Exception &#123;&#10;&#9;&#9;sender.send1();&#10;&#9;&#9;sender.send2();&#10;    &#125;&#10;    &#10;    @Test&#10;    public void hello2() throws Exception &#123;&#10;&#9;&#9;sender2.send1();&#10;&#9;&#9;sender2.send2();&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a>pom.xml</h4><p>Maven项目中最重要的一个配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;project xmlns=&#34;http://maven.apache.org/POM/4.0.0&#34; xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;&#10;&#9;xsi:schemaLocation=&#34;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&#34;&#62;&#10;&#9;&#60;modelVersion&#62;4.0.0&#60;/modelVersion&#62;&#10;&#9;&#60;groupId&#62;com.paas.springboot.demo&#60;/groupId&#62;&#10;&#9;&#60;artifactId&#62;springboot&#60;/artifactId&#62;&#10;&#9;&#60;packaging&#62;war&#60;/packaging&#62;&#10;&#9;&#60;version&#62;0.0.1-SNAPSHOT&#60;/version&#62;&#10;&#9;&#60;name&#62;springboot Maven Webapp&#60;/name&#62;&#10;&#9;&#60;url&#62;http://maven.apache.org&#60;/url&#62;&#10;&#10;&#9;&#60;parent&#62;&#10;&#9;&#9;&#60;groupId&#62;org.springframework.boot&#60;/groupId&#62;&#10;&#9;&#9;&#60;artifactId&#62;spring-boot-starter-parent&#60;/artifactId&#62;&#10;&#9;&#9;&#60;version&#62;1.4.3.RELEASE&#60;/version&#62;&#10;&#9;&#9;&#60;relativePath /&#62; &#60;!-- lookup parent from repository --&#62;&#10;&#9;&#60;/parent&#62;&#10;&#10;&#9;&#60;dependencies&#62;&#10;&#9;&#9;&#60;dependency&#62;&#10;&#9;&#9;&#9;&#60;groupId&#62;junit&#60;/groupId&#62;&#10;&#9;&#9;&#9;&#60;artifactId&#62;junit&#60;/artifactId&#62;&#10;&#9;&#9;&#9;&#60;scope&#62;test&#60;/scope&#62;&#10;&#9;&#9;&#60;/dependency&#62;&#10;&#9;&#9;&#60;dependency&#62;&#10;&#9;&#9;&#9;&#60;groupId&#62;org.springframework.boot&#60;/groupId&#62;&#10;&#9;&#9;&#9;&#60;artifactId&#62;spring-boot-starter-amqp&#60;/artifactId&#62;&#10;&#9;&#9;&#60;/dependency&#62;&#10;&#9;&#9;&#60;dependency&#62;&#10;&#9;&#9;&#9;&#60;groupId&#62;org.springframework.boot&#60;/groupId&#62;&#10;&#9;&#9;&#9;&#60;artifactId&#62;spring-boot-starter-actuator&#60;/artifactId&#62;&#10;&#9;&#9;&#60;/dependency&#62;&#10;&#9;&#9; &#60;dependency&#62;&#10;            &#60;groupId&#62;org.springframework.boot&#60;/groupId&#62;&#10;            &#60;artifactId&#62;spring-boot-starter-web&#60;/artifactId&#62;&#10;        &#60;/dependency&#62;&#10;        &#60;dependency&#62;&#10;            &#60;groupId&#62;org.springframework.boot&#60;/groupId&#62;&#10;            &#60;artifactId&#62;spring-boot-starter-jdbc&#60;/artifactId&#62;&#10;        &#60;/dependency&#62;&#10;&#9;&#9;&#60;dependency&#62;&#10;&#9;&#9;&#9;&#60;groupId&#62;org.springframework.boot&#60;/groupId&#62;&#10;&#9;&#9;&#9;&#60;artifactId&#62;spring-boot-starter-test&#60;/artifactId&#62;&#10;&#9;&#9;&#9;&#60;scope&#62;test&#60;/scope&#62;&#10;&#9;&#9;&#60;/dependency&#62;&#10;&#9;&#9;&#60;dependency&#62;&#10;&#9;&#9;&#9;&#60;groupId&#62;com.jayway.jsonpath&#60;/groupId&#62;&#10;&#9;&#9;&#9;&#60;artifactId&#62;json-path&#60;/artifactId&#62;&#10;&#9;&#9;&#9;&#60;scope&#62;test&#60;/scope&#62;&#10;&#9;&#9;&#60;/dependency&#62;&#10;&#9;&#9;&#60;dependency&#62;&#10;&#9;&#9;    &#60;groupId&#62;mysql&#60;/groupId&#62;&#10;&#9;&#9;    &#60;artifactId&#62;mysql-connector-java&#60;/artifactId&#62;&#10;&#9;&#9;&#60;/dependency&#62;&#10;&#9;&#60;/dependencies&#62;&#10;&#10;&#9;&#60;build&#62;&#10;&#9;&#9;&#60;finalName&#62;springboot&#60;/finalName&#62;&#10;        &#60;plugins&#62;&#10;            &#60;plugin&#62;&#10;                &#60;groupId&#62;org.springframework.boot&#60;/groupId&#62;&#10;                &#60;artifactId&#62;spring-boot-maven-plugin&#60;/artifactId&#62;&#10;            &#60;/plugin&#62;&#10;        &#60;/plugins&#62;&#10;    &#60;/build&#62;&#10;&#9;&#10;&#9;&#60;repositories&#62;&#10;        &#60;repository&#62;&#10;            &#60;id&#62;spring-releases&#60;/id&#62;&#10;            &#60;url&#62;https://repo.spring.io/libs-release&#60;/url&#62;&#10;        &#60;/repository&#62;&#10;    &#60;/repositories&#62;&#10;    &#60;pluginRepositories&#62;&#10;        &#60;pluginRepository&#62;&#10;            &#60;id&#62;spring-releases&#60;/id&#62;&#10;            &#60;url&#62;https://repo.spring.io/libs-release&#60;/url&#62;&#10;        &#60;/pluginRepository&#62;&#10;    &#60;/pluginRepositories&#62;&#10;    &#10;&#60;/project&#62;</span><br></pre></td></tr></table></figure></p>
+<h3 id="u8FD0_u884C_26amp_3B_u6D4B_u8BD5"><a href="#u8FD0_u884C_26amp_3B_u6D4B_u8BD5" class="headerlink" title="运行&amp;测试"></a>运行&amp;测试</h3><p>通过运行HelloApplication.java，将程序中的Receiver启动一直监控着队列，然后通过运行TestDemo01.java中的测试案例，发送消息到队列中，这时可以发现运行HelloApplication的程序控制台将刚刚发送的消息打印出来</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RabbitMQ/" rel="tag">#RabbitMQ</a>
+          
+            <a href="/tags/SpringBoot/" rel="tag">#SpringBoot</a>
+          
+            <a href="/tags/技术人生/" rel="tag">#技术人生</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/19/maven集成tomcat插件/" rel="next" title="Maven集成Tomcat插件">
+                <i class="fa fa-chevron-left"></i> Maven集成Tomcat插件
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/19/Vim中配置默认属性/" rel="prev" title="Vim中配置默认属性">
+                Vim中配置默认属性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/19/Spring Boot 配置多个RabbitMQ/"
+           data-title="Spring Boot 配置多个RabbitMQ" data-url="https://1csh1.github.io/2017/01/19/Spring Boot 配置多个RabbitMQ/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">46</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#u95F2_u8BDD"><span class="nav-number">1.</span> <span class="nav-text">闲话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u9879_u76EE_u4EE3_u7801_u6784_u9020"><span class="nav-number">2.</span> <span class="nav-text">项目代码构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u4EE3_u7801"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#application-properties"><span class="nav-number">3.1.</span> <span class="nav-text">application.properties</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HelloApplication-java"><span class="nav-number">3.2.</span> <span class="nav-text">HelloApplication.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RabbitConfig-java"><span class="nav-number">3.3.</span> <span class="nav-text">RabbitConfig.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Receiver-java"><span class="nav-number">3.4.</span> <span class="nav-text">Receiver.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Receiver2-java"><span class="nav-number">3.5.</span> <span class="nav-text">Receiver2.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sender-java"><span class="nav-number">3.6.</span> <span class="nav-text">Sender.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sender2-java"><span class="nav-number">3.7.</span> <span class="nav-text">Sender2.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TestDemo01-java"><span class="nav-number">3.8.</span> <span class="nav-text">TestDemo01.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pom-xml"><span class="nav-number">3.9.</span> <span class="nav-text">pom.xml</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u8FD0_u884C_26amp_3B_u6D4B_u8BD5"><span class="nav-number">4.</span> <span class="nav-text">运行&测试</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>  
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>
