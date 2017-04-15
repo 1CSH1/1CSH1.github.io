@@ -1,0 +1,41 @@
+---
+title: 在Ubuntu中安装VMWare
+date: 2017-04-12 22:00:00
+categories: [Ubuntu]
+tags: [VMWare, Ubuntu]
+---
+
+个人博客原文：[]()
+
+> 摘要：本文简单介绍在Ubuntu中安装VMWare
+
+# 软件
+VMware-Workstation-Full-12.1.0-3272444.x86_64.bundle
+百度网盘链接: https://pan.baidu.com/s/1dFOQs2d 密码: kgnm
+链接里面附带了key
+
+# 步骤
+
+## 在终端敲命令
+```
+sudo ./VMware-Workstation-Full-12.1.0-3272444.x86_64.bundle
+```
+
+## 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
