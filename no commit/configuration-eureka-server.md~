@@ -1,0 +1,42 @@
+---
+title: Eurkea Server 搭建部署
+date: 2017-04-16 21:00:00
+categories: [Eureka]
+tags: [Eureka]
+---
+
+个人博客原文：[Eurkea Server 搭建部署](https://1csh1.github.io/2017/04/16/configuration-eureka-server/)
+
+> 摘要：本文讲述如何在本地搭建配置 Eureka Server
+
+# 下载
+
+[eureka-server-1.6.2.war](https://1csh1.github.io/file/configuration-eureka-server/eureka-server-1.6.2.war)
+[tomcat](https://1csh1.github.io/file/configuration-eureka-server/apache-tomcat-8.5.13.tar.gz)
+
+# 安装
+
+解压
+
+```
+tar -xvzf apache-tomcat-8.5.13.tar.gz
+```
+
+将 eureka-server.war 复制到 tomcat 的 webapps 目录下，并改名为 eureka.war
+
+```
+cp ~/eureka-server-1.6.2.war /csh/software/tomcat/webapps/eureka.war
+```
+
+# 启动 Tomcat
+
+```
+bin/startup.sh
+```
+
+# 验证
+
+在浏览器中访问 http://localhost:8080/eureka , 看到下面的页面就是部署 Eureka Server 成功
+
+![Eureka Server](https://1csh1.github.io/img/configuration-eureka-server/configuration-eureka-server.png)
+
