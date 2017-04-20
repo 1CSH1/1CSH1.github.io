@@ -1,0 +1,70 @@
+---
+title: 在 Ubuntu 中安装 Wine
+date: 2017-04-20 22:30:00
+categories: [Ubuntu]
+tags: [Wine, Ubuntu]
+---
+
+个人博客原文：[]()
+
+> 摘要：本文简单介绍在 Ubuntu 中安装 Wine
+
+# 安装命令
+
+## 如果 Ubuntu 系统是 64 位的，需要运行下面的命令，使可以使用 32 位的系统架构
+
+```
+sudo dpkg --add-architecture i386 
+
+```
+
+## 添加资源
+
+```
+wget https://dl.winehq.org/wine-builds/Release.key
+sudo apt-key add Release.key
+sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
+```
+
+## 更新资源
+
+```
+sudo apt-get update
+```
+
+## 安装
+下面3个选其中一个就可以了
+
+
+Stable branch	
+```
+sudo apt-get install --install-recommends winehq-stable
+```
+
+Development branch	
+
+```
+sudo apt-get install --install-recommends winehq-devel
+```
+
+Staging branch	
+
+```
+sudo apt-get install --install-recommends winehq-staging
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
