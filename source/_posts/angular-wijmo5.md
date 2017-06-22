@@ -36,7 +36,7 @@ tags: [Angular, Wijmo5]
 
 ### 编写代码
 
- **app/app.modules.ts** 代码如下：
+**app/app.modules.ts** 代码如下：
 
 ```
 import { BrowserModule } from '@angular/platform-browser';
@@ -59,8 +59,13 @@ import { AppComponent } from './app.component';
 export class AppModule { }
 ```
 
-添加了 ``` import { WjInputModule } from 'wijmo/wijmo.angular2.input'; ``` 和 ```  imports: [ WjInputModule ] ```
+添加了  
 
+```
+import { WjInputModule } from 'wijmo/wijmo.angular2.input'; 
+...
+imports: [ WjInputModule ]
+```
 
 **app/component.ts** 代码如下：
 
