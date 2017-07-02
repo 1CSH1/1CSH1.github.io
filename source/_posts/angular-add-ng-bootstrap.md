@@ -64,7 +64,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 ### 测试结果
 
-![angular-ng-bootstrap-result](https://1csh1.github.io/img/angular-add-ng-bootstrap/angular-add-ng-bootstrap-result.png)
+![angular-ng-bootstrap-result](https://1csh1.github.io/img/angular-add-ng-bootstrap/angular-ng-bootstrap-result.png)
 
 ### 示例代码
 [angular + ng-bootstrap](https://github.com/1CSH1/james-blog-ui/tree/6c2c1503b4102c28b14f8b9e7fb447f8d52e1548)
