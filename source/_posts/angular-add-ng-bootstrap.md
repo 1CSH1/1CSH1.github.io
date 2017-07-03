@@ -1,7 +1,7 @@
 ---
 title: 在 Angular 项目中添加插件 ng-bootstrap
 date: 2017-07-02 20:00:00
-categories: [Angular, ng-bootstrap]
+categories: [Angular, James-Blog, ng-bootstrap]
 tags: [Angular, ng-bootstrap]
 ---
 

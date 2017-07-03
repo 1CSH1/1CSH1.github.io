@@ -1,7 +1,7 @@
 ---
 title: 在 Angular 项目中添加 i18n 插件 ngx-translate
 date: 2017-07-01 18:00:00
-categories: [Angular, ngx-translate]
+categories: [Angular, James-Blog, ngx-translate]
 tags: [Angular, ngx-translate, i18n]
 ---
 
