@@ -1,0 +1,870 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="技术人生,Flume," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="下载apache-flume-1.6.0-bin.tar.gz 解压1tar -zxvf apache-flume-1.6.0-bin.tar.gz 配置12cp conf/flume-conf.properties.template conf/flume-conf.propertiescp conf/flume-env.sh.template conf/flume-env.sh flume-en">
+<meta name="keywords" content="技术人生,Flume">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flume单机安装与配置">
+<meta property="og:url" content="https://1csh1.github.io/2016/04/21/Flume单机安装与配置/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="下载apache-flume-1.6.0-bin.tar.gz 解压1tar -zxvf apache-flume-1.6.0-bin.tar.gz 配置12cp conf/flume-conf.properties.template conf/flume-conf.propertiescp conf/flume-env.sh.template conf/flume-env.sh flume-en">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-21T12:01:09.997Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flume单机安装与配置">
+<meta name="twitter:description" content="下载apache-flume-1.6.0-bin.tar.gz 解压1tar -zxvf apache-flume-1.6.0-bin.tar.gz 配置12cp conf/flume-conf.properties.template conf/flume-conf.propertiescp conf/flume-env.sh.template conf/flume-env.sh flume-en">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Flume单机安装与配置 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Flume单机安装与配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-21T18:15:35+08:00" content="2016-04-21">
+              2016-04-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Flume/" itemprop="url" rel="index">
+                    <span itemprop="name">Flume</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/21/Flume单机安装与配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/21/Flume单机安装与配置/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/04/21/Flume单机安装与配置/" class="leancloud_visitors" data-flag-title="Flume单机安装与配置">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p><a href="https://1csh1.github.io/file/Flume单机安装与配置/apache-flume-1.6.0-bin.tar.gz">apache-flume-1.6.0-bin.tar.gz</a></p>
+<h3 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf apache-flume-1.6.0-bin.tar.gz</span><br></pre></td></tr></table></figure>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp conf/flume-conf.properties.template conf/flume-conf.properties</span><br><span class="line">cp conf/flume-env.sh.template conf/flume-env.sh</span><br></pre></td></tr></table></figure>
+<p>flume-env.sh<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Enviroment variables can be set here.</span><br><span class="line">export JAVA_HOME=/csh/link/jdk</span><br><span class="line"></span><br><span class="line"># Give Flume more memory and pre-allocate, enable remote monitoring via JMX</span><br><span class="line"># export JAVA_OPTS=&quot;-Xms100m -Xmx2000m -Dcom.sun.management.jmxremote&quot;</span><br><span class="line"></span><br><span class="line"># Note that the Flume conf directory is always included in the classpath.</span><br><span class="line">FLUME_CLASSPATH=/csh/link/flume/lib</span><br></pre></td></tr></table></figure></p>
+<h3 id="单机配置"><a href="#单机配置" class="headerlink" title="单机配置"></a>单机配置</h3><p>在conf目录下创建single-node.conf文件，并将下面内容复制粘贴</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"># example.conf: A single-node Flume configuration</span><br><span class="line"></span><br><span class="line"># Name the components on this agent</span><br><span class="line">a1.sources = r1</span><br><span class="line">a1.sinks = k1</span><br><span class="line">a1.channels = c1</span><br><span class="line"></span><br><span class="line"># Describe/configure the source</span><br><span class="line">a1.sources.r1.type = netcat</span><br><span class="line">a1.sources.r1.bind = localhost</span><br><span class="line">a1.sources.r1.port = 44444</span><br><span class="line"></span><br><span class="line"># Describe the sink</span><br><span class="line">a1.sinks.k1.type = logger</span><br><span class="line"></span><br><span class="line"># Use a channel which buffers events in memory</span><br><span class="line">a1.channels.c1.type = memory</span><br><span class="line">a1.channels.c1.capacity = 1000</span><br><span class="line">a1.channels.c1.transactionCapacity = 100</span><br><span class="line"></span><br><span class="line"># Bind the source and sink to the channel</span><br><span class="line">a1.sources.r1.channels = c1</span><br><span class="line">a1.sinks.k1.channel = c1</span><br></pre></td></tr></table></figure>
+<h3 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/flume-ng agent --conf conf --conf-file conf/single-node.conf --name a1 -Dflume.root.logger=INFO,console</span><br></pre></td></tr></table></figure>
+<p>命令行输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">Info: Sourcing environment configuration script /csh/link/flume/conf/flume-env.sh</span><br><span class="line">Info: Including Hadoop libraries found via (/csh/link/hadoop/bin/hadoop) for HDFS access</span><br><span class="line">Info: Excluding /csh/software/hadoop-2.7.2/share/hadoop/common/lib/slf4j-api-1.7.10.jar from classpath</span><br><span class="line">Info: Excluding /csh/software/hadoop-2.7.2/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar from classpath</span><br><span class="line">Info: Including HBASE libraries found via (/csh/link/hbase/bin/hbase) for HBASE access</span><br><span class="line">Info: Excluding /csh/link/hbase/lib/slf4j-api-1.7.7.jar from classpath</span><br><span class="line">Info: Excluding /csh/link/hbase/lib/slf4j-log4j12-1.7.5.jar from classpath</span><br><span class="line">Info: Excluding /csh/software/hadoop-2.7.2/share/hadoop/common/lib/slf4j-api-1.7.10.jar from classpath</span><br><span class="line">Info: Excluding /csh/software/hadoop-2.7.2/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar from classpath</span><br><span class="line">Info: Including Hive libraries found via (/csh/link/hive) for Hive access</span><br><span class="line">+ exec /csh/link/jdk/bin/java -Xmx20m -Dflume.root.logger=INFO,console -cp &apos;/csh/link/flume/conf:/csh/link/flume/lib/*:/csh/link/flume/lib:/csh/software/hadoop-2.7.2/etc/hadoop:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/activation-1.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/apacheds-i18n-2.0.0-M15.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/api-asn1-api-1.0.0-M20.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/api-util-1.0.0-M20.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/asm-3.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/avro-1.7.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-beanutils-1.7.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-beanutils-core-1.8.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-cli-1.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-codec-1.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-collections-3.2.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-compress-1.4.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-configuration-1.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-digester-1.8.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-httpclient-3.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-io-2.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-lang-2.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-logging-1.1.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-math3-3.1.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-net-3.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/curator-client-2.7.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/curator-framework-2.7.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/curator-recipes-2.7.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/gson-2.2.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/guava-11.0.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/hadoop-annotations-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/hadoop-auth-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/hamcrest-core-1.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/htrace-core-3.1.0-incubating.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/httpclient-4.2.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/httpcore-4.2.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jackson-core-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jackson-jaxrs-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jackson-mapper-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jackson-xc-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/java-xmlbuilder-0.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jaxb-api-2.2.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jaxb-impl-2.2.3-1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jersey-core-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jersey-json-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jersey-server-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jets3t-0.9.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jettison-1.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jetty-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jetty-util-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jsch-0.1.42.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jsp-api-2.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jsr305-3.0.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/junit-4.11.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/log4j-1.2.17.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/mockito-all-1.8.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/netty-3.6.2.Final.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/paranamer-2.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/protobuf-java-2.5.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/servlet-api-2.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/snappy-java-1.0.4.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/stax-api-1.0-2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/xmlenc-0.52.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/xz-1.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/zookeeper-3.4.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/hadoop-common-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/hadoop-common-2.7.2-tests.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/hadoop-nfs-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/jdiff:/csh/software/hadoop-2.7.2/share/hadoop/common/lib:/csh/software/hadoop-2.7.2/share/hadoop/common/sources:/csh/software/hadoop-2.7.2/share/hadoop/common/templates:/csh/software/hadoop-2.7.2/share/hadoop/hdfs:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/asm-3.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-cli-1.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-codec-1.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-daemon-1.0.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-io-2.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-lang-2.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-logging-1.1.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/guava-11.0.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/htrace-core-3.1.0-incubating.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jackson-core-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jackson-mapper-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jersey-core-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jersey-server-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jetty-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jetty-util-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jsr305-3.0.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/leveldbjni-all-1.8.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/log4j-1.2.17.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/netty-3.6.2.Final.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/netty-all-4.0.23.Final.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/protobuf-java-2.5.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/servlet-api-2.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/xercesImpl-2.9.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/xml-apis-1.3.04.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/xmlenc-0.52.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-2.7.2-tests.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-nfs-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/jdiff:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/sources:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/templates:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/webapps:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/activation-1.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/aopalliance-1.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/asm-3.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-cli-1.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-codec-1.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-collections-3.2.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-compress-1.4.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-io-2.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-lang-2.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-logging-1.1.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/guava-11.0.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/guice-3.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/guice-servlet-3.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-core-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-jaxrs-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-mapper-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-xc-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/javax.inject-1.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jaxb-api-2.2.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jaxb-impl-2.2.3-1.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-client-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-core-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-guice-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-json-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-server-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jettison-1.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jetty-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jetty-util-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jsr305-3.0.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/leveldbjni-all-1.8.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/log4j-1.2.17.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/netty-3.6.2.Final.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/protobuf-java-2.5.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/servlet-api-2.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/stax-api-1.0-2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/xz-1.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/zookeeper-3.4.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/zookeeper-3.4.6-tests.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-api-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-client-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-common-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-registry-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-applicationhistoryservice-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-common-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-nodemanager-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-resourcemanager-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-sharedcachemanager-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-tests-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-web-proxy-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib:/csh/software/hadoop-2.7.2/share/hadoop/yarn/sources:/csh/software/hadoop-2.7.2/share/hadoop/yarn/test:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/aopalliance-1.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/asm-3.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/avro-1.7.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/commons-compress-1.4.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/commons-io-2.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/guice-3.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/guice-servlet-3.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/hadoop-annotations-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/hamcrest-core-1.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/jackson-core-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/jackson-mapper-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/javax.inject-1.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-core-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-guice-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-server-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/junit-4.11.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/leveldbjni-all-1.8.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/log4j-1.2.17.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/netty-3.6.2.Final.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/paranamer-2.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/protobuf-java-2.5.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/snappy-java-1.0.4.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/xz-1.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-app-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-plugins-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.2-tests.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-shuffle-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib-examples:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/sources:/csh/link/hadoop/contrib/capacity-scheduler/*.jar:/csh/link/hbase/conf:/csh/link/jdk/lib/tools.jar:/csh/link/hbase:/csh/link/hbase/lib/activation-1.1.jar:/csh/link/hbase/lib/antisamy-1.4.3.jar:/csh/link/hbase/lib/aopalliance-1.0.jar:/csh/link/hbase/lib/apacheds-i18n-2.0.0-M15.jar:/csh/link/hbase/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/csh/link/hbase/lib/api-asn1-api-1.0.0-M20.jar:/csh/link/hbase/lib/api-util-1.0.0-M20.jar:/csh/link/hbase/lib/asm-3.1.jar:/csh/link/hbase/lib/avro-1.7.4.jar:/csh/link/hbase/lib/batik-css-1.7.jar:/csh/link/hbase/lib/batik-ext-1.7.jar:/csh/link/hbase/lib/batik-util-1.7.jar:/csh/link/hbase/lib/bsh-core-2.0b4.jar:/csh/link/hbase/lib/commons-beanutils-1.7.0.jar:/csh/link/hbase/lib/commons-beanutils-core-1.7.0.jar:/csh/link/hbase/lib/commons-cli-1.2.jar:/csh/link/hbase/lib/commons-codec-1.9.jar:/csh/link/hbase/lib/commons-collections-3.2.2.jar:/csh/link/hbase/lib/commons-compress-1.4.1.jar:/csh/link/hbase/lib/commons-configuration-1.6.jar:/csh/link/hbase/lib/commons-daemon-1.0.13.jar:/csh/link/hbase/lib/commons-digester-1.8.jar:/csh/link/hbase/lib/commons-el-1.0.jar:/csh/link/hbase/lib/commons-fileupload-1.2.jar:/csh/link/hbase/lib/commons-httpclient-3.1.jar:/csh/link/hbase/lib/commons-io-2.4.jar:/csh/link/hbase/lib/commons-lang-2.6.jar:/csh/link/hbase/lib/commons-logging-1.2.jar:/csh/link/hbase/lib/commons-math-2.2.jar:/csh/link/hbase/lib/commons-math3-3.1.1.jar:/csh/link/hbase/lib/commons-net-3.1.jar:/csh/link/hbase/lib/disruptor-3.3.0.jar:/csh/link/hbase/lib/esapi-2.1.0.jar:/csh/link/hbase/lib/findbugs-annotations-1.3.9-1.jar:/csh/link/hbase/lib/guava-12.0.1.jar:/csh/link/hbase/lib/guice-3.0.jar:/csh/link/hbase/lib/guice-servlet-3.0.jar:/csh/link/hbase/lib/hadoop-annotations-2.5.1.jar:/csh/link/hbase/lib/hadoop-auth-2.5.1.jar:/csh/link/hbase/lib/hadoop-client-2.5.1.jar:/csh/link/hbase/lib/hadoop-common-2.5.1.jar:/csh/link/hbase/lib/hadoop-hdfs-2.5.1.jar:/csh/link/hbase/lib/hadoop-mapreduce-client-app-2.5.1.jar:/csh/link/hbase/lib/hadoop-mapreduce-client-common-2.5.1.jar:/csh/link/hbase/lib/hadoop-mapreduce-client-core-2.5.1.jar:/csh/link/hbase/lib/hadoop-mapreduce-client-jobclient-2.5.1.jar:/csh/link/hbase/lib/hadoop-mapreduce-client-shuffle-2.5.1.jar:/csh/link/hbase/lib/hadoop-yarn-api-2.5.1.jar:/csh/link/hbase/lib/hadoop-yarn-client-2.5.1.jar:/csh/link/hbase/lib/hadoop-yarn-common-2.5.1.jar:/csh/link/hbase/lib/hadoop-yarn-server-common-2.5.1.jar:/csh/link/hbase/lib/hbase-annotations-1.1.4.jar:/csh/link/hbase/lib/hbase-annotations-1.1.4-tests.jar:/csh/link/hbase/lib/hbase-client-1.1.4.jar:/csh/link/hbase/lib/hbase-common-1.1.4.jar:/csh/link/hbase/lib/hbase-common-1.1.4-tests.jar:/csh/link/hbase/lib/hbase-examples-1.1.4.jar:/csh/link/hbase/lib/hbase-hadoop2-compat-1.1.4.jar:/csh/link/hbase/lib/hbase-hadoop-compat-1.1.4.jar:/csh/link/hbase/lib/hbase-it-1.1.4.jar:/csh/link/hbase/lib/hbase-it-1.1.4-tests.jar:/csh/link/hbase/lib/hbase-prefix-tree-1.1.4.jar:/csh/link/hbase/lib/hbase-procedure-1.1.4.jar:/csh/link/hbase/lib/hbase-protocol-1.1.4.jar:/csh/link/hbase/lib/hbase-resource-bundle-1.1.4.jar:/csh/link/hbase/lib/hbase-rest-1.1.4.jar:/csh/link/hbase/lib/hbase-server-1.1.4.jar:/csh/link/hbase/lib/hbase-server-1.1.4-tests.jar:/csh/link/hbase/lib/hbase-shell-1.1.4.jar:/csh/link/hbase/lib/hbase-thrift-1.1.4.jar:/csh/link/hbase/lib/htrace-core-3.1.0-incubating.jar:/csh/link/hbase/lib/httpclient-4.2.5.jar:/csh/link/hbase/lib/httpcore-4.1.3.jar:/csh/link/hbase/lib/jackson-core-asl-1.9.13.jar:/csh/link/hbase/lib/jackson-jaxrs-1.9.13.jar:/csh/link/hbase/lib/jackson-mapper-asl-1.9.13.jar:/csh/link/hbase/lib/jackson-xc-1.9.13.jar:/csh/link/hbase/lib/jamon-runtime-2.3.1.jar:/csh/link/hbase/lib/jasper-compiler-5.5.23.jar:/csh/link/hbase/lib/jasper-runtime-5.5.23.jar:/csh/link/hbase/lib/javax.inject-1.jar:/csh/link/hbase/lib/java-xmlbuilder-0.4.jar:/csh/link/hbase/lib/jaxb-api-2.2.2.jar:/csh/link/hbase/lib/jaxb-impl-2.2.3-1.jar:/csh/link/hbase/lib/jcodings-1.0.8.jar:/csh/link/hbase/lib/jersey-client-1.9.jar:/csh/link/hbase/lib/jersey-core-1.9.jar:/csh/link/hbase/lib/jersey-guice-1.9.jar:/csh/link/hbase/lib/jersey-json-1.9.jar:/csh/link/hbase/lib/jersey-server-1.9.jar:/csh/link/hbase/lib/jets3t-0.9.0.jar:/csh/link/hbase/lib/jettison-1.3.3.jar:/csh/link/hbase/lib/jetty-6.1.26.jar:/csh/link/hbase/lib/jetty-sslengine-6.1.26.jar:/csh/link/hbase/lib/jetty-util-6.1.26.jar:/csh/link/hbase/lib/joni-2.1.2.jar:/csh/link/hbase/lib/jruby-complete-1.6.8.jar:/csh/link/hbase/lib/jsch-0.1.42.jar:/csh/link/hbase/lib/jsp-2.1-6.1.14.jar:/csh/link/hbase/lib/jsp-api-2.1-6.1.14.jar:/csh/link/hbase/lib/jsr305-1.3.9.jar:/csh/link/hbase/lib/junit-4.12.jar:/csh/link/hbase/lib/leveldbjni-all-1.8.jar:/csh/link/hbase/lib/libthrift-0.9.0.jar:/csh/link/hbase/lib/log4j-1.2.17.jar:/csh/link/hbase/lib/metrics-core-2.2.0.jar:/csh/link/hbase/lib/nekohtml-1.9.12.jar:/csh/link/hbase/lib/netty-3.2.4.Final.jar:/csh/link/hbase/lib/netty-all-4.0.23.Final.jar:/csh/link/hbase/lib/paranamer-2.3.jar:/csh/link/hbase/lib/protobuf-java-2.5.0.jar:/csh/link/hbase/lib/servlet-api-2.5-6.1.14.jar:/csh/link/hbase/lib/servlet-api-2.5.jar:/csh/link/hbase/lib/snappy-java-1.0.4.1.jar:/csh/link/hbase/lib/spymemcached-2.11.6.jar:/csh/link/hbase/lib/xalan-2.7.0.jar:/csh/link/hbase/lib/xml-apis-1.3.03.jar:/csh/link/hbase/lib/xml-apis-ext-1.3.04.jar:/csh/link/hbase/lib/xmlenc-0.52.jar:/csh/link/hbase/lib/xom-1.2.5.jar:/csh/link/hbase/lib/xz-1.0.jar:/csh/link/hbase/lib/zookeeper-3.4.6.jar:/csh/software/hadoop-2.7.2/etc/hadoop:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/activation-1.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/apacheds-i18n-2.0.0-M15.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/api-asn1-api-1.0.0-M20.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/api-util-1.0.0-M20.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/asm-3.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/avro-1.7.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-beanutils-1.7.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-beanutils-core-1.8.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-cli-1.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-codec-1.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-collections-3.2.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-compress-1.4.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-configuration-1.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-digester-1.8.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-httpclient-3.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-io-2.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-lang-2.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-logging-1.1.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-math3-3.1.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/commons-net-3.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/curator-client-2.7.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/curator-framework-2.7.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/curator-recipes-2.7.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/gson-2.2.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/guava-11.0.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/hadoop-annotations-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/hadoop-auth-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/hamcrest-core-1.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/htrace-core-3.1.0-incubating.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/httpclient-4.2.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/httpcore-4.2.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jackson-core-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jackson-jaxrs-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jackson-mapper-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jackson-xc-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/java-xmlbuilder-0.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jaxb-api-2.2.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jaxb-impl-2.2.3-1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jersey-core-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jersey-json-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jersey-server-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jets3t-0.9.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jettison-1.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jetty-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jetty-util-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jsch-0.1.42.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jsp-api-2.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/jsr305-3.0.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/junit-4.11.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/log4j-1.2.17.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/mockito-all-1.8.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/netty-3.6.2.Final.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/paranamer-2.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/protobuf-java-2.5.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/servlet-api-2.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/snappy-java-1.0.4.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/stax-api-1.0-2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/xmlenc-0.52.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/xz-1.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/lib/zookeeper-3.4.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/hadoop-common-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/hadoop-common-2.7.2-tests.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/hadoop-nfs-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/common/jdiff:/csh/software/hadoop-2.7.2/share/hadoop/common/lib:/csh/software/hadoop-2.7.2/share/hadoop/common/sources:/csh/software/hadoop-2.7.2/share/hadoop/common/templates:/csh/software/hadoop-2.7.2/share/hadoop/hdfs:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/asm-3.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-cli-1.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-codec-1.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-daemon-1.0.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-io-2.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-lang-2.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/commons-logging-1.1.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/guava-11.0.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/htrace-core-3.1.0-incubating.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jackson-core-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jackson-mapper-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jersey-core-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jersey-server-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jetty-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jetty-util-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/jsr305-3.0.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/leveldbjni-all-1.8.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/log4j-1.2.17.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/netty-3.6.2.Final.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/netty-all-4.0.23.Final.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/protobuf-java-2.5.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/servlet-api-2.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/xercesImpl-2.9.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/xml-apis-1.3.04.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib/xmlenc-0.52.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-2.7.2-tests.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/hadoop-hdfs-nfs-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/jdiff:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/lib:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/sources:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/templates:/csh/software/hadoop-2.7.2/share/hadoop/hdfs/webapps:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/activation-1.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/aopalliance-1.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/asm-3.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-cli-1.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-codec-1.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-collections-3.2.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-compress-1.4.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-io-2.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-lang-2.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/commons-logging-1.1.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/guava-11.0.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/guice-3.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/guice-servlet-3.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-core-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-jaxrs-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-mapper-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jackson-xc-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/javax.inject-1.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jaxb-api-2.2.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jaxb-impl-2.2.3-1.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-client-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-core-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-guice-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-json-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jersey-server-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jettison-1.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jetty-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jetty-util-6.1.26.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/jsr305-3.0.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/leveldbjni-all-1.8.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/log4j-1.2.17.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/netty-3.6.2.Final.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/protobuf-java-2.5.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/servlet-api-2.5.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/stax-api-1.0-2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/xz-1.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/zookeeper-3.4.6.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib/zookeeper-3.4.6-tests.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-api-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-client-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-common-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-registry-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-applicationhistoryservice-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-common-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-nodemanager-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-resourcemanager-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-sharedcachemanager-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-tests-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/hadoop-yarn-server-web-proxy-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/yarn/lib:/csh/software/hadoop-2.7.2/share/hadoop/yarn/sources:/csh/software/hadoop-2.7.2/share/hadoop/yarn/test:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/aopalliance-1.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/asm-3.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/avro-1.7.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/commons-compress-1.4.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/commons-io-2.4.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/guice-3.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/guice-servlet-3.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/hadoop-annotations-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/hamcrest-core-1.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/jackson-core-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/jackson-mapper-asl-1.9.13.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/javax.inject-1.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-core-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-guice-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/jersey-server-1.9.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/junit-4.11.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/leveldbjni-all-1.8.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/log4j-1.2.17.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/netty-3.6.2.Final.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/paranamer-2.3.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/protobuf-java-2.5.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/snappy-java-1.0.4.1.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib/xz-1.0.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-app-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-plugins-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.7.2-tests.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-client-shuffle-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.2.jar:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/lib-examples:/csh/software/hadoop-2.7.2/share/hadoop/mapreduce/sources:/csh/link/hadoop/contrib/capacity-scheduler/*.jar:/csh/link/hbase/conf:/csh/link/hive/lib/*&apos; -Djava.library.path=:/csh/software/hadoop-2.7.2/lib/native:/csh/software/hadoop-2.7.2/lib/native org.apache.flume.node.Application --conf-file conf/single-node.conf --name a1</span><br><span class="line">2016-04-19 21:44:11,126 (lifecycleSupervisor-1-0) [INFO - org.apache.flume.node.PollingPropertiesFileConfigurationProvider.start(PollingPropertiesFileConfigurationProvider.java:61)] Configuration provider starting</span><br><span class="line">2016-04-19 21:44:11,165 (conf-file-poller-0) [INFO - org.apache.flume.node.PollingPropertiesFileConfigurationProvider$FileWatcherRunnable.run(PollingPropertiesFileConfigurationProvider.java:133)] Reloading configuration file:conf/single-node.conf</span><br><span class="line">2016-04-19 21:44:11,200 (conf-file-poller-0) [INFO - org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty(FlumeConfiguration.java:931)] Added sinks: k1 Agent: a1</span><br><span class="line">2016-04-19 21:44:11,200 (conf-file-poller-0) [INFO - org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty(FlumeConfiguration.java:1017)] Processing:k1</span><br><span class="line">2016-04-19 21:44:11,201 (conf-file-poller-0) [INFO - org.apache.flume.conf.FlumeConfiguration$AgentConfiguration.addProperty(FlumeConfiguration.java:1017)] Processing:k1</span><br><span class="line">2016-04-19 21:44:11,285 (conf-file-poller-0) [INFO - org.apache.flume.conf.FlumeConfiguration.validateConfiguration(FlumeConfiguration.java:141)] Post-validation flume configuration contains configuration for agents: [a1]</span><br><span class="line">2016-04-19 21:44:11,285 (conf-file-poller-0) [INFO - org.apache.flume.node.AbstractConfigurationProvider.loadChannels(AbstractConfigurationProvider.java:145)] Creating channels</span><br><span class="line">2016-04-19 21:44:11,341 (conf-file-poller-0) [INFO - org.apache.flume.channel.DefaultChannelFactory.create(DefaultChannelFactory.java:42)] Creating instance of channel c1 type memory</span><br><span class="line">2016-04-19 21:44:11,506 (conf-file-poller-0) [INFO - org.apache.flume.node.AbstractConfigurationProvider.loadChannels(AbstractConfigurationProvider.java:200)] Created channel c1</span><br><span class="line">2016-04-19 21:44:11,507 (conf-file-poller-0) [INFO - org.apache.flume.source.DefaultSourceFactory.create(DefaultSourceFactory.java:41)] Creating instance of source r1, type netcat</span><br><span class="line">2016-04-19 21:44:11,590 (conf-file-poller-0) [INFO - org.apache.flume.sink.DefaultSinkFactory.create(DefaultSinkFactory.java:42)] Creating instance of sink: k1, type: logger</span><br><span class="line">2016-04-19 21:44:11,610 (conf-file-poller-0) [INFO - org.apache.flume.node.AbstractConfigurationProvider.getConfiguration(AbstractConfigurationProvider.java:114)] Channel c1 connected to [r1, k1]</span><br><span class="line">2016-04-19 21:44:11,684 (conf-file-poller-0) [INFO - org.apache.flume.node.Application.startAllComponents(Application.java:138)] Starting new configuration:&#123; sourceRunners:&#123;r1=EventDrivenSourceRunner: &#123; source:org.apache.flume.source.NetcatSource&#123;name:r1,state:IDLE&#125; &#125;&#125; sinkRunners:&#123;k1=SinkRunner: &#123; policy:org.apache.flume.sink.DefaultSinkProcessor@7ceacc49 counterGroup:&#123; name:null counters:&#123;&#125; &#125; &#125;&#125; channels:&#123;c1=org.apache.flume.channel.MemoryChannel&#123;name: c1&#125;&#125; &#125;</span><br><span class="line">2016-04-19 21:44:11,713 (conf-file-poller-0) [INFO - org.apache.flume.node.Application.startAllComponents(Application.java:145)] Starting Channel c1</span><br><span class="line">2016-04-19 21:44:17,439 (lifecycleSupervisor-1-0) [INFO - org.apache.flume.instrumentation.MonitoredCounterGroup.register(MonitoredCounterGroup.java:120)] Monitored counter group for type: CHANNEL, name: c1: Successfully registered new MBean.</span><br><span class="line">2016-04-19 21:44:17,440 (lifecycleSupervisor-1-0) [INFO - org.apache.flume.instrumentation.MonitoredCounterGroup.start(MonitoredCounterGroup.java:96)] Component type: CHANNEL, name: c1 started</span><br><span class="line">2016-04-19 21:44:17,452 (conf-file-poller-0) [INFO - org.apache.flume.node.Application.startAllComponents(Application.java:173)] Starting Sink k1</span><br><span class="line">2016-04-19 21:44:17,462 (conf-file-poller-0) [INFO - org.apache.flume.node.Application.startAllComponents(Application.java:184)] Starting Source r1</span><br><span class="line">2016-04-19 21:44:17,474 (lifecycleSupervisor-1-1) [INFO - org.apache.flume.source.NetcatSource.start(NetcatSource.java:150)] Source starting</span><br><span class="line">2016-04-19 21:44:18,012 (lifecycleSupervisor-1-1) [INFO - org.apache.flume.source.NetcatSource.start(NetcatSource.java:164)] Created serverSocket:sun.nio.ch.ServerSocketChannelImpl[/127.0.0.1:44444]</span><br></pre></td></tr></table></figure></p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在XShell中打开另一个窗口输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 ~]# telnet 127.0.0.1 44444</span><br><span class="line">Trying 127.0.0.1...</span><br><span class="line">Connected to 127.0.0.1.</span><br><span class="line">Escape character is &apos;^]&apos;.</span><br><span class="line">hello flume!</span><br><span class="line">OK</span><br><span class="line">hello big data</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+<p>在原来启动flume的命令行中可以看到：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2016-04-19 21:47:35,653 (SinkRunner-PollingRunner-DefaultSinkProcessor) [INFO - org.apache.flume.sink.LoggerSink.process(LoggerSink.java:94)] Event: &#123; headers:&#123;&#125; body: 68 65 6C 6C 6F 20 66 6C 75 6D 65 21 0D          hello flume!. &#125;</span><br><span class="line">2016-04-19 21:49:10,610 (SinkRunner-PollingRunner-DefaultSinkProcessor) [INFO - org.apache.flume.sink.LoggerSink.process(LoggerSink.java:94)] Event: &#123; headers:&#123;&#125; body: 68 65 6C 6C 6F 20 62 69 67 20 64 61 74 61 0D    hello big data. &#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术人生/" rel="tag">#技术人生</a>
+          
+            <a href="/tags/Flume/" rel="tag">#Flume</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/21/Sqoop HDFS导入到MySQL/" rel="next" title="Sqoop HDFS导入到MySQL">
+                <i class="fa fa-chevron-left"></i> Sqoop HDFS导入到MySQL
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/21/Flume集群搭建/" rel="prev" title="Flume集群搭建">
+                Flume集群搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/21/Flume单机安装与配置/"
+           data-title="Flume单机安装与配置" data-url="https://1csh1.github.io/2016/04/21/Flume单机安装与配置/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载"><span class="nav-number">1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解压"><span class="nav-number">2.</span> <span class="nav-text">解压</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单机配置"><span class="nav-number">4.</span> <span class="nav-text">单机配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行"><span class="nav-number">5.</span> <span class="nav-text">运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">6.</span> <span class="nav-text">测试</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>  
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

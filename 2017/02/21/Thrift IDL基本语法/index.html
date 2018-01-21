@@ -1,0 +1,964 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Thrift,RPC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="摘要：本文介绍Thrift的IDL基本语法  IDL Thrift 采用IDL（Interface Definition Language）来定义通用的服务接口，然后通过Thrift提供的编译器，可以将服务接口编译成不同语言编写的代码，通过这个方式来实现跨语言的功能。  基本类型 bool: 布尔值          对应Java中的booleanbyte: 有符号字节      对应Java中">
+<meta name="keywords" content="Thrift,RPC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thrift IDL基本语法">
+<meta property="og:url" content="https://1csh1.github.io/2017/02/21/Thrift IDL基本语法/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="摘要：本文介绍Thrift的IDL基本语法  IDL Thrift 采用IDL（Interface Definition Language）来定义通用的服务接口，然后通过Thrift提供的编译器，可以将服务接口编译成不同语言编写的代码，通过这个方式来实现跨语言的功能。  基本类型 bool: 布尔值          对应Java中的booleanbyte: 有符号字节      对应Java中">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-21T12:01:10.006Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Thrift IDL基本语法">
+<meta name="twitter:description" content="摘要：本文介绍Thrift的IDL基本语法  IDL Thrift 采用IDL（Interface Definition Language）来定义通用的服务接口，然后通过Thrift提供的编译器，可以将服务接口编译成不同语言编写的代码，通过这个方式来实现跨语言的功能。  基本类型 bool: 布尔值          对应Java中的booleanbyte: 有符号字节      对应Java中">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Thrift IDL基本语法 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Thrift IDL基本语法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-21T20:30:00+08:00" content="2017-02-21">
+              2017-02-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Thrift/" itemprop="url" rel="index">
+                    <span itemprop="name">Thrift</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/21/Thrift IDL基本语法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/21/Thrift IDL基本语法/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/21/Thrift IDL基本语法/" class="leancloud_visitors" data-flag-title="Thrift IDL基本语法">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>摘要：本文介绍Thrift的IDL基本语法</p>
+</blockquote>
+<h1 id="IDL"><a href="#IDL" class="headerlink" title="IDL"></a>IDL</h1><blockquote>
+<p>Thrift 采用IDL（Interface Definition Language）来定义通用的服务接口，然后通过Thrift提供的编译器，可以将服务接口编译成不同语言编写的代码，通过这个方式来实现跨语言的功能。</p>
+</blockquote>
+<h1 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h1><blockquote>
+<p>bool: 布尔值          对应Java中的boolean<br>byte: 有符号字节      对应Java中的byte<br>i16: 16位有符号整型   对应Java中的short<br>i32: 32位有符号整型   对应Java中的int<br>i64: 64位有符号整型   对应Java中的long<br>double: 64位浮点型    对应Java中的double<br>string: 字符串        对应Java中的String<br>binary: Blob 类型     对应Java中的byte[]</p>
+</blockquote>
+<h1 id="struct-结构体"><a href="#struct-结构体" class="headerlink" title="struct 结构体"></a>struct 结构体</h1><p>struct有以下一些约束：</p>
+<blockquote>
+<p>1.struct不能继承，但是可以嵌套，不能嵌套自己。<br>2.其成员都是有明确类型<br>3.成员是被正整数编号过的，其中的编号使不能重复的，这个是为了在传输过程中编码使用。<br>4.成员分割符可以是逗号（,）或是分号（;），而且可以混用<br>5.字段会有optional和required之分和protobuf一样，但是如果不指定则为无类型–可以不填充该值，但是在序列化传输的时候也会序列化进去，optional是不填充则部序列化，required是必须填充也必须序列化。<br>6.每个字段可以设置默认值<br>7.同一文件可以定义多个struct，也可以定义在不同的文件，进行include引入。</p>
+</blockquote>
+<p>例子：</p>
+<pre><code>struct User{
+  1: required string name, //改字段必须填写
+  2: optional i32 age = 0; //默认值
+  3: bool gender //默认字段类型为optional
+}
+</code></pre><p>规则：</p>
+<blockquote>
+<p>如果required标识的域没有赋值，Thrift将给予提示；<br>如果optional标识的域没有赋值，该域将不会被序列化传输；<br>如果某个optional标识域有缺省值而用户没有重新赋值，则该域的值一直为缺省值；<br>如果某个optional标识域有缺省值或者用户已经重新赋值，而不设置它的__isset为true，也不会被序列化传输。</p>
+</blockquote>
+<h1 id="Container-容器"><a href="#Container-容器" class="headerlink" title="Container (容器)"></a>Container (容器)</h1><p>有3种可用容器类型：</p>
+<blockquote>
+<p>list&lt;t&gt;:  元素类型为t的有序表，容许元素重复。对应c++的vector，java的ArrayList或者其他语言的数组<br>set&lt;t&gt;:   元素类型为t的无序表，不容许元素重复。对应c++中的set，java中的HashSet,python中的set，php中没有set，则转换为list类型了<br>map&lt;t, t&gt;: 键类型为t，值类型为t的kv对，键不容许重复。对用c++中的map, Java的HashMap, PHP 对应 array, Python/Ruby 的dictionary</p>
+</blockquote>
+<p>例子</p>
+<pre><code>struct Test {
+  1: map&lt;string, User&gt; usermap,
+  2: set&lt;i32&gt; intset,
+  3: list&lt;double&gt; doublelist
+}
+</code></pre><h1 id="enum-枚举"><a href="#enum-枚举" class="headerlink" title="enum (枚举)"></a>enum (枚举)</h1><p>约束：</p>
+<blockquote>
+<p>1.编译器默认从0开始赋值<br>2.可以赋予某个常量某个整数<br>3.允许常量是十六进制整数<br>4.末尾没有分号<br>5.给常量赋缺省值时，使用常量的全称</p>
+</blockquote>
+<p>规则：</p>
+<blockquote>
+<p>Thrift不支持枚举类嵌套，枚举常量必须是32位的正整数</p>
+</blockquote>
+<p>例子：</p>
+<pre><code>enum HttpStatus {
+  OK = 200,
+  NOTFOUND=404
+}
+</code></pre><h1 id="常量定义"><a href="#常量定义" class="headerlink" title="常量定义"></a>常量定义</h1><p>使用方法：在变量前面加上const</p>
+<p>例子：</p>
+<pre><code>const i32 const_int = 1;
+</code></pre><h1 id="类型定义"><a href="#类型定义" class="headerlink" title="类型定义"></a>类型定义</h1><p>Thrift支持C/C++类型定义</p>
+<p>例子：</p>
+<pre><code>typedef i32 myint
+typedef i64 usernumber
+</code></pre><p>规则：</p>
+<blockquote>
+<p>末尾没有逗号</p>
+</blockquote>
+<h1 id="Exception-异常"><a href="#Exception-异常" class="headerlink" title="Exception (异常)"></a>Exception (异常)</h1><p>异常在语法和功能上类似于结构体，差别是异常使用关键字exception，而且异常是继承每种语言的基础异常类。</p>
+<p>例子：</p>
+<pre><code>exception MyException {
+    1: i32 errorCode,
+    2: string message
+}
+</code></pre><h1 id="Service-服务定义类型"><a href="#Service-服务定义类型" class="headerlink" title="Service (服务定义类型)"></a>Service (服务定义类型)</h1><p>服务的定义方法在语义上等同于面向对象语言中的接口。</p>
+<pre><code>service HelloService {
+    i32 sayInt(1:i32 param)
+    string sayString(1:string param)
+    bool sayBoolean(1:bool param)
+    void sayVoid()
+}
+</code></pre><p>编译后的Java代码</p>
+<pre><code>public class HelloService {
+  public interface Iface {
+    public int sayInt(int param) throws org.apache.thrift.TException;
+    public java.lang.String sayString(java.lang.String param) throws org.apache.thrift.TException;
+    public boolean sayBoolean(boolean param) throws org.apache.thrift.TException;
+    public void sayVoid() throws org.apache.thrift.TException;
+  }
+  // ... 省略很多代码
+}
+</code></pre><h1 id="Namespace-名字空间"><a href="#Namespace-名字空间" class="headerlink" title="Namespace (名字空间)"></a>Namespace (名字空间)</h1><blockquote>
+<p>Thrift中的命名空间类似于C++中的namespace和java中的package，它们提供了一种组织（隔离）代码的简便方式。名字空间也可以用于解决类型定义中的名字冲突。<br>由于每种语言均有自己的命名空间定义方式（如python中有module）, thrift允许开发者针对特定语言定义namespace：</p>
+</blockquote>
+<p>例子：</p>
+<pre><code>namespace java com.example.test
+</code></pre><p>转化成</p>
+<pre><code>package com.example.test
+</code></pre><h1 id="Comment-注释"><a href="#Comment-注释" class="headerlink" title="Comment (注释)"></a>Comment (注释)</h1><p>Thrift支持C多行风格和Java/C++单行风格。<br>例子：</p>
+<pre><code>/** 
+ * This is a multi-line comment. 
+ * Just like in C. 
+ */
+ // C++/Java style single-line comments work just as well.
+</code></pre><h1 id="Include"><a href="#Include" class="headerlink" title="Include"></a>Include</h1><blockquote>
+<p>便于管理、重用和提高模块性/组织性，我们常常分割Thrift定义在不同的文件中。包含文件搜索方式与c++一样。Thrift允许文件包含其它thrift文件，用户需要使用thrift文件名作为前缀访问被包含的对象，</p>
+</blockquote>
+<p>如：</p>
+<pre><code>include &quot;test.thrift&quot;   
+...
+struct StSearchResult {
+    1: in32 uid;
+     ...
+}
+</code></pre><p>thrift文件名要用双引号包含，末尾没有逗号或者分号</p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-apachethrift/" target="_blank" rel="noopener">Apache Thrift - 可伸缩的跨语言服务开发框架</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Thrift/" rel="tag">#Thrift</a>
+          
+            <a href="/tags/RPC/" rel="tag">#RPC</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/21/Thrift 入门介绍/" rel="next" title="Thrift 入门技术">
+                <i class="fa fa-chevron-left"></i> Thrift 入门技术
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/22/Thrift 简单例子/" rel="prev" title="Thrift 简单例子">
+                Thrift 简单例子 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/21/Thrift IDL基本语法/"
+           data-title="Thrift IDL基本语法" data-url="https://1csh1.github.io/2017/02/21/Thrift IDL基本语法/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#IDL"><span class="nav-number">1.</span> <span class="nav-text">IDL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本类型"><span class="nav-number">2.</span> <span class="nav-text">基本类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#struct-结构体"><span class="nav-number">3.</span> <span class="nav-text">struct 结构体</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Container-容器"><span class="nav-number">4.</span> <span class="nav-text">Container (容器)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#enum-枚举"><span class="nav-number">5.</span> <span class="nav-text">enum (枚举)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常量定义"><span class="nav-number">6.</span> <span class="nav-text">常量定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类型定义"><span class="nav-number">7.</span> <span class="nav-text">类型定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Exception-异常"><span class="nav-number">8.</span> <span class="nav-text">Exception (异常)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Service-服务定义类型"><span class="nav-number">9.</span> <span class="nav-text">Service (服务定义类型)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Namespace-名字空间"><span class="nav-number">10.</span> <span class="nav-text">Namespace (名字空间)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Comment-注释"><span class="nav-number">11.</span> <span class="nav-text">Comment (注释)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Include"><span class="nav-number">12.</span> <span class="nav-text">Include</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文章"><span class="nav-number">13.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>  
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

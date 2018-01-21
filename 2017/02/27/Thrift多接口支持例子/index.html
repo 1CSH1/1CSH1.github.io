@@ -1,0 +1,881 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Thrift,RPC,Server," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="摘要：本文简单写一个Thrift支持多接口的代码  Thrift通过TMultiplexedProcessor来设置多个服务接口下面是代码： IDL接口HelloService.thrift1234567namespace java com.thrift.demo.service service HelloService &amp;#123;    i32 sayInt(1:i32 param)">
+<meta name="keywords" content="Thrift,RPC,Server">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thrift多接口支持例子">
+<meta property="og:url" content="https://1csh1.github.io/2017/02/27/Thrift多接口支持例子/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="摘要：本文简单写一个Thrift支持多接口的代码  Thrift通过TMultiplexedProcessor来设置多个服务接口下面是代码： IDL接口HelloService.thrift1234567namespace java com.thrift.demo.service service HelloService &amp;#123;    i32 sayInt(1:i32 param)">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-21T12:01:10.008Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Thrift多接口支持例子">
+<meta name="twitter:description" content="摘要：本文简单写一个Thrift支持多接口的代码  Thrift通过TMultiplexedProcessor来设置多个服务接口下面是代码： IDL接口HelloService.thrift1234567namespace java com.thrift.demo.service service HelloService &amp;#123;    i32 sayInt(1:i32 param)">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Thrift多接口支持例子 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Thrift多接口支持例子
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-27T23:00:00+08:00" content="2017-02-27">
+              2017-02-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Thrift/" itemprop="url" rel="index">
+                    <span itemprop="name">Thrift</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/27/Thrift多接口支持例子/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/27/Thrift多接口支持例子/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/27/Thrift多接口支持例子/" class="leancloud_visitors" data-flag-title="Thrift多接口支持例子">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>摘要：本文简单写一个Thrift支持多接口的代码</p>
+</blockquote>
+<p>Thrift通过TMultiplexedProcessor来设置多个服务接口<br>下面是代码：</p>
+<h1 id="IDL接口"><a href="#IDL接口" class="headerlink" title="IDL接口"></a>IDL接口</h1><h2 id="HelloService-thrift"><a href="#HelloService-thrift" class="headerlink" title="HelloService.thrift"></a>HelloService.thrift</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">namespace java com.thrift.demo.service </span><br><span class="line">service HelloService &#123;</span><br><span class="line">    i32 sayInt(1:i32 param)</span><br><span class="line">    string sayString(1:string param)</span><br><span class="line">    bool sayBoolean(1:bool param)</span><br><span class="line">    void sayVoid()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="TestService-thrift"><a href="#TestService-thrift" class="headerlink" title="TestService.thrift"></a>TestService.thrift</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">struct Test &#123;</span><br><span class="line">  1: required bool bool_; //required 必须填充也必须序列化</span><br><span class="line">  2: optional i8 i8_; //optional 不填充则不序列化</span><br><span class="line">  3: i16 i16_;</span><br><span class="line">  4: i32 i32_;</span><br><span class="line">  5: i64 i64_;</span><br><span class="line">  6: double double_;</span><br><span class="line">  7: string string_;</span><br><span class="line">  8: binary binary_;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">service TestService &#123;</span><br><span class="line">  void getVoid(1:Test test);</span><br><span class="line">  bool getBool(1:Test test);</span><br><span class="line">  i8 getI8(1:Test test);</span><br><span class="line">  i16 getI16(1:Test test);</span><br><span class="line">  i32 getI32(1:Test test);</span><br><span class="line">  i64 getI64(1:Test test);</span><br><span class="line">  double getDouble(1:Test test);</span><br><span class="line">  string getString(1:Test test);</span><br><span class="line">  binary getBinary(1:Test test);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="接口实现类"><a href="#接口实现类" class="headerlink" title="接口实现类"></a>接口实现类</h1><h2 id="HelloServiceImpl-java"><a href="#HelloServiceImpl-java" class="headerlink" title="HelloServiceImpl.java"></a>HelloServiceImpl.java</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class HelloServiceImpl implements HelloService.Iface &#123;</span><br><span class="line"></span><br><span class="line">    public int sayInt(int param) throws TException &#123;</span><br><span class="line">        System.out.println(&quot;say int :&quot; + param);</span><br><span class="line">        return param;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String sayString(String param) throws TException &#123;</span><br><span class="line">        System.out.println(&quot;say string :&quot; + param);</span><br><span class="line">        return param;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public boolean sayBoolean(boolean param) throws TException &#123;</span><br><span class="line">        System.out.println(&quot;say boolean :&quot; + param);</span><br><span class="line">        return param;</span><br><span class="line">    &#125;</span><br><span class="line">    public void sayVoid() throws TException &#123;</span><br><span class="line">        System.out.println(&quot;say void ...&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="TestServiceImpl-java"><a href="#TestServiceImpl-java" class="headerlink" title="TestServiceImpl.java"></a>TestServiceImpl.java</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">public class TestServiceImpl implements TestService.Iface &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void getVoid(Test test) throws TException &#123;</span><br><span class="line">		System.out.println(&quot;TestServiceImpl + &quot; + test.toString());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public boolean getBool(Test test) throws TException &#123;</span><br><span class="line">		System.out.println(&quot;TestServiceImpl.getBool() + &quot; + test.bool_);</span><br><span class="line">		return test.bool_;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public byte getI8(Test test) throws TException &#123;</span><br><span class="line">		System.out.println(&quot;TestServiceImpl.getI8() + &quot; + test.i8_);</span><br><span class="line">		return test.i8_;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public short getI16(Test test) throws TException &#123;</span><br><span class="line">		System.out.println(&quot;TestServiceImpl.getI16() + &quot; + test.i16_);</span><br><span class="line">		return test.i16_;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public int getI32(Test test) throws TException &#123;</span><br><span class="line">		System.out.println(&quot;TestServiceImpl.getI32() + &quot; + test.i32_);</span><br><span class="line">		return test.i32_;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public long getI64(Test test) throws TException &#123;</span><br><span class="line">		System.out.println(&quot;TestServiceImpl.getI64() + &quot; + test.i64_);</span><br><span class="line">		return test.i64_;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public double getDouble(Test test) throws TException &#123;</span><br><span class="line">		System.out.println(&quot;TestServiceImpl.getDouble() + &quot; + test.double_);</span><br><span class="line">		return test.double_;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public String getString(Test test) throws TException &#123;</span><br><span class="line">		System.out.println(&quot;TestServiceImpl.getString() + &quot; + test.string_);</span><br><span class="line">		return test.string_;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public ByteBuffer getBinary(Test test) throws TException &#123;</span><br><span class="line">		System.out.println(&quot;TestServiceImpl.getBinary() + &quot; + test.binary_);</span><br><span class="line">		return test.binary_;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Server端"><a href="#Server端" class="headerlink" title="Server端"></a>Server端</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftServer &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			TServerSocket serverTransport = new TServerSocket(9090);</span><br><span class="line">			Factory protocolFactory = new TBinaryProtocol.Factory();</span><br><span class="line">			//创建多个服务Processor</span><br><span class="line">			Processor&lt;TestService.Iface&gt; processorTest = new TestService.Processor&lt;TestService.Iface&gt;(new TestServiceImpl());</span><br><span class="line">			com.thrift.demo01.service.HelloService.Processor&lt;Iface&gt; processorHello = new HelloService.Processor&lt;HelloService.Iface&gt;(new HelloServiceImpl());</span><br><span class="line">			</span><br><span class="line">			//将服务注册到TMultiplexedProcessor中</span><br><span class="line">			TMultiplexedProcessor processors = new TMultiplexedProcessor();</span><br><span class="line">			processors.registerProcessor(&quot;testService&quot;, processorTest);</span><br><span class="line">			processors.registerProcessor(&quot;helloService&quot;, processorHello);</span><br><span class="line">			</span><br><span class="line">			TThreadPoolServer.Args args = new TThreadPoolServer.Args(serverTransport)</span><br><span class="line">								.protocolFactory(protocolFactory)</span><br><span class="line">								.processor(processors)</span><br><span class="line">								.minWorkerThreads(1000)</span><br><span class="line">								.maxWorkerThreads(1000);</span><br><span class="line">			TServer server = new TThreadPoolServer(args);</span><br><span class="line">			System.out.println(&quot;开启thrift服务器，监听端口：9090&quot;);</span><br><span class="line">			server.serve();</span><br><span class="line">		&#125; catch (TTransportException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Client端"><a href="#Client端" class="headerlink" title="Client端"></a>Client端</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftClient &#123;</span><br><span class="line">	public static void testTMultiplexedProcessor() &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			TTransport transport = new TSocket(&quot;localhost&quot;, 9090);</span><br><span class="line">			TProtocol protocol = new TBinaryProtocol(transport);</span><br><span class="line">			//通过TMultiplexedProtocol获取对应的服务</span><br><span class="line">			TMultiplexedProtocol protocolTest = new TMultiplexedProtocol(protocol, &quot;testService&quot;);</span><br><span class="line">			TMultiplexedProtocol protocolHello = new TMultiplexedProtocol(protocol, &quot;helloService&quot;);</span><br><span class="line">			</span><br><span class="line">			//创建Client调用服务接口的方法</span><br><span class="line">			TestService.Client client = new TestService.Client(protocolTest);</span><br><span class="line">			HelloService.Client clientHello = new HelloService.Client(protocolHello);</span><br><span class="line">			transport.open();</span><br><span class="line">			</span><br><span class="line">			//调用接口方法</span><br><span class="line">			Test test = new Test();</span><br><span class="line">			test.setBool_(true);</span><br><span class="line">			test.setDouble_(5.0);</span><br><span class="line">			System.out.println(&quot;Client getBool()&quot; + client.getBool(test));</span><br><span class="line">			System.out.println(&quot;Client getDouble()&quot; + client.getDouble(test));</span><br><span class="line">		</span><br><span class="line">			System.out.println(&quot;HelloService sayString :&quot; + clientHello.sayString(&quot;哈哈哈&quot;));</span><br><span class="line">			transport.close();</span><br><span class="line">		&#125; catch (TTransportException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; catch (TException te) &#123;</span><br><span class="line">			te.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果:"></a>运行结果:</h1><p>Server端:</p>
+<blockquote>
+<p>开启thrift服务器，监听端口：9090<br>TestServiceImpl.getBool() + true<br>TestServiceImpl.getDouble() + 5.0<br>say string :哈哈哈</p>
+</blockquote>
+<p>Client端:</p>
+<blockquote>
+<p>Received 1<br>Client getBool()true<br>Received 2<br>Client getDouble()5.0<br>Received 1<br>HelloService sayString :哈哈哈</p>
+</blockquote>
+<p>通过这个方法,就可以在启动一个服务中同时提供多个接口给客户端调用，这种方式在项目开发中可能会用的更多。</p>
+<p>参考文章:<br><a href="http://www.myexception.cn/software-architecture-design/1404363.html" target="_blank" rel="noopener">Thrift对多接口服务的支持</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Thrift/" rel="tag">#Thrift</a>
+          
+            <a href="/tags/RPC/" rel="tag">#RPC</a>
+          
+            <a href="/tags/Server/" rel="tag">#Server</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/27/Thrift Server介绍及代码实现/" rel="next" title="Thrift Server介绍及代码实现">
+                <i class="fa fa-chevron-left"></i> Thrift Server介绍及代码实现
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/16/Thrift封装/" rel="prev" title="Thrift封装">
+                Thrift封装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/27/Thrift多接口支持例子/"
+           data-title="Thrift多接口支持例子" data-url="https://1csh1.github.io/2017/02/27/Thrift多接口支持例子/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#IDL接口"><span class="nav-number">1.</span> <span class="nav-text">IDL接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HelloService-thrift"><span class="nav-number">1.1.</span> <span class="nav-text">HelloService.thrift</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TestService-thrift"><span class="nav-number">1.2.</span> <span class="nav-text">TestService.thrift</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接口实现类"><span class="nav-number">2.</span> <span class="nav-text">接口实现类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HelloServiceImpl-java"><span class="nav-number">2.1.</span> <span class="nav-text">HelloServiceImpl.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TestServiceImpl-java"><span class="nav-number">2.2.</span> <span class="nav-text">TestServiceImpl.java</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Server端"><span class="nav-number">3.</span> <span class="nav-text">Server端</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Client端"><span class="nav-number">4.</span> <span class="nav-text">Client端</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行结果"><span class="nav-number">5.</span> <span class="nav-text">运行结果:</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>  
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

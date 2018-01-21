@@ -1,0 +1,942 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Thrift,RPC,Server," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="摘要：本文介绍Thrift几个Server，以及其代码的实现。  Thrift为服务器端提供了多种工作模式，本文中将涉及以下5中工作模式：TSimpleServer、TNonblockingServer、THsHaServer、TThreadPoolServer、TThreadedSelectorServer，这5中工作模式的详细工作原理如下： TSimpleServer介绍TSimpleSer">
+<meta name="keywords" content="Thrift,RPC,Server">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thrift Server介绍及代码实现">
+<meta property="og:url" content="https://1csh1.github.io/2017/02/27/Thrift Server介绍及代码实现/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="摘要：本文介绍Thrift几个Server，以及其代码的实现。  Thrift为服务器端提供了多种工作模式，本文中将涉及以下5中工作模式：TSimpleServer、TNonblockingServer、THsHaServer、TThreadPoolServer、TThreadedSelectorServer，这5中工作模式的详细工作原理如下： TSimpleServer介绍TSimpleSer">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://1csh1.github.io/img/Thrift Server介绍及代码实现/TSimpleServer.jpg">
+<meta property="og:image" content="https://1csh1.github.io/img/Thrift Server介绍及代码实现/TNonblockingServer.jpg">
+<meta property="og:image" content="https://1csh1.github.io/img/Thrift Server介绍及代码实现/THsHaServer.jpg">
+<meta property="og:image" content="https://1csh1.github.io/img/Thrift Server介绍及代码实现/TThreadPoolServer.jpg">
+<meta property="og:image" content="https://1csh1.github.io/img/Thrift Server介绍及代码实现/TThreadedSelectorServer.jpg">
+<meta property="og:updated_time" content="2017-12-21T12:01:10.006Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Thrift Server介绍及代码实现">
+<meta name="twitter:description" content="摘要：本文介绍Thrift几个Server，以及其代码的实现。  Thrift为服务器端提供了多种工作模式，本文中将涉及以下5中工作模式：TSimpleServer、TNonblockingServer、THsHaServer、TThreadPoolServer、TThreadedSelectorServer，这5中工作模式的详细工作原理如下： TSimpleServer介绍TSimpleSer">
+<meta name="twitter:image" content="https://1csh1.github.io/img/Thrift Server介绍及代码实现/TSimpleServer.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Thrift Server介绍及代码实现 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Thrift Server介绍及代码实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-27T22:00:00+08:00" content="2017-02-27">
+              2017-02-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Thrift/" itemprop="url" rel="index">
+                    <span itemprop="name">Thrift</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/27/Thrift Server介绍及代码实现/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/27/Thrift Server介绍及代码实现/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/27/Thrift Server介绍及代码实现/" class="leancloud_visitors" data-flag-title="Thrift Server介绍及代码实现">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>摘要：本文介绍Thrift几个Server，以及其代码的实现。</p>
+</blockquote>
+<p>Thrift为服务器端提供了多种工作模式，本文中将涉及以下5中工作模式：TSimpleServer、TNonblockingServer、THsHaServer、TThreadPoolServer、TThreadedSelectorServer，这5中工作模式的详细工作原理如下：</p>
+<h1 id="TSimpleServer"><a href="#TSimpleServer" class="headerlink" title="TSimpleServer"></a>TSimpleServer</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>TSimpleServer的工作模式只有一个工作线程，循环监听新请求的到来并完成对请求的处理，它只是在简单的演示时候使用，它的工作方式如下图所示：</p>
+<p><img src="https://1csh1.github.io/img/Thrift Server介绍及代码实现/TSimpleServer.jpg" alt="TSimpleServer"> </p>
+<p>TSimpleServer的工作模式采用最简单的阻塞IO，实现方法简洁明了，便于理解，但是一次只能接收和处理一个socket连接，效率比较低，主要用于演示Thrift的工作过程，在实际开发过程中很少用到它。</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p>上篇博客已经有了<br><a href="https://1csh1.github.io/2017/02/22/Thrift%20%E7%AE%80%E5%8D%95%E4%BE%8B%E5%AD%90/">Thrift 简单例子</a></p>
+<h1 id="TNonblockingServer"><a href="#TNonblockingServer" class="headerlink" title="TNonblockingServer"></a>TNonblockingServer</h1><h2 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h2><p>TNonblockingServer工作模式，该模式也是单线程工作，但是该模式采用NIO的方式，所有的socket都被注册到selector中，在一个线程中通过seletor循环监控所有的socket，每次selector结束时，处理所有的处于就绪状态的socket，对于有数据到来的socket进行数据读取操作，对于有数据发送的socket则进行数据发送，对于监听socket则产生一个新业务socket并将其注册到selector中，如下图所示：</p>
+<p><img src="https://1csh1.github.io/img/Thrift Server介绍及代码实现/TNonblockingServer.jpg" alt="TNonblockingServer"> </p>
+<p>上图中读取数据之后的业务处理就是根据读取到的调用请求，调用具体函数完成处理，只有完成函数处理才能进行后续的操作；</p>
+<h2 id="TNonblockingServer模式优点："><a href="#TNonblockingServer模式优点：" class="headerlink" title="TNonblockingServer模式优点："></a>TNonblockingServer模式优点：</h2><p>相比于TSimpleServer效率提升主要体现在IO多路复用上，TNonblockingServer采用非阻塞IO，同时监控多个socket的状态变化；</p>
+<h2 id="TNonblockingServer模式缺点："><a href="#TNonblockingServer模式缺点：" class="headerlink" title="TNonblockingServer模式缺点："></a>TNonblockingServer模式缺点：</h2><p>TNonblockingServer模式在业务处理上还是采用单线程顺序来完成，在业务处理比较复杂、耗时的时候，例如某些接口函数需要读取数据库执行时间较长，此时该模式效率也不高，因为多个调用请求任务依然是顺序一个接一个执行。</p>
+<h2 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h2><p>Server端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftServer &#123;</span><br><span class="line">	</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			// 设置服务器端口</span><br><span class="line">			TNonblockingServerSocket serverTransport = new TNonblockingServerSocket(9090);</span><br><span class="line">			// 设置二进制协议工厂</span><br><span class="line">			Factory protocolFactory = new TBinaryProtocol.Factory();</span><br><span class="line">			// 处理器关联业务实现</span><br><span class="line">			Processor&lt;TestService.Iface&gt; processor = new TestService.Processor&lt;TestService.Iface&gt;(</span><br><span class="line">					new TestServiceImpl());</span><br><span class="line">			TNonblockingServer.Args args = new TNonblockingServer.Args(serverTransport)</span><br><span class="line">					.processor(processor)</span><br><span class="line">					.protocolFactory(protocolFactory);</span><br><span class="line">			TServer server = new TNonblockingServer(args);</span><br><span class="line">			System.out.println(&quot;开启thrift服务器，监听端口：9090&quot;);</span><br><span class="line">			server.serve();</span><br><span class="line">		&#125; catch (TTransportException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Client端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftClient &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			TProtocolFactory protocolFactory = new TBinaryProtocol.Factory();</span><br><span class="line">			TAsyncClientManager clientManager = new TAsyncClientManager();</span><br><span class="line">			TNonblockingSocket transport = new TNonblockingSocket(&quot;localhost&quot;, 9090);</span><br><span class="line">			TestService.AsyncClient client = new TestService.AsyncClient(protocolFactory, clientManager, transport);</span><br><span class="line">			</span><br><span class="line">			Test test = new Test();</span><br><span class="line">			test.setBool_(true);</span><br><span class="line">			test.setI8_((byte) 1);</span><br><span class="line">			test.setI16_((short) 2);</span><br><span class="line">			test.setI32_(3);</span><br><span class="line">			test.setI64_(4L);</span><br><span class="line">			test.setDouble_(5.0);</span><br><span class="line">			test.setString_(&quot;abc&quot;);</span><br><span class="line">			test.setBinary_(&quot;abc&quot;.getBytes());			</span><br><span class="line">			</span><br><span class="line">			CountDownLatch latch = new CountDownLatch(1);</span><br><span class="line">			client.getBool(test, new AsynCallback(latch));</span><br><span class="line"></span><br><span class="line">			boolean wait;			</span><br><span class="line">			try &#123;</span><br><span class="line">				wait = latch.await(1, TimeUnit.SECONDS);</span><br><span class="line">				System.out.println(&quot;latch.await =:&quot; + wait); </span><br><span class="line">			&#125; catch (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;  </span><br><span class="line">		</span><br><span class="line">			transport.close();</span><br><span class="line">			</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; catch (TException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：<br>Client端：</p>
+<blockquote>
+<p>Received 0<br>onComplete<br>AsynCall result =:true<br>latch.await =:true</p>
+</blockquote>
+<p>Server端：</p>
+<blockquote>
+<p>开启thrift服务器，监听端口：9090<br>TestServiceImpl.getBool() + true</p>
+</blockquote>
+<h1 id="THsHaServer模式（半同步半异步）"><a href="#THsHaServer模式（半同步半异步）" class="headerlink" title="THsHaServer模式（半同步半异步）"></a>THsHaServer模式（半同步半异步）</h1><h2 id="介绍-2"><a href="#介绍-2" class="headerlink" title="介绍"></a>介绍</h2><p>THsHaServer类是TNonblockingServer类的子类，在TNonblockingServer模式中，采用一个线程来完成对所有socket的监听和业务处理，造成了效率的低下，THsHaServer模式的引入则是部分解决了这些问题。THsHaServer模式中，引入一个线程池来专门进行业务处理，如下图所示；</p>
+<p><img src="https://1csh1.github.io/img/Thrift Server介绍及代码实现/THsHaServer.jpg" alt="THsHaServer"></p>
+<h2 id="THsHaServer的优点："><a href="#THsHaServer的优点：" class="headerlink" title="THsHaServer的优点："></a>THsHaServer的优点：</h2><p>与TNonblockingServer模式相比，THsHaServer在完成数据读取之后，将业务处理过程交由一个线程池来完成，主线程直接返回进行下一次循环操作，效率大大提升；</p>
+<h2 id="THsHaServer的缺点："><a href="#THsHaServer的缺点：" class="headerlink" title="THsHaServer的缺点："></a>THsHaServer的缺点：</h2><p>由上图可以看出，主线程需要完成对所有socket的监听以及数据读写的工作，当并发请求数较大时，且发送数据量较多时，监听socket上新连接请求不能被及时接受。</p>
+<h2 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h2><p>Server端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftServer &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			TNonblockingServerSocket serverTransport = new TNonblockingServerSocket(9090);</span><br><span class="line">			TTransportFactory transportFactory = new TFramedTransport.Factory();</span><br><span class="line">			Factory protocolFactory = new TBinaryProtocol.Factory();</span><br><span class="line">			Processor&lt;TestService.Iface&gt; processor = new TestService.Processor&lt;TestService.Iface&gt;(</span><br><span class="line">					new TestServiceImpl());</span><br><span class="line">			Args args = new Args(serverTransport)</span><br><span class="line">					.processor(processor)</span><br><span class="line">					.transportFactory(transportFactory)</span><br><span class="line">					.protocolFactory(protocolFactory);</span><br><span class="line">			TServer server = new THsHaServer(args);</span><br><span class="line">			System.out.println(&quot;开启thrift服务器，监听端口：9090&quot;);</span><br><span class="line">			server.serve();</span><br><span class="line">		&#125; catch (TTransportException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Client 端<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftClient &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			TProtocolFactory protocolFactory = new TBinaryProtocol.Factory();</span><br><span class="line">			TAsyncClientManager clientManager = new TAsyncClientManager();</span><br><span class="line">			TNonblockingSocket transport = new TNonblockingSocket(&quot;localhost&quot;, 9090);</span><br><span class="line">			TestService.AsyncClient client = new TestService.AsyncClient(protocolFactory, clientManager, transport);</span><br><span class="line">			</span><br><span class="line">			Test test = new Test();</span><br><span class="line">			test.setBool_(true);</span><br><span class="line">			test.setI8_((byte) 1);</span><br><span class="line">			test.setI16_((short) 2);</span><br><span class="line">			test.setI32_(3);</span><br><span class="line">			test.setI64_(4L);</span><br><span class="line">			test.setDouble_(5.0);</span><br><span class="line">			test.setString_(&quot;abc&quot;);</span><br><span class="line">			test.setBinary_(&quot;abc&quot;.getBytes());			</span><br><span class="line">			</span><br><span class="line">			CountDownLatch latch = new CountDownLatch(1);</span><br><span class="line">			client.getBool(test, new AsynCallback(latch));</span><br><span class="line"></span><br><span class="line">			boolean wait;			</span><br><span class="line">			try &#123;</span><br><span class="line">				wait = latch.await(1, TimeUnit.SECONDS);</span><br><span class="line">				System.out.println(&quot;latch.await =:&quot; + wait); </span><br><span class="line">			&#125; catch (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;  </span><br><span class="line">		</span><br><span class="line">			transport.close();</span><br><span class="line">			</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; catch (TException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>异步处理类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">class AsynCallback implements AsyncMethodCallback&lt;Boolean&gt;&#123;  </span><br><span class="line">    private CountDownLatch latch;  </span><br><span class="line"></span><br><span class="line">    public AsynCallback(CountDownLatch latch) &#123;  </span><br><span class="line">        this.latch = latch;  </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void onComplete(Boolean response) &#123;  </span><br><span class="line">        System.out.println(&quot;onComplete&quot;);  </span><br><span class="line">        try &#123;  </span><br><span class="line">            // Thread.sleep(1000L * 1);  </span><br><span class="line">            System.out.println(&quot;AsynCall result =:&quot; + response);  </span><br><span class="line">        &#125; catch (Exception e) &#123;  </span><br><span class="line">            e.printStackTrace();  </span><br><span class="line">        &#125; finally &#123;  </span><br><span class="line">            latch.countDown();  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public void onError(Exception exception) &#123;  </span><br><span class="line">        System.out.println(&quot;onError :&quot; + exception.getMessage());  </span><br><span class="line">        latch.countDown();  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：<br>Client端：</p>
+<blockquote>
+<p>Received 0<br>onComplete<br>AsynCall result =:true<br>latch.await =:true</p>
+</blockquote>
+<p>Server端：</p>
+<blockquote>
+<p>开启thrift服务器，监听端口：9090<br>TestServiceImpl.getBool() + true</p>
+</blockquote>
+<h1 id="TThreadPoolServer"><a href="#TThreadPoolServer" class="headerlink" title="TThreadPoolServer"></a>TThreadPoolServer</h1><h2 id="介绍-3"><a href="#介绍-3" class="headerlink" title="介绍"></a>介绍</h2><p>TThreadPoolServer模式采用阻塞socket方式工作，,主线程负责阻塞式监听“监听socket”中是否有新socket到来，业务处理交由一个线程池来处理，如下图所示：</p>
+<p><img src="https://1csh1.github.io/img/Thrift Server介绍及代码实现/TThreadPoolServer.jpg" alt="TThreadPoolServer"></p>
+<h2 id="TThreadPoolServer模式优点："><a href="#TThreadPoolServer模式优点：" class="headerlink" title="TThreadPoolServer模式优点："></a>TThreadPoolServer模式优点：</h2><p>线程池模式中，数据读取和业务处理都交由线程池完成，主线程只负责监听新连接，因此在并发量较大时新连接也能够被及时接受。线程池模式比较适合服务器端能预知最多有多少个客户端并发的情况，这时每个请求都能被业务线程池及时处理，性能也非常高。</p>
+<h2 id="TThreadPoolServer模式缺点："><a href="#TThreadPoolServer模式缺点：" class="headerlink" title="TThreadPoolServer模式缺点："></a>TThreadPoolServer模式缺点：</h2><p>线程池模式的处理能力受限于线程池的工作能力，当并发请求数大于线程池中的线程数时，新请求也只能排队等待。</p>
+<h2 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h2><p>Server端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">public ThriftServer &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			TServerSocket serverTransport = new TServerSocket(9090);</span><br><span class="line">			Factory protocolFactory = new TBinaryProtocol.Factory();</span><br><span class="line">			Processor&lt;TestService.Iface&gt; processor = new TestService.Processor&lt;TestService.Iface&gt;(new TestServiceImpl());</span><br><span class="line">			TThreadPoolServer.Args args = new TThreadPoolServer.Args(serverTransport)</span><br><span class="line">					.protocolFactory(protocolFactory)</span><br><span class="line">					.processor(processor)</span><br><span class="line">					.minWorkerThreads(1000).maxWorkerThreads(1000);</span><br><span class="line">			TServer server = new TThreadPoolServer(args);</span><br><span class="line">			System.out.println(&quot;开启thrift服务器，监听端口：9090&quot;);</span><br><span class="line">			server.serve();</span><br><span class="line">		&#125; catch (TTransportException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Client端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public ThriftClient &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			// 设置调用的服务地址-端口</span><br><span class="line">			TTransport transport = new TSocket(&quot;localhost&quot;, 9090);</span><br><span class="line">			// 使用二进制协议</span><br><span class="line">			TProtocol protocol = new TBinaryProtocol(transport);</span><br><span class="line">			// 使用的接口</span><br><span class="line">			TestService.Client client = new TestService.Client(protocol);</span><br><span class="line">			// 打开socket</span><br><span class="line">			transport.open();</span><br><span class="line"></span><br><span class="line">			Test test = new Test();</span><br><span class="line">			test.setBool_(true);</span><br><span class="line">			test.setI8_((byte) 1);</span><br><span class="line">			test.setI16_((short) 2);</span><br><span class="line">			test.setI32_(3);</span><br><span class="line">			test.setI64_(4L);</span><br><span class="line">			test.setDouble_(5.0);</span><br><span class="line">			test.setString_(&quot;abc&quot;);</span><br><span class="line">			test.setBinary_(&quot;abc&quot;.getBytes());</span><br><span class="line">			</span><br><span class="line">			System.out.println(&quot;Client getBool()&quot; + client.getBool(test));</span><br><span class="line">			System.out.println(&quot;Client getI8()&quot; + client.getI8(test));</span><br><span class="line">			System.out.println(&quot;Client getI16()&quot; + client.getI16(test));</span><br><span class="line">			System.out.println(&quot;Client getI32()&quot; + client.getI32(test));</span><br><span class="line">			System.out.println(&quot;Client getI64()&quot; + client.getI64(test));</span><br><span class="line">			System.out.println(&quot;Client getDouble()&quot; + client.getDouble(test));</span><br><span class="line">			System.out.println(&quot;Client getString()&quot; + client.getString(test));</span><br><span class="line">			System.out.println(&quot;Client getBinary()&quot; + client.getBinary(test));</span><br><span class="line">			transport.close();</span><br><span class="line">		&#125; catch (TTransportException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; catch (TException te) &#123;</span><br><span class="line">			te.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：<br>Client端：</p>
+<blockquote>
+<p>Received 1<br>Client getBool()true<br>Received 2<br>Client getI8()1<br>Received 3<br>Client getI16()2<br>Received 4<br>Client getI32()3<br>Received 5<br>Client getI64()4<br>Received 6<br>Client getDouble()5.0<br>Received 7<br>Client getString()abc<br>Received 8<br>Client getBinary()java.nio.HeapByteBuffer[pos=0 lim=3 cap=3]</p>
+</blockquote>
+<p>Server端：</p>
+<blockquote>
+<p>开启thrift服务器，监听端口：9090<br>TestServiceImpl.getBool() + true<br>TestServiceImpl.getI8() + 1<br>TestServiceImpl.getI16() + 2<br>TestServiceImpl.getI32() + 3<br>TestServiceImpl.getI64() + 4<br>TestServiceImpl.getDouble() + 5.0<br>TestServiceImpl.getString() + abc<br>TestServiceImpl.getBinary() + java.nio.HeapByteBuffer[pos=0 lim=3 cap=3]</p>
+</blockquote>
+<h1 id="TThreadedSelectorServer"><a href="#TThreadedSelectorServer" class="headerlink" title="TThreadedSelectorServer"></a>TThreadedSelectorServer</h1><h2 id="介绍-4"><a href="#介绍-4" class="headerlink" title="介绍"></a>介绍</h2><p>TThreadedSelectorServer模式是目前Thrift提供的最高级的模式，它内部有如果几个部分构成：</p>
+<ol>
+<li>一个AcceptThread线程对象，专门用于处理监听socket上的新连接；</li>
+<li>若干个SelectorThread对象专门用于处理业务socket的网络I/O操作，所有网络数据的读写均是有这些线程来完成；</li>
+<li>一个负载均衡器SelectorThreadLoadBalancer对象，主要用于AcceptThread线程接收到一个新socket连接请求时，决定将这个新连接请求分配给哪个SelectorThread线程。</li>
+<li>一个ExecutorService类型的工作线程池，在SelectorThread线程中，监听到有业务socket中有调用请求过来，则将请求读取之后，交个ExecutorService线程池中的线程完成此次调用的具体执行；</li>
+</ol>
+<p><img src="https://1csh1.github.io/img/Thrift Server介绍及代码实现/TThreadedSelectorServer.jpg" alt="TThreadedSelectorServer"></p>
+<p>如上图所示，TThreadedSelectorServer模式中有一个专门的线程AcceptThread用于处理新连接请求，因此能够及时响应大量并发连接请求；另外它将网络I/O操作分散到多个SelectorThread线程中来完成，因此能够快速对网络I/O进行读写操作，能够很好地应对网络I/O较多的情况；TThreadedSelectorServer对于大部分应用场景性能都不会差，因此，如果实在不知道选择哪种工作模式，使用TThreadedSelectorServer就可以。</p>
+<h2 id="代码-4"><a href="#代码-4" class="headerlink" title="代码"></a>代码</h2><p>Server端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftServer &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			// 设置服务器端口</span><br><span class="line">			TNonblockingServerSocket serverTransport = new TNonblockingServerSocket(9090);</span><br><span class="line">			// 设置二进制协议工厂</span><br><span class="line">			Factory protocolFactory = new TBinaryProtocol.Factory();</span><br><span class="line">			// 处理器关联业务实现</span><br><span class="line">			Processor&lt;TestService.Iface&gt; processor = new TestService.Processor&lt;TestService.Iface&gt;(new TestServiceImpl());</span><br><span class="line">			TThreadedSelectorServer.Args args = new TThreadedSelectorServer.Args(serverTransport);</span><br><span class="line">			args.processor(processor);</span><br><span class="line">			args.protocolFactory(protocolFactory);</span><br><span class="line">			TServer server = new TThreadedSelectorServer(args);</span><br><span class="line">			System.out.println(&quot;开启thrift服务器，监听端口：9090&quot;);</span><br><span class="line">			server.serve();</span><br><span class="line">		&#125; catch (TTransportException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Client端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public class ThriftClient &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		try &#123;</span><br><span class="line">			TProtocolFactory protocolFactory = new TBinaryProtocol.Factory();</span><br><span class="line">			TAsyncClientManager clientManager = new TAsyncClientManager();</span><br><span class="line">			TNonblockingSocket transport = new TNonblockingSocket(&quot;localhost&quot;, 9090);</span><br><span class="line">			TestService.AsyncClient client = new TestService.AsyncClient(protocolFactory, clientManager, transport);</span><br><span class="line">			</span><br><span class="line">			Test test = new Test();</span><br><span class="line">			test.setBool_(true);</span><br><span class="line">			test.setI8_((byte) 1);</span><br><span class="line">			test.setI16_((short) 2);</span><br><span class="line">			test.setI32_(3);</span><br><span class="line">			test.setI64_(4L);</span><br><span class="line">			test.setDouble_(5.0);</span><br><span class="line">			test.setString_(&quot;abc&quot;);</span><br><span class="line">			test.setBinary_(&quot;abc&quot;.getBytes());			</span><br><span class="line">			</span><br><span class="line">			CountDownLatch latch = new CountDownLatch(1);</span><br><span class="line">			client.getBool(test, new AsynCallback(latch));</span><br><span class="line"></span><br><span class="line">			boolean wait;			</span><br><span class="line">			try &#123;</span><br><span class="line">				wait = latch.await(1, TimeUnit.SECONDS);</span><br><span class="line">				System.out.println(&quot;latch.await =:&quot; + wait); </span><br><span class="line">			&#125; catch (InterruptedException e) &#123;</span><br><span class="line">				e.printStackTrace();</span><br><span class="line">			&#125;  </span><br><span class="line">		</span><br><span class="line">			transport.close();</span><br><span class="line">			</span><br><span class="line">		&#125; catch (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125; catch (TException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>异步处理类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">class AsynCallback implements AsyncMethodCallback&lt;Boolean&gt;&#123;  </span><br><span class="line">    private CountDownLatch latch;  </span><br><span class="line"></span><br><span class="line">    public AsynCallback(CountDownLatch latch) &#123;  </span><br><span class="line">        this.latch = latch;  </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void onComplete(Boolean response) &#123;  </span><br><span class="line">        System.out.println(&quot;onComplete&quot;);  </span><br><span class="line">        try &#123;  </span><br><span class="line">            // Thread.sleep(1000L * 1);  </span><br><span class="line">            System.out.println(&quot;AsynCall result =:&quot; + response);  </span><br><span class="line">        &#125; catch (Exception e) &#123;  </span><br><span class="line">            e.printStackTrace();  </span><br><span class="line">        &#125; finally &#123;  </span><br><span class="line">            latch.countDown();  </span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    public void onError(Exception exception) &#123;  </span><br><span class="line">        System.out.println(&quot;onError :&quot; + exception.getMessage());  </span><br><span class="line">        latch.countDown();  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：<br>Client端：</p>
+<blockquote>
+<p>Received 0<br>onComplete<br>AsynCall result =:true<br>latch.await =:true</p>
+</blockquote>
+<p>Server端：</p>
+<blockquote>
+<p>开启thrift服务器，监听端口：9090<br>TestServiceImpl.getBool() + true</p>
+</blockquote>
+<p>上面代码接口的编写：<br>testService.thrift</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">struct Test &#123;</span><br><span class="line">  1: required bool bool_; //required 必须填充也必须序列化</span><br><span class="line">  2: optional i8 i8_; //optional 不填充则不序列化</span><br><span class="line">  3: i16 i16_;</span><br><span class="line">  4: i32 i32_;</span><br><span class="line">  5: i64 i64_;</span><br><span class="line">  6: double double_;</span><br><span class="line">  7: string string_;</span><br><span class="line">  8: binary binary_;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">service TestService &#123;</span><br><span class="line">  void getVoid(1:Test test);</span><br><span class="line">  bool getBool(1:Test test);</span><br><span class="line">  i8 getI8(1:Test test);</span><br><span class="line">  i16 getI16(1:Test test);</span><br><span class="line">  i32 getI32(1:Test test);</span><br><span class="line">  i64 getI64(1:Test test);</span><br><span class="line">  double getDouble(1:Test test);</span><br><span class="line">  string getString(1:Test test);</span><br><span class="line">  binary getBinary(1:Test test);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考文章<br><a href="http://blog.csdn.net/houjixin/article/details/42779915" target="_blank" rel="noopener">由浅入深了解Thrift（三）——Thrift server端的几种工作模式分析</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Thrift/" rel="tag">#Thrift</a>
+          
+            <a href="/tags/RPC/" rel="tag">#RPC</a>
+          
+            <a href="/tags/Server/" rel="tag">#Server</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/22/Thrift 简单例子/" rel="next" title="Thrift 简单例子">
+                <i class="fa fa-chevron-left"></i> Thrift 简单例子
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/27/Thrift多接口支持例子/" rel="prev" title="Thrift多接口支持例子">
+                Thrift多接口支持例子 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/27/Thrift Server介绍及代码实现/"
+           data-title="Thrift Server介绍及代码实现" data-url="https://1csh1.github.io/2017/02/27/Thrift Server介绍及代码实现/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TSimpleServer"><span class="nav-number">1.</span> <span class="nav-text">TSimpleServer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">1.2.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TNonblockingServer"><span class="nav-number">2.</span> <span class="nav-text">TNonblockingServer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍-1"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TNonblockingServer模式优点："><span class="nav-number">2.2.</span> <span class="nav-text">TNonblockingServer模式优点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TNonblockingServer模式缺点："><span class="nav-number">2.3.</span> <span class="nav-text">TNonblockingServer模式缺点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码-1"><span class="nav-number">2.4.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#THsHaServer模式（半同步半异步）"><span class="nav-number">3.</span> <span class="nav-text">THsHaServer模式（半同步半异步）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍-2"><span class="nav-number">3.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#THsHaServer的优点："><span class="nav-number">3.2.</span> <span class="nav-text">THsHaServer的优点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#THsHaServer的缺点："><span class="nav-number">3.3.</span> <span class="nav-text">THsHaServer的缺点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码-2"><span class="nav-number">3.4.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TThreadPoolServer"><span class="nav-number">4.</span> <span class="nav-text">TThreadPoolServer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍-3"><span class="nav-number">4.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TThreadPoolServer模式优点："><span class="nav-number">4.2.</span> <span class="nav-text">TThreadPoolServer模式优点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TThreadPoolServer模式缺点："><span class="nav-number">4.3.</span> <span class="nav-text">TThreadPoolServer模式缺点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码-3"><span class="nav-number">4.4.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TThreadedSelectorServer"><span class="nav-number">5.</span> <span class="nav-text">TThreadedSelectorServer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍-4"><span class="nav-number">5.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码-4"><span class="nav-number">5.2.</span> <span class="nav-text">代码</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>  
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

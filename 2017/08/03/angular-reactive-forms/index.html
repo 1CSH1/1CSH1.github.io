@@ -1,0 +1,890 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Angular,响应式表单," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="摘要：本文简单介绍 Angular 的响应式表单，还是以之前的评论模块为例  介绍Angular 总共提供了 3 中表单实现方式，分别是：Template-driven Forms （模板驱动表单）、 Reactive Forms （响应式表单）、Dynamic Forms （动态表单）。本文只介绍响应式表单。 响应式表单是什么呢？其实跟我们以前用 JQuery 或者其他框架实现的思路差不多，就">
+<meta name="keywords" content="Angular,响应式表单">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Angular 的响应式表单">
+<meta property="og:url" content="https://1csh1.github.io/2017/08/03/angular-reactive-forms/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="摘要：本文简单介绍 Angular 的响应式表单，还是以之前的评论模块为例  介绍Angular 总共提供了 3 中表单实现方式，分别是：Template-driven Forms （模板驱动表单）、 Reactive Forms （响应式表单）、Dynamic Forms （动态表单）。本文只介绍响应式表单。 响应式表单是什么呢？其实跟我们以前用 JQuery 或者其他框架实现的思路差不多，就">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://1csh1.github.io/img/angular-reactive-forms/angular-reactive-forms.png">
+<meta property="og:updated_time" content="2017-12-21T12:01:10.011Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Angular 的响应式表单">
+<meta name="twitter:description" content="摘要：本文简单介绍 Angular 的响应式表单，还是以之前的评论模块为例  介绍Angular 总共提供了 3 中表单实现方式，分别是：Template-driven Forms （模板驱动表单）、 Reactive Forms （响应式表单）、Dynamic Forms （动态表单）。本文只介绍响应式表单。 响应式表单是什么呢？其实跟我们以前用 JQuery 或者其他框架实现的思路差不多，就">
+<meta name="twitter:image" content="https://1csh1.github.io/img/angular-reactive-forms/angular-reactive-forms.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Angular 的响应式表单 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Angular 的响应式表单
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-08-03T22:30:00+08:00" content="2017-08-03">
+              2017-08-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/" itemprop="url" rel="index">
+                    <span itemprop="name">Angular</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
+                    <span itemprop="name">James-Blog</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/08/03/angular-reactive-forms/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/03/angular-reactive-forms/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/08/03/angular-reactive-forms/" class="leancloud_visitors" data-flag-title="Angular 的响应式表单">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>摘要：本文简单介绍 Angular 的响应式表单，还是以之前的评论模块为例</p>
+</blockquote>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Angular 总共提供了 3 中表单实现方式，分别是：<a href="https://angular.io/guide/forms" target="_blank" rel="noopener">Template-driven Forms （模板驱动表单）</a>、 <a href="https://angular.io/guide/reactive-forms" target="_blank" rel="noopener">Reactive Forms （响应式表单）</a>、<a href="https://angular.io/guide/dynamic-form" target="_blank" rel="noopener">Dynamic Forms （动态表单）</a>。本文只介绍响应式表单。</p>
+<p>响应式表单是什么呢？其实跟我们以前用 JQuery 或者其他框架实现的思路差不多，就是使用 HTML 显示数据，然后通过定义一定的校验器、校验规则以及校验提示语，通过事件触发校验后校验不通过的显示提示语，只不过用了 Angular，我们就使用 Angular 提供的语法来实现这个校验过程。</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>接下来我们通过代码例子来介绍如何使用响应式表单。</p>
+<h4 id="引入响应式表单模块"><a href="#引入响应式表单模块" class="headerlink" title="引入响应式表单模块"></a>引入响应式表单模块</h4><p>在我们要使用响应式表单的那个模块里面引入响应式表单模块，比如我们在文章模块中使用响应式表单，我们就要在 imports 中添加 ReactiveFormsModule。代码如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@NgModule(&#123;</span><br><span class="line">  imports: [</span><br><span class="line">    RouterModule,</span><br><span class="line">    RouterModule.forChild(articleRoutes),</span><br><span class="line">    SharedModule,</span><br><span class="line">    ReactiveFormsModule,</span><br><span class="line">    NgbModule.forRoot()</span><br><span class="line">  ],</span><br><span class="line">  declarations: [</span><br><span class="line">    HomeComponent,</span><br><span class="line">    DetailComponent,</span><br><span class="line">    CommentComponent,</span><br><span class="line">    CommentViewComponent</span><br><span class="line">  ],</span><br><span class="line">  providers: [</span><br><span class="line">    HomeService,</span><br><span class="line">    DetailService,</span><br><span class="line">    CommentService</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br><span class="line">export class ArticleModule &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="编写校验器代码"><a href="#编写校验器代码" class="headerlink" title="编写校验器代码"></a>编写校验器代码</h4><p>首先我们这里的表单有 3 个字段，分别是 nickname、email、content； nickname 添加必填校验器，email 添加必填和邮箱格式校验器，content添加必填校验器。</p>
+<p>首先在 CommentComponent 中注入 FormBuilder 对象，并添加 commentForm 表单组以及创建一个评论对象 comment。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public commentForm: FormGroup;</span><br><span class="line">public comment: Comment = new Comment();</span><br><span class="line"></span><br><span class="line">constructor(private formBuilder: FormBuilder)&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>定义校验器的提示语 validationMessages， formErrors 是在模板中显示的提示语，提示语来自 validationMessages<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public formErrors = &#123;</span><br><span class="line">  &quot;nickname&quot;: &quot;&quot;,</span><br><span class="line">  &quot;email&quot;: &quot;&quot;,</span><br><span class="line">  &quot;content&quot;: &quot;&quot;,</span><br><span class="line">  &quot;formError&quot;: &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public validationMessages = &#123;</span><br><span class="line">  &quot;nickname&quot;: &#123;</span><br><span class="line">    &quot;required&quot;: &quot;昵称不能为空&quot;,</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;email&quot;: &#123;</span><br><span class="line">    &quot;required&quot;: &quot;邮箱不能为空&quot;,</span><br><span class="line">    &quot;pattern&quot;: &quot;请输入正确的邮箱地址&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;content&quot;: &#123;</span><br><span class="line">    &quot;required&quot;: &quot;内容不能为空&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在组件启动的函数中构造表单，这时候为每个字段添加了校验器，并且绑定在什么时候触发校验，这里我们在每个值改变的时候触发。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">ngOnInit(): void &#123;</span><br><span class="line">  this.buildForm();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private buildForm() &#123;</span><br><span class="line">  this.commentForm = this.formBuilder.group(&#123;</span><br><span class="line">    &quot;nickname&quot;:[</span><br><span class="line">      this.comment.nickname,</span><br><span class="line">      [</span><br><span class="line">        Validators.required</span><br><span class="line">      ]</span><br><span class="line">    ],</span><br><span class="line">    &quot;email&quot;: [</span><br><span class="line">      this.comment.email,</span><br><span class="line">      [</span><br><span class="line">        Validators.required,</span><br><span class="line">        Validators.pattern(&quot;^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]&#123;2,3&#125;)&#123;1,2&#125;)$&quot;)</span><br><span class="line">      ]</span><br><span class="line">    ],</span><br><span class="line">    &quot;content&quot;: [</span><br><span class="line">      this.comment.content,</span><br><span class="line">      [</span><br><span class="line">        Validators.required</span><br><span class="line">      ]</span><br><span class="line">    ]</span><br><span class="line">  &#125;);</span><br><span class="line">  this.commentForm.valueChanges.subscribe(data =&gt; this.onValueChanged(data));</span><br><span class="line">  this.onValueChanged();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>onValueChanged() 方法实现了判断是那个字段校验不通过，然后将该字段的 validationMessages 提示语赋值给 formErrors，在模板那里有判断如果 formErrors.email 等等字段不为空则显示改内容，也即是校验器的提示语<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">onValueChanged(data?: any) &#123;</span><br><span class="line">  if (!this.commentForm) &#123;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line">  const form = this.commentForm;</span><br><span class="line">  for (const field in this.formErrors) &#123;</span><br><span class="line">    this.formErrors[field] = &apos;&apos;;</span><br><span class="line">    const control = form.get(field);</span><br><span class="line">    if (control &amp;&amp; control.dirty &amp;&amp; !control.valid) &#123;</span><br><span class="line">      const messages = this.validationMessages[field];</span><br><span class="line">      for (const key in control.errors) &#123;</span><br><span class="line">        this.formErrors[field] += messages[key] + &apos; &apos;;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="HTML-模板代码"><a href="#HTML-模板代码" class="headerlink" title="HTML 模板代码"></a>HTML 模板代码</h4><p>我们要关注的是 [formGroup]=”commentForm”、novalidate、formControlName=”nickname”、以及 *ngIf=”formErrors.nickname” 这几个点，并不是指具体的点，而是着重看这些语法的每一个地方，在你自己实现的时候需要根据你的代码修改的。<br>还有一个是 (ngSubmit)=”sendComment()” 定义了该表单点击提交时调用的函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;form [formGroup]=&quot;commentForm&quot; (ngSubmit)=&quot;sendComment()&quot; role=&quot;form&quot; novalidate&gt;</span><br><span class="line">  &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;form-group floating-label-form-group controls&quot; [ngClass]=&quot;&#123;&apos;has-error&apos;: formErrors.nickname&#125;&quot;&gt;</span><br><span class="line">      &lt;label&gt;&#123;&#123; &apos;comment.nickname&apos; | translate &#125;&#125;&lt;/label&gt;</span><br><span class="line">      &lt;input formControlName=&quot;nickname&quot; type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;&#123;&#123; &apos;comment.nickname&apos; | translate &#125;&#125;&quot;&gt;</span><br><span class="line">      &lt;p *ngIf=&quot;formErrors.nickname&quot; class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">        &#123;&#123; formErrors.nickname &#125;&#125;</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;control-group&quot; &gt;</span><br><span class="line">    &lt;div class=&quot;form-group floating-label-form-group controls&quot; [ngClass]=&quot;&#123;&apos;has-error&apos;: formErrors.email&#125;&quot;&gt;</span><br><span class="line">      &lt;label&gt;&#123;&#123; &apos;comment.email&apos; | translate &#125;&#125;&lt;/label&gt;</span><br><span class="line">      &lt;input formControlName=&quot;email&quot; type=&quot;email&quot;   class=&quot;form-control&quot; placeholder=&quot;&#123;&#123; &apos;comment.email&apos; | translate &#125;&#125;&quot;&gt;</span><br><span class="line">      &lt;p *ngIf=&quot;formErrors.email&quot; class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">        &#123;&#123; formErrors.email &#125;&#125;</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;form-group floating-label-form-group controls&quot;  [ngClass]=&quot;&#123;&apos;has-error&apos;: formErrors.content&#125;&quot;&gt;</span><br><span class="line">      &lt;label&gt;&#123;&#123; &apos;comment.content&apos; | translate &#125;&#125;&lt;/label&gt;</span><br><span class="line">      &lt;textarea formControlName=&quot;content&quot; rows=&quot;5&quot; class=&quot;form-control&quot; placeholder=&quot;&#123;&#123; &apos;comment.content&apos; | translate &#125;&#125;&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">      &lt;p *ngIf=&quot;formErrors.content&quot;  class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">        &#123;&#123; formErrors.content &#125;&#125;</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;p *ngIf=&quot;formErrors.formError&quot;  class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">    &#123;&#123; formErrors.formError &#125;&#125;</span><br><span class="line">  &lt;/p&gt;</span><br><span class="line">  &lt;br&gt;</span><br><span class="line">  &lt;div id=&quot;success&quot;&gt;&lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">    &lt;button [disabled]=&quot;commentForm.invalid&quot; type=&quot;submit&quot; class=&quot;btn btn-secondary&quot; &gt;&#123;&#123; &apos;comment.submit&apos; | translate &#125;&#125;&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="GitHub-代码"><a href="#GitHub-代码" class="headerlink" title="GitHub 代码"></a>GitHub 代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/f96a6af5f10261ba484ddb93cc52a9dae5c5dc03" target="_blank" rel="noopener">James-Blog 中的 comment.component.ts 文件</a></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://angular.io/guide/reactive-forms" target="_blank" rel="noopener">Reactive Forms</a></p>
+<h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://1csh1.github.io/img/angular-reactive-forms/angular-reactive-forms.png" alt="angular-reactive-forms.png"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Angular/" rel="tag">#Angular</a>
+          
+            <a href="/tags/响应式表单/" rel="tag">#响应式表单</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/01/angular-comment-recursive-event/" rel="next" title="Angular 实现类似博客获取回复评论的数据">
+                <i class="fa fa-chevron-left"></i> Angular 实现类似博客获取回复评论的数据
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/03/mybatis-select-in-sql/" rel="prev" title="MyBatis 在 @Select 写 IN SQL">
+                MyBatis 在 @Select 写 IN SQL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/08/03/angular-reactive-forms/"
+           data-title="Angular 的响应式表单" data-url="https://1csh1.github.io/2017/08/03/angular-reactive-forms/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#引入响应式表单模块"><span class="nav-number">2.1.</span> <span class="nav-text">引入响应式表单模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编写校验器代码"><span class="nav-number">2.2.</span> <span class="nav-text">编写校验器代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTML-模板代码"><span class="nav-number">2.3.</span> <span class="nav-text">HTML 模板代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub-代码"><span class="nav-number">3.</span> <span class="nav-text">GitHub 代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效果图"><span class="nav-number">5.</span> <span class="nav-text">效果图</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>  
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

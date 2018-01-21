@@ -1,0 +1,901 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Angular,评论,递归," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="摘要：本文继上一篇文章 Angular 实现类似博客评论的递归显示 讲述的内容，上篇文章里面只是说明了如何实现评论梯形显示，在博客评论中我们经常看到可以回复某一条评论，本文讲述如何实现点击某一条评论的回复按钮后，获取该条评论的内容并显示在输入框中。类似 CSDN 博客评论一样，点击回复后输入框自动添加了 [reply]u011642663[/reply]  思路依据上一篇文章中的评论梯形显示，我">
+<meta name="keywords" content="Angular,评论,递归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Angular 实现类似博客获取回复评论的数据">
+<meta property="og:url" content="https://1csh1.github.io/2017/08/01/angular-comment-recursive-event/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="摘要：本文继上一篇文章 Angular 实现类似博客评论的递归显示 讲述的内容，上篇文章里面只是说明了如何实现评论梯形显示，在博客评论中我们经常看到可以回复某一条评论，本文讲述如何实现点击某一条评论的回复按钮后，获取该条评论的内容并显示在输入框中。类似 CSDN 博客评论一样，点击回复后输入框自动添加了 [reply]u011642663[/reply]  思路依据上一篇文章中的评论梯形显示，我">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://1csh1.github.io/img/angular-comment-recursive-event/angular-comment-recursive-event.png">
+<meta property="og:updated_time" content="2017-12-21T12:01:10.010Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Angular 实现类似博客获取回复评论的数据">
+<meta name="twitter:description" content="摘要：本文继上一篇文章 Angular 实现类似博客评论的递归显示 讲述的内容，上篇文章里面只是说明了如何实现评论梯形显示，在博客评论中我们经常看到可以回复某一条评论，本文讲述如何实现点击某一条评论的回复按钮后，获取该条评论的内容并显示在输入框中。类似 CSDN 博客评论一样，点击回复后输入框自动添加了 [reply]u011642663[/reply]  思路依据上一篇文章中的评论梯形显示，我">
+<meta name="twitter:image" content="https://1csh1.github.io/img/angular-comment-recursive-event/angular-comment-recursive-event.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Angular 实现类似博客获取回复评论的数据 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Angular 实现类似博客获取回复评论的数据
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-08-01T22:30:00+08:00" content="2017-08-01">
+              2017-08-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/" itemprop="url" rel="index">
+                    <span itemprop="name">Angular</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
+                    <span itemprop="name">James-Blog</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/08/01/angular-comment-recursive-event/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/01/angular-comment-recursive-event/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/08/01/angular-comment-recursive-event/" class="leancloud_visitors" data-flag-title="Angular 实现类似博客获取回复评论的数据">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>摘要：本文继上一篇文章 <a href="https://1csh1.github.io/2017/07/31/angular-comment-recursive-display/">Angular 实现类似博客评论的递归显示</a> 讲述的内容，上篇文章里面只是说明了如何实现评论梯形显示，在博客评论中我们经常看到可以回复某一条评论，本文讲述如何实现点击某一条评论的回复按钮后，获取该条评论的内容并显示在输入框中。类似 CSDN 博客评论一样，点击回复后输入框自动添加了 [reply]u011642663[/reply]</p>
+</blockquote>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>依据上一篇文章中的评论梯形显示，我们还需要实现点击回复后，屏幕自动到达输入框位置，并且获取了点击回复的评论的信息。首先分解一下这个功能点，在项目中我们也会经常分解功能点，这个功能点有 2 个小点：一是在每条评论中加上 [回复] 按钮，点击回复后跳到输入框位置；二是点击回复后，获取到点击回复的那条评论的信息。下面我们一一解决。</p>
+<h3 id="跳转到输入框"><a href="#跳转到输入框" class="headerlink" title="跳转到输入框"></a>跳转到输入框</h3><p>我们接触前段第一个语言便是 HTML，我们知道 HTML 中有一个 # 定位，下面代码简单解释一下。<br>假设这个 HTML 代码文件是 index.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;a href=&quot;index.html#pointer&quot;&gt;Click me to pointer&lt;/a&gt;</span><br><span class="line">    &lt;div id=&quot;pointer&quot;&gt;</span><br><span class="line">      &lt;h1&gt;哈哈哈哈&lt;/h1&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>上面代码只要点击 Click me to pointer 这个链接，页面就会跳到 id=”pointer” 这个 div 的位置。所以我们在实现这个点击回复跳转到输入框中就可以使用这个方法。<br>我们在 comment-component.html 中将评论输入框加入 id=”comment”，接下来就是路径拼接的问题了，我们可以通过 Angular 的 Router 的 url 来获取本页面的路径，然后在这个路径后面加入 #comment 就可以实现跳转了，下面是实现这个跳转功能的代码</p>
+<h4 id="添加-id-”comment”"><a href="#添加-id-”comment”" class="headerlink" title="添加 id=”comment”"></a>添加 id=”comment”</h4><p>comment-component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Comment --&gt;</span><br><span class="line">&lt;div class=&quot;container font-small&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line"></span><br><span class="line">      &lt;comment-view [comments]=&quot;comments&quot; (contentEvent)=&quot;getReplyComment($event)&quot; &gt;&lt;/comment-view&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div class=&quot;well&quot; id=&quot;comment&quot;&gt;</span><br><span class="line">        &lt;h4&gt;&#123;&#123; &apos;comment.leaveComment&apos; | translate &#125;&#125;&lt;/h4&gt;</span><br><span class="line">        &lt;form role=&quot;form&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">            &lt;input type=&quot;hidden&quot; [(ngModel)]=&quot;id&quot; name=&quot;id&quot;&gt;</span><br><span class="line">            &lt;textarea [(ngModel)]=&quot;content&quot; name=&quot;content&quot; class=&quot;form-control&quot; rows=&quot;5&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="添加通过路由获取当前页面-URL"><a href="#添加通过路由获取当前页面-URL" class="headerlink" title="添加通过路由获取当前页面 URL"></a>添加通过路由获取当前页面 URL</h4><p>comment-view.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment-view&apos;,</span><br><span class="line">  templateUrl: &apos;./comment-view.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment-view.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentViewComponent implements OnInit &#123;</span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line"></span><br><span class="line">  // 用于跳转到回复输入框的url拼接</span><br><span class="line">  public url: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  constructor(private router: Router,</span><br><span class="line">              private activateRoute: ActivatedRoute ) &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">    this.url = this.router.url;</span><br><span class="line">    this.url = this.url.split(&quot;#&quot;)[0];</span><br><span class="line">    this.url = this.url + &quot;#comment&quot;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="添加链接-href-”“"><a href="#添加链接-href-”“" class="headerlink" title="添加链接 href=”“"></a>添加链接 href=”“</h4><p>comment-view.component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;div *ngFor=&quot;let comment of comments&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;media&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;pull-left&quot;&gt;</span><br><span class="line">      &lt;span class=&quot;media-object&quot;&gt;&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;media-body&quot;&gt;</span><br><span class="line">      &lt;h4 class=&quot;media-heading&quot;&gt;&#123;&#123; comment.username &#125;&#125;</span><br><span class="line">        &lt;small class=&quot;pull-right&quot;&gt;&#123;&#123; comment.time &#125;&#125;&amp;nbsp;|&amp;nbsp;&lt;a href=&quot;&#123;&#123;url&#125;&#125;&quot; (click)=&quot;reply(comment)&quot; &gt;&#123;&#123; &apos;comment.reply&apos; | translate &#125;&#125;&lt;/a&gt;&lt;/small&gt;</span><br><span class="line">      &lt;/h4&gt;</span><br><span class="line">       &#123;&#123; comment.content &#125;&#125;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;comment-view *ngIf=&quot;comment.cComments != null&quot; [comments]=&quot;comment.cComments&quot; (contentEvent)=&quot;transferToParent($event)&quot;&gt;&lt;/comment-view&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>这就实现了页面跳转的功能点，接下来实现获取回复的评论的信息。</p>
+<h3 id="获取回复的评论信息"><a href="#获取回复的评论信息" class="headerlink" title="获取回复的评论信息"></a>获取回复的评论信息</h3><p>有人会说获取回复的评论信息，这不简单么？加个 click 事件不就行了。还记得上一篇文章咱们是如何实现梯形展示评论的么？咱们是通过递归来实现的，怎么添加 click 事件让一个不知道嵌了多少层的组件能够把评论信息传给父组件？首先不具体想怎么实现，我们这个思路是不是对的：把子组件的信息传给父组件？答案是肯定的，我们就是要把不管嵌了多少层的子组件的信息传给 comment.component.ts 这个评论模块的主组件。<br>Angular 提供了 @Output 来实现子组件向父组件传递信息，我们在 comment-view.component.ts 模块中添加 @Output 向每个调用它的父组件传信息，我们是嵌套的，这样一层一层传出来，直到传给 comment-component.ts 组件。我们看代码怎么实现。</p>
+<h4 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h4><p>comment-view.component.ts</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment-view&apos;,</span><br><span class="line">  templateUrl: &apos;./comment-view.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment-view.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentViewComponent implements OnInit &#123;</span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line">  // 点击回复时返回数据</span><br><span class="line">  @Output()</span><br><span class="line">  public contentEvent: EventEmitter&lt;Comment&gt; = new EventEmitter&lt;Comment&gt;();</span><br><span class="line">  // 用于跳转到回复输入框的url拼接</span><br><span class="line">  public url: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  constructor(private router: Router,</span><br><span class="line">              private activateRoute: ActivatedRoute ) &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">    this.url = this.router.url;</span><br><span class="line">    this.url = this.url.split(&quot;#&quot;)[0];</span><br><span class="line">    this.url = this.url + &quot;#comment&quot;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  reply(comment: Comment) &#123;</span><br><span class="line">    this.contentEvent.emit(comment);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  transferToParent(event) &#123;</span><br><span class="line">    this.contentEvent.emit(event);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>comment-view.component.html</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;div *ngFor=&quot;let comment of comments&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;media&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;pull-left&quot;&gt;</span><br><span class="line">      &lt;span class=&quot;media-object&quot;&gt;&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;media-body&quot;&gt;</span><br><span class="line">      &lt;h4 class=&quot;media-heading&quot;&gt;&#123;&#123; comment.username &#125;&#125;</span><br><span class="line">        &lt;small class=&quot;pull-right&quot;&gt;&#123;&#123; comment.time &#125;&#125;&amp;nbsp;|&amp;nbsp;&lt;a href=&quot;&#123;&#123;url&#125;&#125;&quot; (click)=&quot;reply(comment)&quot; &gt;&#123;&#123; &apos;comment.reply&apos; | translate &#125;&#125;&lt;/a&gt;&lt;/small&gt;</span><br><span class="line">      &lt;/h4&gt;</span><br><span class="line">       &#123;&#123; comment.content &#125;&#125;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;comment-view *ngIf=&quot;comment.cComments != null&quot; [comments]=&quot;comment.cComments&quot; (contentEvent)=&quot;transferToParent($event)&quot;&gt;&lt;/comment-view&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>comment.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment&apos;,</span><br><span class="line">  templateUrl: &apos;./comment.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentComponent implements OnInit &#123;</span><br><span class="line"></span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line"></span><br><span class="line">  // 要回复的评论</span><br><span class="line">  public replyComment: Comment = new Comment();</span><br><span class="line"></span><br><span class="line">  public id: number = 0;</span><br><span class="line">  public content: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getReplyComment(event) &#123;</span><br><span class="line">    this.replyComment = event;</span><br><span class="line">    this.id = this.replyComment.id;</span><br><span class="line">    this.content = &quot;[reply]&quot; + this.replyComment.username + &quot;[reply]\n&quot;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>comment.component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Comment --&gt;</span><br><span class="line">&lt;div class=&quot;container font-small&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line"></span><br><span class="line">      &lt;comment-view [comments]=&quot;comments&quot; (contentEvent)=&quot;getReplyComment($event)&quot; &gt;&lt;/comment-view&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div class=&quot;well&quot; id=&quot;comment&quot;&gt;</span><br><span class="line">        &lt;h4&gt;&#123;&#123; &apos;comment.leaveComment&apos; | translate &#125;&#125;&lt;/h4&gt;</span><br><span class="line">        &lt;form role=&quot;form&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">            &lt;input type=&quot;hidden&quot; [(ngModel)]=&quot;id&quot; name=&quot;id&quot;&gt;</span><br><span class="line">            &lt;textarea [(ngModel)]=&quot;content&quot; name=&quot;content&quot; class=&quot;form-control&quot; rows=&quot;5&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>解释一下代码逻辑：<br>我们在 comment-view.component.ts 添加以下几点：</p>
+<ol>
+<li>定义了@Output() contentEvent</li>
+<li>添加了reply(comment: Comment) 事件在点击回复的时候触发的，触发的时候 contentEvent 将 comment 传到父模块</li>
+<li>添加 transferToParent(event) 是接受子组件传来的 event, 并且继续将 event 传到父组件</li>
+</ol>
+<p>在 comment.component.ts 中定义了 getReplyComment(event) 方法，该方法接收子组件传递来的评论信息，并将信息显示在页面上。大功告成。。。</p>
+<h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://1csh1.github.io/img/angular-comment-recursive-event/angular-comment-recursive-event.png" alt="angular-comment-recursive-event.png"></p>
+<h3 id="demo-代码"><a href="#demo-代码" class="headerlink" title="demo 代码"></a>demo 代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/e025e62e17461a6937e9b6d3e0865e1ae7c2e4d4" target="_blank" rel="noopener">James-Blog</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Angular/" rel="tag">#Angular</a>
+          
+            <a href="/tags/评论/" rel="tag">#评论</a>
+          
+            <a href="/tags/递归/" rel="tag">#递归</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/31/angular-comment-recursive-display/" rel="next" title="Angular 实现类似博客评论的递归显示">
+                <i class="fa fa-chevron-left"></i> Angular 实现类似博客评论的递归显示
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/03/angular-reactive-forms/" rel="prev" title="Angular 的响应式表单">
+                Angular 的响应式表单 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/08/01/angular-comment-recursive-event/"
+           data-title="Angular 实现类似博客获取回复评论的数据" data-url="https://1csh1.github.io/2017/08/01/angular-comment-recursive-event/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#思路"><span class="nav-number">1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跳转到输入框"><span class="nav-number">2.</span> <span class="nav-text">跳转到输入框</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加-id-”comment”"><span class="nav-number">2.1.</span> <span class="nav-text">添加 id=”comment”</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加通过路由获取当前页面-URL"><span class="nav-number">2.2.</span> <span class="nav-text">添加通过路由获取当前页面 URL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加链接-href-”“"><span class="nav-number">2.3.</span> <span class="nav-text">添加链接 href=”“</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取回复的评论信息"><span class="nav-number">3.</span> <span class="nav-text">获取回复的评论信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实现代码"><span class="nav-number">3.1.</span> <span class="nav-text">实现代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效果图"><span class="nav-number">4.</span> <span class="nav-text">效果图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo-代码"><span class="nav-number">5.</span> <span class="nav-text">demo 代码</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>  
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>
