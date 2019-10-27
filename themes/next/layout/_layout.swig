@@ -29,7 +29,7 @@
 
     <main id="main" class="main">
       <div class="main-inner">
-        <div class="content-wrap">
+        <div id="container" class="content-wrap">
           <div id="content" class="content">
             {% block content %}{% endblock %}
           </div>
@@ -68,5 +68,17 @@
   {% include '_scripts/third-party/localsearch.swig' %}
   {% include '_scripts/third-party/mathjax.swig' %}
   {% include '_scripts/third-party/lean-analytics.swig' %}
+  
+  <script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+  <script>
+      const btw = new BTWPlugin();
+      btw.init({
+          id: 'container',
+          blogId: '15497-1572145892011-295',
+          name: 'LieBrother',
+          qrcode: 'http://www.liebrother.com/upload/2ead36875d2647ef9f857b904cdbb3e6_.jpg',
+          keyword: 'github',
+      });
+  </script>
 </body>
 </html>
