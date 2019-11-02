@@ -226,8 +226,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/03/21/LVS简单介绍/" itemprop="url">
-                  LVS简单介绍
+                <a class="post-title-link" href="/2017/08/03/angular-reactive-forms/" itemprop="url">
+                  Angular 的响应式表单
                 </a>
               
             
@@ -240,8 +240,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-21T20:54:22+08:00" content="2016-03-21">
-              2016-03-21
+            <time itemprop="dateCreated" datetime="2017-08-03T22:30:00+08:00" content="2017-08-03">
+              2017-08-03
             </time>
           </span>
 
@@ -254,8 +254,20 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/LVS/" itemprop="url" rel="index">
-                    <span itemprop="name">LVS</span>
+                  <a href="/categories/Angular/" itemprop="url" rel="index">
+                    <span itemprop="name">Angular</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
+                    <span itemprop="name">James-Blog</span>
                   </a>
                 </span>
 
@@ -270,8 +282,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/21/LVS简单介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/21/LVS简单介绍/" itemprop="commentsCount"></span>
+                <a href="/2017/08/03/angular-reactive-forms/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/03/angular-reactive-forms/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -281,7 +293,7 @@
 
           
           
-             <span id="/2016/03/21/LVS简单介绍/" class="leancloud_visitors" data-flag-title="LVS简单介绍">
+             <span id="/2017/08/03/angular-reactive-forms/" class="leancloud_visitors" data-flag-title="Angular 的响应式表单">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -304,300 +316,23 @@
       
         
           
-            <p>&emsp;&emsp;LVS原意为 Linux Virtual Server，创始人是章文嵩，想了解LVS，最好就是查看章文嵩的LVS博客。这里简单描述LVS。</p>
-<p><strong>LVS体系结构</strong><br>&emsp;&emsp;虚拟服务器的体系结构如下图所示，一组服务器通过高速的局域网或者地理分布的广域网相互连接，在它们的前端有一个负载调度器（Load Balancer）。负载调度器能无缝地将网络请求调度到真实服务器上，从而使得服务器集群的结构对客户是透明的，客户访问集群系统提供的网络服务就像访 问一台高性能、高可用的服务器一样。客户程序不受服务器集群的影响不需作任何修改。系统的伸缩性通过在服务机群中透明地加入和删除一个节点来达到，通过检 测节点或服务进程故障和正确地重置系统达到高可用性。由于我们的负载调度技术是在Linux内核中实现的，我们称之为Linux虚拟服务器（Linux Virtual Server）。<br><img src="https://1csh1.github.io/img/LVS简单介绍/LVS体系结构.jpg" alt="LVS体系结构"></p>
-<p><strong>LVS项目目标</strong><br>&emsp;&emsp;Linux Virtual Server项目的目标 ：使用集群技术和Linux操作系统实现一个高性能、高可用的服务器，它具有很好的可伸缩性（Scalability）、可靠性（Reliability）和可管理性（Manageability）<br><strong>LVS实现的3中负载均衡技术</strong></p>
-<ul>
-<li><p>Virtual Server via Network Address Translation（VS/NAT）<br>&emsp;&emsp;通过网络地址转换，调度器重写请求报文的目标地址，根据预设的调度算法，将请求分派给后端的真实服务器；真实服务器的响应报文通过调度器时，报文的源地址被重写，再返回给客户，完成整个负载调度过程。</p>
-</li>
-<li><p>Virtual Server via IP Tunneling（VS/TUN）<br>&emsp;&emsp;采用NAT技术时，由于请求和响应报文都必须经过调度器地址重写，当客户请求越来越多时，调度器的处理能力将成为瓶颈。为了解决这个问题，调度器把请求报 文通过IP隧道转发至真实服务器，而真实服务器将响应直接返回给客户，所以调度器只处理请求报文。由于一般网络服务应答比请求报文大许多，采用 VS/TUN技术后，集群系统的最大吞吐量可以提高10倍。</p>
-</li>
-<li><p>Virtual Server via Direct Routing（VS/DR）<br>&emsp;&emsp;VS/DR通过改写请求报文的MAC地址，将请求发送到真实服务器，而真实服务器将响应直接返回给客户。同VS/TUN技术一样，VS/DR技术可极大地 提高集群系统的伸缩性。这种方法没有IP隧道的开销，对集群中的真实服务器也没有必须支持IP隧道协议的要求，但是要求调度器与真实服务器都有一块网卡连 在同一物理网段上。</p>
-</li>
-</ul>
-<p><strong>IPVS（IP虚拟服务器软件）调度器实现了如下八种负载调度算法：</strong></p>
-<ul>
-<li><p><strong>轮叫（Round Robin）</strong><br>&emsp;&emsp;调度器通过”轮叫”调度算法将外部请求按顺序轮流分配到集群中的真实服务器上，它均等地对待每一台服务器，而不管服务器上实际的连接数和系统负载。</p>
-</li>
-<li><p><strong>加权轮叫（Weighted Round Robin）</strong><br>&emsp;&emsp;调度器通过”加权轮叫”调度算法根据真实服务器的不同处理能力来调度访问请求。这样可以保证处理能力强的服务器处理更多的访问流量。调度器可以自动问询真实服务器的负载情况，并动态地调整其权值。</p>
-</li>
-<li><p><strong>最少链接（Least Connections）</strong><br>&emsp;&emsp;调度器通过”最少连接”调度算法动态地将网络请求调度到已建立的链接数最少的服务器上。如果集群系统的真实服务器具有相近的系统性能，采用”最小连接”调度算法可以较好地均衡负载。</p>
-</li>
-<li><p><strong>加权最少链接（Weighted Least Connections）</strong><br>&emsp;&emsp;在集群系统中的服务器性能差异较大的情况下，调度器采用”加权最少链接”调度算法优化负载均衡性能，具有较高权值的服务器将承受较大比例的活动连接负载。调度器可以自动问询真实服务器的负载情况，并动态地调整其权值。</p>
-</li>
-<li><p><strong>基于局部性的最少链接（Locality-Based Least Connections）</strong><br>&emsp;&emsp;”基于局部性的最少链接” 调度算法是针对目标IP地址的负载均衡，目前主要用于Cache集群系统。该算法根据请求的目标IP地址找出该目标IP地址最近使用的服务器，若该服务器 是可用的且没有超载，将请求发送到该服务器；若服务器不存在，或者该服务器超载且有服务器处于一半的工作负载，则用”最少链接”的原则选出一个可用的服务 器，将请求发送到该服务器。</p>
-</li>
-<li><p><strong>带复制的基于局部性最少链接（Locality-Based Least Connections with Replication）</strong><br>&emsp;&emsp;”带复制的基于局部性最少链接”调度算法也是针对目标IP地址的负载均衡，目前主要用于Cache集群系统。它与LBLC算法的不同之处是它要维护从一个 目标IP地址到一组服务器的映射，而LBLC算法维护从一个目标IP地址到一台服务器的映射。该算法根据请求的目标IP地址找出该目标IP地址对应的服务 器组，按”最小连接”原则从服务器组中选出一台服务器，若服务器没有超载，将请求发送到该服务器，若服务器超载；则按”最小连接”原则从这个集群中选出一 台服务器，将该服务器加入到服务器组中，将请求发送到该服务器。同时，当该服务器组有一段时间没有被修改，将最忙的服务器从服务器组中删除，以降低复制的 程度。</p>
-</li>
-<li><p><strong>目标地址散列（Destination Hashing）</strong><br>&emsp;&emsp;”目标地址散列”调度算法根据请求的目标IP地址，作为散列键（Hash Key）从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。</p>
-</li>
-<li><p><strong>源地址散列（Source Hashing）</strong><br>&emsp;&emsp;”源地址散列”调度算法根据请求的源IP地址，作为散列键（Hash Key）从静态分配的散列表找出对应的服务器，若该服务器是可用的且未超载，将请求发送到该服务器，否则返回空。</p>
-</li>
-</ul>
-<p>参考文章链接<br><a href="http://www.linuxvirtualserver.org/zh/lvs1.html" target="_blank" rel="noopener">Linux服务器集群系统（一）</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/21/Memcached简单介绍/" itemprop="url">
-                  Memcached简单介绍
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-21T19:49:54+08:00" content="2016-03-21">
-              2016-03-21
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Memcached/" itemprop="url" rel="index">
-                    <span itemprop="name">Memcached</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/21/Memcached简单介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/21/Memcached简单介绍/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/03/21/Memcached简单介绍/" class="leancloud_visitors" data-flag-title="Memcached简单介绍">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>Memcached是什么</strong><br>&emsp;&emsp;Memcached 是一个高性能的分布式内存对象缓存系统，用于动态Web应用以减轻数据库负载。它通过在内存中缓存数据和对象 来减少读取数据库的次数，从而提供动态、数据库驱动网站的速度。<br>&emsp;&emsp;相信很多人都用过缓存，在JavaWeb开发中有Ehcache缓存等等，还有很多第三方工具如apache，nginx等可以做静态资源的缓存，同时我们也可以制定自己的缓存机制，缓存数据库查询的数据以减少对数据库的频繁操作。但是很多时候我们总是感觉这些缓存总不尽人意， Memcached可以解决你不少的烦恼问题。<br>&emsp;&emsp;Memcached基于一个存储键/值对的hashmap。其守护进程是用C写的，但是客户端可以用任何语言来编写(本文使用Java作为例子)，并通过memcached协议与守护进程通信。</p>
-<p><strong>Memcached使用目的</strong><br>&emsp;&emsp;通过缓存数据库查询结果，减少数据库访问次数，以提高动态Web应用的速度、提高可扩展性。</p>
-<p><strong>Memcached应用机制</strong><br>&emsp;&emsp;Memcached作为一个分布式内存对象缓存系统，它可以将缓存和应用分离开来，但是每个Memcached服务不会互相通信，而是客户端根据分布式算法将数据库数据保存到不同的Memcached服务器上。<br><img src="https://1csh1.github.io/img/Memcached简单介绍/Memcached应用机制.jpg" alt="Memcached应用机制"></p>
-<p><strong>Memcached特点</strong><br>&emsp;&emsp;1.协议简单<br>&emsp;&emsp;2.基于libevent的事件处理<br>&emsp;&emsp;3.内置内存存储方式<br>&emsp;&emsp;4.Memcached不互相通信的分布式，数据都是通过客户端的分布式算法存储到各个服务器中</p>
-<p><strong>其他知识点</strong><br>&emsp;&emsp;Memcached的API使用32位元的循环冗余校验（CRC-32）计算键值后，将资料分散在不同的机器上。当表格满了以后，接下来新增的资料会以LRU机制替换掉。由于memcached通常只是当作快取系统使用，所以使用memcached的应用程式在写回较慢的系统时（像是后端的数据库）需要额外的程式码更新memcached内的资料<br>&emsp;&emsp;存储方式：为了提高性能，memcached中保存的数据都存储在memcached内置的内存存储空间中。由于数据仅存在于内存中，因此重启memcached、重启操作系统会导致全部数据消失。另外，内容容量达到指定值之后，就基于LRU(Least Recently Used)算法自动删除不使用的缓存。memcached本身是为缓存而设计的服务器，因此并没有过多考虑数据的永久性问题。</p>
-<p><strong>Java代码实现Memcached基本操作</strong><br>&emsp;&emsp;需要导入jar包：spymemcached<br>下载链接：<a href="https://1csh1.github.io/file/Memcached简单介绍/spymemcached-2.12.0.jar">spymemcached-2.12.0.jar</a></p>
-<p>&emsp;&emsp;首先需要启动Memcached服务，我是在Linux中测试的：启动命令如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">memcached -p 11211 -m 64m -d</span><br></pre></td></tr></table></figure></p>
-<p>&emsp;&emsp;Java客户端测试代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args)&#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        MemcachedClient mcc = new MemcachedClient(new InetSocketAddress(&quot;127.0.0.1&quot;, 11211));</span><br><span class="line">        System.out.println(&quot;connection success&quot;);</span><br><span class="line">        </span><br><span class="line">        // set 向Memcached中设置缓存对象【如果缓存中已有该key的缓存对象，则替换原来的缓存对象】</span><br><span class="line">        Future future = mcc.set(&quot;runoob&quot;, 900, &quot;Free Education&quot;);</span><br><span class="line">        System.out.println(&quot;status : &quot; + future.get());</span><br><span class="line">        System.out.println(&quot;runoob in cache : &quot; + mcc.get(&quot;runoob&quot;));</span><br><span class="line">        </span><br><span class="line">        // add 想Memcached中添加缓存对象【如果缓存中已有该key的缓存对象，则不添加】</span><br><span class="line">        Future future1 = mcc.add(&quot;test2&quot;, 10, &quot;test2-value&quot;);</span><br><span class="line">        System.out.println(&quot;test2 in cache : &quot; + mcc.get(&quot;test2&quot;));</span><br><span class="line">        Future future2 = mcc.add(&quot;test3&quot;, 1, &quot;test3-value&quot;);</span><br><span class="line">        System.out.println(&quot;test2 status : &quot; + future1.get());</span><br><span class="line">        System.out.println(&quot;test2 in cache : &quot; + mcc.get(&quot;test2&quot;));</span><br><span class="line">        </span><br><span class="line">        Thread.sleep(1000);</span><br><span class="line">        //test3只缓存1秒，测试test3超时后还有没存在，结果是不存在了</span><br><span class="line">        System.out.println(&quot;after sleep 1s test3 in cache : &quot; + mcc.get(&quot;test3&quot;));</span><br><span class="line">        </span><br><span class="line">        //replace 替换掉原来缓存的对象</span><br><span class="line">        System.out.println(&quot;before replace : &quot; + mcc.get(&quot;runoob&quot;));</span><br><span class="line">        mcc.replace(&quot;runoob&quot;, 90, &quot;replace value&quot;);</span><br><span class="line">        System.out.println(&quot;after replace : &quot; + mcc.get(&quot;runoob&quot;));</span><br><span class="line">        </span><br><span class="line">        //append 在相应缓存对象后面追加内容</span><br><span class="line">        System.out.println(&quot;before append : &quot; + mcc.get(&quot;runoob&quot;));</span><br><span class="line">        mcc.append(&quot;runoob&quot;, &quot; abc &quot;);</span><br><span class="line">        System.out.println(&quot;after append : &quot; + mcc.get(&quot;runoob&quot;));</span><br><span class="line">        </span><br><span class="line">        //prepend 在相应缓存对象的前面添加内容</span><br><span class="line">        System.out.println(&quot;before prepend : &quot; + mcc.get(&quot;runoob&quot;));</span><br><span class="line">        mcc.prepend(&quot;runoob&quot;, &quot; 123 &quot;);</span><br><span class="line">        System.out.println(&quot;after prepend : &quot; + mcc.get(&quot;runoob&quot;));</span><br><span class="line">        </span><br><span class="line">        //CAS 检查并设置操作</span><br><span class="line">        System.out.println(&quot;before cas : &quot; + mcc.get(&quot;runoob&quot;));</span><br><span class="line">        //获取token牌</span><br><span class="line">        CASValue casValue = mcc.gets(&quot;runoob&quot;);</span><br><span class="line">        System.out.println(&quot;CASValue : &quot; + casValue);</span><br><span class="line">        CASResponse casResponse = mcc.cas(&quot;runoob&quot;, casValue.getCas(), 90, &quot;runoob cas&quot;);</span><br><span class="line">        System.out.println(&quot;CASResponse : &quot; + casResponse);</span><br><span class="line">        </span><br><span class="line">        // delete 删除掉缓存数据</span><br><span class="line">        System.out.println(&quot;before delete : &quot; + mcc.get(&quot;runoob&quot;));</span><br><span class="line">        mcc.delete(&quot;runoob&quot;);</span><br><span class="line">        System.out.println(&quot;after delete : &quot; + mcc.get(&quot;runoob&quot;));</span><br><span class="line">        </span><br><span class="line">        // incr  将缓存数据自增</span><br><span class="line">        mcc.set(&quot;num&quot;, 10, 100);</span><br><span class="line">        System.out.println(&quot;before incr : &quot; + mcc.get(&quot;num&quot;));</span><br><span class="line">        System.out.println(mcc.get(&quot;num&quot;) instanceof Integer);</span><br><span class="line">        mcc.incr(&quot;num&quot;, 10);</span><br><span class="line">        System.out.println(&quot;after incr : &quot; + mcc.get(&quot;num&quot;));</span><br><span class="line">        </span><br><span class="line">        //decr 将缓存数据自减</span><br><span class="line">        System.out.println(&quot;before decr : &quot; + mcc.get(&quot;num&quot;));</span><br><span class="line">        mcc.decr(&quot;num&quot;, 10);</span><br><span class="line">        System.out.println(&quot;after decr : &quot; + mcc.get(&quot;num&quot;));</span><br><span class="line">        mcc.shutdown();</span><br><span class="line">        </span><br><span class="line">        // test another memcachedclient can get the object</span><br><span class="line">        MemcachedClient mcc1 = new MemcachedClient(new InetSocketAddress(&quot;node1&quot;, 11211));</span><br><span class="line">        System.out.println(mcc1.get(&quot;runoob&quot;));</span><br><span class="line">        mcc1.shutdown();</span><br><span class="line">    &#125; catch (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        System.out.println(&quot;connection fail&quot;);</span><br><span class="line">    &#125; catch (InterruptedException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; catch (ExecutionException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>参考文章链接</strong><br><a href="http://www.cnblogs.com/qingyuan/archive/2011/01/17/1937855.html" target="_blank" rel="noopener">缓存应用–Memcached分布式缓存简介</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/03/17/从马云说起。。。/" itemprop="url">
-                  从马云说起。。。
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-17T22:00:00+08:00" content="2016-03-17">
-              2016-03-17
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/生活人生/" itemprop="url" rel="index">
-                    <span itemprop="name">生活人生</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/03/17/从马云说起。。。/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/17/从马云说起。。。/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2016/03/17/从马云说起。。。/" class="leancloud_visitors" data-flag-title="从马云说起。。。">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>&emsp;&emsp;前2天看一些资讯，里面讲到马云给新员工培训的内部演讲，以下是全文：</p>
-<blockquote>
-<p>&emsp;&emsp;加入阿里巴巴，我们不承诺你会发财，不承诺你会成功，我们不承诺你会当官，但是我们承诺你会很倒霉、你会很受委屈。“3月9日，马云在阿里巴巴西溪园区报告厅里为800余名入职一年以内的阿里新员工上了一堂名为“百阿必修课”的公开大课。谈到KPI，马云表示，每个人都恨KPI，但如果没有KPI、没有结果导向、没有效率意识、没有组织意识、没有管理意识，就会变成一个梦想者，理想成为空话。此外，马云称最讨厌那些天天说公司不好，还留在公司里的人。”就像老公说老婆不好，老婆说老公不好，又不愿意离婚。<br><b>谈理想：希望公司对人类社会进步有贡献</b><br>&emsp;&emsp;我们希望阿里巴巴是这么一家公司，希望在中国这个土地上诞生一家对世界经济发展、人类社会进步有贡献的公司。所以我们希望招聘进来的员工，大家都充满这个使命，大家都充满着这个理想，大家都是一起团结，当然我们也有很多的分歧，但是最重要的是点点滴滴把它做下去。<br>&emsp;&emsp;所以你们可能听了这些以后，会发现公司是不是玩得太虚了，这就是我们公司的与众不同之处。如果你觉得这样的公司不愿意加入，没有关系，听了今天以后，你可以辞去，阿里巴巴的门应该永远要打开，很容易出去，但是很难进来。大家记住，要容易出去，很难进来;如果说容易进来，很难出去，那是监狱。<br>&emsp;&emsp;我们这家公司未来的85年，我们依旧会按照这样的路线往前走，强大的理想主义加上现实主义的结合，形成我们对于未来的思考、对于世界的思考。<br><b>谈使命：让天下没有难做的生意</b><br>&emsp;&emsp;我想还是跟大家讲，公司的使命驱动，至少我在这个公司，很重要的工作就是坚持这家公司使命驱动，让天下没有难做的生意，让这家公司以价值观来管理自己，强化文化。<br>&emsp;&emsp;我们这家公司走的路线也很独特，我们这家公司，我们第一天在湖畔花园的时候提出这句话，叫做“东方的智慧、西方的运作、全世界的大市场”。我们这家公司诞生在中国，阿里巴巴诞生在中国，但阿里巴巴不是一家中国公司，我们当然也不是美国的公司，人家说阿里巴巴是一家什么公司，我们的股东有世界各地的，我跟大家讲，阿里巴巴诞生在中国，但是它是一家全球化的公司。<br><b>谈KPI：没有KPI的理想就是空想</b><br>&emsp;&emsp;每个人都愿意停留在理想之中，每个人都恨KPI，但如果没有KPI、没有结果导向、没有效率意识、没有组织意识、没有管理意识，那么我个人觉得所有的理想都是空话，我们就变成一个梦想者，胡说八道。<br>&emsp;&emsp;天下没有完美的组织，为什么，很简单，要想走得快，那你就一个人走，你要想走得远，那就一群人一起走。要一群人一起走，一定要有组织，有组织，一定有时效率不会高，只是组织与组织之间比赛谁效率更高而已。<br><b>谈人才：第一大产品是员工，曾经四倍工资都挖不走</b><br>&emsp;&emsp;我们希望的第一大产品不是我们的淘宝，不是我们的天猫，不是我们的支付宝，也不是我们的云，也不是我们的菜鸟，我们第一的产品是我们的员工，因为我们相信，我们的员工强大了，我们的产品自然会强大，我们的服务会做好，客户才会满意。<br>&emsp;&emsp;以前挖我们员工的人很多，那时候我们还在华星大厦，曾经开到四倍工资，只要阿里人能去，给四倍工资，我们一个员工也没去。<br><b>谈偏好：最讨厌天天说公司不好，还留在公司里的人</b><br>&emsp;&emsp;我们喜欢的人，是提意见、有建设性意见、并且有行动的人，我们讨厌那些天天抱怨的人，我们不喜欢这些人，无论在内网、在外网，我们最讨厌那些天天说公司不好，还留在公司里的人。<br>&emsp;&emsp;就像老公说老婆不好，老婆说老公不好，又不愿意离婚，我们门是打开的，我们愿意听建议、批评，但是要有行动，大家只有团结一致才能度过难关，而不是碰上灾难麻烦的时候，大家都是互相说你的错。<br><b>谈福利：利益一定是自己打下来的</b><br>&emsp;&emsp;前几年争论了很久，有些东西我们跟其他公司不一样，我反对有大巴车班车上下班，为什么，不是买不起。员工如果没有车，那去挤地铁、去挤公交车、去骑自行车，保证自己上班不迟到，所有的公司、所有的优秀员工都经历过这一点。<br>&emsp;&emsp;我告诉大家，即使有班车，迟到的人会更多，放下工作的人会有更多，我们不是在乎加班这点工作，我们在乎的是你是否在乎你的工作，如果你在乎、热爱你的工作，你会早起。<br>&emsp;&emsp;阿里人记住，利益一定是自己打下来的，没有人的奖金、没有人的收入是别人给你的，而是凭自己的努力。业绩、市场是打下来的，没有人给你们，成绩也是努力出来的。我们为努力鼓掌，为结果付报酬，如果有结果，we pay，如果你很努力，没有结果，我们鼓鼓掌，也很好。  </p>
+            <blockquote>
+<p>摘要：本文简单介绍 Angular 的响应式表单，还是以之前的评论模块为例</p>
 </blockquote>
-<p>&emsp;&emsp;今晚看了《马云达沃斯44分钟全英文演讲》这段视频。视频如下：</p>
-<iframe height="498" width="510" src="http://player.youku.com/embed/XMTM0ODM2MDc2OA==" frameborder="0" allowfullscreen></iframe>
-
-<p>&emsp;&emsp;在知乎上，大家对马云给新员工的演讲有自己的主见。没有好坏之分，看多了一种意见，则多了一份思考的方式。<a href="https://www.zhihu.com/question/41352910" target="_blank" rel="noopener">如何评价2016年3月9日马云给新员工的演讲「最讨厌天天说公司不好 还留在公司里的人？</a><br>&emsp;&emsp;看了这些后，突然想到了自己。剩下100天就大学毕业了，这4年来我成长了什么？收获了什么？回顾4年太长久了，只是简单的回忆了去年3月份到现在，从一个蠢蠢欲动，想找一份实习来证明自己，到现在真正面对职场，却有些迷茫。这一年成长了么？成长了。长在哪？不知。。。只是觉得多了一份浮躁：浮躁地看待任何事，浮躁地做了任何事，浮躁地面对任何人，浮躁地写着任何代码……也许缺少的就是马云说的《阿甘正传》电影的阿甘所拥有的：Simple，Never give up，人们以为他傻，但他知道他在干做什么。<b>心不够简单，不够努力，太在意别人的看法，</b>在这一年来表现的淋漓尽致呀！！！</p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Angular 总共提供了 3 中表单实现方式，分别是：<a href="https://angular.io/guide/forms" target="_blank" rel="noopener">Template-driven Forms （模板驱动表单）</a>、 <a href="https://angular.io/guide/reactive-forms" target="_blank" rel="noopener">Reactive Forms （响应式表单）</a>、<a href="https://angular.io/guide/dynamic-form" target="_blank" rel="noopener">Dynamic Forms （动态表单）</a>。本文只介绍响应式表单。</p>
+<p>响应式表单是什么呢？其实跟我们以前用 JQuery 或者其他框架实现的思路差不多，就是使用 HTML 显示数据，然后通过定义一定的校验器、校验规则以及校验提示语，通过事件触发校验后校验不通过的显示提示语，只不过用了 Angular，我们就使用 Angular 提供的语法来实现这个校验过程。</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>接下来我们通过代码例子来介绍如何使用响应式表单。</p>
+<h4 id="引入响应式表单模块"><a href="#引入响应式表单模块" class="headerlink" title="引入响应式表单模块"></a>引入响应式表单模块</h4><p>在我们要使用响应式表单的那个模块里面引入响应式表单模块，比如我们在文章模块中使用响应式表单，我们就要在 imports 中添加 ReactiveFormsModule。代码如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@NgModule(&#123;</span><br><span class="line">  imports: [</span><br><span class="line">    RouterModule,</span><br><span class="line">    RouterModule.forChild(articleRoutes),</span><br><span class="line">    SharedModule,</span><br><span class="line">    ReactiveFormsModule,</span><br><span class="line">    NgbModule.forRoot()</span><br><span class="line">  ],</span><br><span class="line">  declarations: [</span><br><span class="line">    HomeComponent,</span><br><span class="line">    DetailComponent,</span><br><span class="line">    CommentComponent,</span><br><span class="line">    CommentViewComponent</span><br><span class="line">  ],</span><br><span class="line">  providers: [</span><br><span class="line">    HomeService,</span><br><span class="line">    DetailService,</span><br><span class="line">    CommentService</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br><span class="line">export class ArticleModule &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="编写校验器代码"><a href="#编写校验器代码" class="headerlink" title="编写校验器代码"></a>编写校验器代码</h4><p>首先我们这里的表单有 3 个字段，分别是 nickname、email、content； nickname 添加必填校验器，email 添加必填和邮箱格式校验器，content添加必填校验器。</p>
+<p>首先在 CommentComponent 中注入 FormBuilder 对象，并添加 commentForm 表单组以及创建一个评论对象 comment。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public commentForm: FormGroup;</span><br><span class="line">public comment: Comment = new Comment();</span><br><span class="line"></span><br><span class="line">constructor(private formBuilder: FormBuilder)&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>定义校验器的提示语 validationMessages， formErrors 是在模板中显示的提示语，提示语来自 validationMessages<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public formErrors = &#123;</span><br><span class="line">  &quot;nickname&quot;: &quot;&quot;,</span><br><span class="line">  &quot;email&quot;: &quot;&quot;,</span><br><span class="line">  &quot;content&quot;: &quot;&quot;,</span><br><span class="line">  &quot;formError&quot;: &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public validationMessages = &#123;</span><br><span class="line">  &quot;nickname&quot;: &#123;</span><br><span class="line">    &quot;required&quot;: &quot;昵称不能为空&quot;,</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;email&quot;: &#123;</span><br><span class="line">    &quot;required&quot;: &quot;邮箱不能为空&quot;,</span><br><span class="line">    &quot;pattern&quot;: &quot;请输入正确的邮箱地址&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;content&quot;: &#123;</span><br><span class="line">    &quot;required&quot;: &quot;内容不能为空&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在组件启动的函数中构造表单，这时候为每个字段添加了校验器，并且绑定在什么时候触发校验，这里我们在每个值改变的时候触发。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">ngOnInit(): void &#123;</span><br><span class="line">  this.buildForm();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private buildForm() &#123;</span><br><span class="line">  this.commentForm = this.formBuilder.group(&#123;</span><br><span class="line">    &quot;nickname&quot;:[</span><br><span class="line">      this.comment.nickname,</span><br><span class="line">      [</span><br><span class="line">        Validators.required</span><br><span class="line">      ]</span><br><span class="line">    ],</span><br><span class="line">    &quot;email&quot;: [</span><br><span class="line">      this.comment.email,</span><br><span class="line">      [</span><br><span class="line">        Validators.required,</span><br><span class="line">        Validators.pattern(&quot;^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]&#123;2,3&#125;)&#123;1,2&#125;)$&quot;)</span><br><span class="line">      ]</span><br><span class="line">    ],</span><br><span class="line">    &quot;content&quot;: [</span><br><span class="line">      this.comment.content,</span><br><span class="line">      [</span><br><span class="line">        Validators.required</span><br><span class="line">      ]</span><br><span class="line">    ]</span><br><span class="line">  &#125;);</span><br><span class="line">  this.commentForm.valueChanges.subscribe(data =&gt; this.onValueChanged(data));</span><br><span class="line">  this.onValueChanged();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>onValueChanged() 方法实现了判断是那个字段校验不通过，然后将该字段的 validationMessages 提示语赋值给 formErrors，在模板那里有判断如果 formErrors.email 等等字段不为空则显示改内容，也即是校验器的提示语<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">onValueChanged(data?: any) &#123;</span><br><span class="line">  if (!this.commentForm) &#123;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line">  const form = this.commentForm;</span><br><span class="line">  for (const field in this.formErrors) &#123;</span><br><span class="line">    this.formErrors[field] = &apos;&apos;;</span><br><span class="line">    const control = form.get(field);</span><br><span class="line">    if (control &amp;&amp; control.dirty &amp;&amp; !control.valid) &#123;</span><br><span class="line">      const messages = this.validationMessages[field];</span><br><span class="line">      for (const key in control.errors) &#123;</span><br><span class="line">        this.formErrors[field] += messages[key] + &apos; &apos;;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="HTML-模板代码"><a href="#HTML-模板代码" class="headerlink" title="HTML 模板代码"></a>HTML 模板代码</h4><p>我们要关注的是 [formGroup]=”commentForm”、novalidate、formControlName=”nickname”、以及 *ngIf=”formErrors.nickname” 这几个点，并不是指具体的点，而是着重看这些语法的每一个地方，在你自己实现的时候需要根据你的代码修改的。<br>还有一个是 (ngSubmit)=”sendComment()” 定义了该表单点击提交时调用的函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;form [formGroup]=&quot;commentForm&quot; (ngSubmit)=&quot;sendComment()&quot; role=&quot;form&quot; novalidate&gt;</span><br><span class="line">  &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;form-group floating-label-form-group controls&quot; [ngClass]=&quot;&#123;&apos;has-error&apos;: formErrors.nickname&#125;&quot;&gt;</span><br><span class="line">      &lt;label&gt;&#123;&#123; &apos;comment.nickname&apos; | translate &#125;&#125;&lt;/label&gt;</span><br><span class="line">      &lt;input formControlName=&quot;nickname&quot; type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;&#123;&#123; &apos;comment.nickname&apos; | translate &#125;&#125;&quot;&gt;</span><br><span class="line">      &lt;p *ngIf=&quot;formErrors.nickname&quot; class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">        &#123;&#123; formErrors.nickname &#125;&#125;</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;control-group&quot; &gt;</span><br><span class="line">    &lt;div class=&quot;form-group floating-label-form-group controls&quot; [ngClass]=&quot;&#123;&apos;has-error&apos;: formErrors.email&#125;&quot;&gt;</span><br><span class="line">      &lt;label&gt;&#123;&#123; &apos;comment.email&apos; | translate &#125;&#125;&lt;/label&gt;</span><br><span class="line">      &lt;input formControlName=&quot;email&quot; type=&quot;email&quot;   class=&quot;form-control&quot; placeholder=&quot;&#123;&#123; &apos;comment.email&apos; | translate &#125;&#125;&quot;&gt;</span><br><span class="line">      &lt;p *ngIf=&quot;formErrors.email&quot; class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">        &#123;&#123; formErrors.email &#125;&#125;</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;form-group floating-label-form-group controls&quot;  [ngClass]=&quot;&#123;&apos;has-error&apos;: formErrors.content&#125;&quot;&gt;</span><br><span class="line">      &lt;label&gt;&#123;&#123; &apos;comment.content&apos; | translate &#125;&#125;&lt;/label&gt;</span><br><span class="line">      &lt;textarea formControlName=&quot;content&quot; rows=&quot;5&quot; class=&quot;form-control&quot; placeholder=&quot;&#123;&#123; &apos;comment.content&apos; | translate &#125;&#125;&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">      &lt;p *ngIf=&quot;formErrors.content&quot;  class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">        &#123;&#123; formErrors.content &#125;&#125;</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;p *ngIf=&quot;formErrors.formError&quot;  class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">    &#123;&#123; formErrors.formError &#125;&#125;</span><br><span class="line">  &lt;/p&gt;</span><br><span class="line">  &lt;br&gt;</span><br><span class="line">  &lt;div id=&quot;success&quot;&gt;&lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">    &lt;button [disabled]=&quot;commentForm.invalid&quot; type=&quot;submit&quot; class=&quot;btn btn-secondary&quot; &gt;&#123;&#123; &apos;comment.submit&apos; | translate &#125;&#125;&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="GitHub-代码"><a href="#GitHub-代码" class="headerlink" title="GitHub 代码"></a>GitHub 代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/f96a6af5f10261ba484ddb93cc52a9dae5c5dc03" target="_blank" rel="noopener">James-Blog 中的 comment.component.ts 文件</a></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://angular.io/guide/reactive-forms" target="_blank" rel="noopener">Reactive Forms</a></p>
+<h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://1csh1.github.io/img/angular-reactive-forms/angular-reactive-forms.png" alt="angular-reactive-forms.png"></p>
 
           
         
@@ -643,8 +378,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/03/13/个人博客开始/" itemprop="url">
-                  个人博客开始
+                <a class="post-title-link" href="/2017/08/01/angular-comment-recursive-event/" itemprop="url">
+                  Angular 实现类似博客获取回复评论的数据
                 </a>
               
             
@@ -657,8 +392,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-03-13T10:00:00+08:00" content="2016-03-13">
-              2016-03-13
+            <time itemprop="dateCreated" datetime="2017-08-01T22:30:00+08:00" content="2017-08-01">
+              2017-08-01
             </time>
           </span>
 
@@ -671,8 +406,20 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/生活人生/" itemprop="url" rel="index">
-                    <span itemprop="name">生活人生</span>
+                  <a href="/categories/Angular/" itemprop="url" rel="index">
+                    <span itemprop="name">Angular</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
+                    <span itemprop="name">James-Blog</span>
                   </a>
                 </span>
 
@@ -687,8 +434,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/13/个人博客开始/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/13/个人博客开始/" itemprop="commentsCount"></span>
+                <a href="/2017/08/01/angular-comment-recursive-event/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/01/angular-comment-recursive-event/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -698,7 +445,7 @@
 
           
           
-             <span id="/2016/03/13/个人博客开始/" class="leancloud_visitors" data-flag-title="个人博客开始">
+             <span id="/2017/08/01/angular-comment-recursive-event/" class="leancloud_visitors" data-flag-title="Angular 实现类似博客获取回复评论的数据">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -721,7 +468,492 @@
       
         
           
-            <p><b>当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</b></p>
+            <blockquote>
+<p>摘要：本文继上一篇文章 <a href="https://1csh1.github.io/2017/07/31/angular-comment-recursive-display/">Angular 实现类似博客评论的递归显示</a> 讲述的内容，上篇文章里面只是说明了如何实现评论梯形显示，在博客评论中我们经常看到可以回复某一条评论，本文讲述如何实现点击某一条评论的回复按钮后，获取该条评论的内容并显示在输入框中。类似 CSDN 博客评论一样，点击回复后输入框自动添加了 [reply]u011642663[/reply]</p>
+</blockquote>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>依据上一篇文章中的评论梯形显示，我们还需要实现点击回复后，屏幕自动到达输入框位置，并且获取了点击回复的评论的信息。首先分解一下这个功能点，在项目中我们也会经常分解功能点，这个功能点有 2 个小点：一是在每条评论中加上 [回复] 按钮，点击回复后跳到输入框位置；二是点击回复后，获取到点击回复的那条评论的信息。下面我们一一解决。</p>
+<h3 id="跳转到输入框"><a href="#跳转到输入框" class="headerlink" title="跳转到输入框"></a>跳转到输入框</h3><p>我们接触前段第一个语言便是 HTML，我们知道 HTML 中有一个 # 定位，下面代码简单解释一下。<br>假设这个 HTML 代码文件是 index.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;a href=&quot;index.html#pointer&quot;&gt;Click me to pointer&lt;/a&gt;</span><br><span class="line">    &lt;div id=&quot;pointer&quot;&gt;</span><br><span class="line">      &lt;h1&gt;哈哈哈哈&lt;/h1&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>上面代码只要点击 Click me to pointer 这个链接，页面就会跳到 id=”pointer” 这个 div 的位置。所以我们在实现这个点击回复跳转到输入框中就可以使用这个方法。<br>我们在 comment-component.html 中将评论输入框加入 id=”comment”，接下来就是路径拼接的问题了，我们可以通过 Angular 的 Router 的 url 来获取本页面的路径，然后在这个路径后面加入 #comment 就可以实现跳转了，下面是实现这个跳转功能的代码</p>
+<h4 id="添加-id-”comment”"><a href="#添加-id-”comment”" class="headerlink" title="添加 id=”comment”"></a>添加 id=”comment”</h4><p>comment-component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Comment --&gt;</span><br><span class="line">&lt;div class=&quot;container font-small&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line"></span><br><span class="line">      &lt;comment-view [comments]=&quot;comments&quot; (contentEvent)=&quot;getReplyComment($event)&quot; &gt;&lt;/comment-view&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div class=&quot;well&quot; id=&quot;comment&quot;&gt;</span><br><span class="line">        &lt;h4&gt;&#123;&#123; &apos;comment.leaveComment&apos; | translate &#125;&#125;&lt;/h4&gt;</span><br><span class="line">        &lt;form role=&quot;form&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">            &lt;input type=&quot;hidden&quot; [(ngModel)]=&quot;id&quot; name=&quot;id&quot;&gt;</span><br><span class="line">            &lt;textarea [(ngModel)]=&quot;content&quot; name=&quot;content&quot; class=&quot;form-control&quot; rows=&quot;5&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="添加通过路由获取当前页面-URL"><a href="#添加通过路由获取当前页面-URL" class="headerlink" title="添加通过路由获取当前页面 URL"></a>添加通过路由获取当前页面 URL</h4><p>comment-view.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment-view&apos;,</span><br><span class="line">  templateUrl: &apos;./comment-view.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment-view.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentViewComponent implements OnInit &#123;</span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line"></span><br><span class="line">  // 用于跳转到回复输入框的url拼接</span><br><span class="line">  public url: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  constructor(private router: Router,</span><br><span class="line">              private activateRoute: ActivatedRoute ) &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">    this.url = this.router.url;</span><br><span class="line">    this.url = this.url.split(&quot;#&quot;)[0];</span><br><span class="line">    this.url = this.url + &quot;#comment&quot;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="添加链接-href-”“"><a href="#添加链接-href-”“" class="headerlink" title="添加链接 href=”“"></a>添加链接 href=”“</h4><p>comment-view.component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;div *ngFor=&quot;let comment of comments&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;media&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;pull-left&quot;&gt;</span><br><span class="line">      &lt;span class=&quot;media-object&quot;&gt;&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;media-body&quot;&gt;</span><br><span class="line">      &lt;h4 class=&quot;media-heading&quot;&gt;&#123;&#123; comment.username &#125;&#125;</span><br><span class="line">        &lt;small class=&quot;pull-right&quot;&gt;&#123;&#123; comment.time &#125;&#125;&amp;nbsp;|&amp;nbsp;&lt;a href=&quot;&#123;&#123;url&#125;&#125;&quot; (click)=&quot;reply(comment)&quot; &gt;&#123;&#123; &apos;comment.reply&apos; | translate &#125;&#125;&lt;/a&gt;&lt;/small&gt;</span><br><span class="line">      &lt;/h4&gt;</span><br><span class="line">       &#123;&#123; comment.content &#125;&#125;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;comment-view *ngIf=&quot;comment.cComments != null&quot; [comments]=&quot;comment.cComments&quot; (contentEvent)=&quot;transferToParent($event)&quot;&gt;&lt;/comment-view&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>这就实现了页面跳转的功能点，接下来实现获取回复的评论的信息。</p>
+<h3 id="获取回复的评论信息"><a href="#获取回复的评论信息" class="headerlink" title="获取回复的评论信息"></a>获取回复的评论信息</h3><p>有人会说获取回复的评论信息，这不简单么？加个 click 事件不就行了。还记得上一篇文章咱们是如何实现梯形展示评论的么？咱们是通过递归来实现的，怎么添加 click 事件让一个不知道嵌了多少层的组件能够把评论信息传给父组件？首先不具体想怎么实现，我们这个思路是不是对的：把子组件的信息传给父组件？答案是肯定的，我们就是要把不管嵌了多少层的子组件的信息传给 comment.component.ts 这个评论模块的主组件。<br>Angular 提供了 @Output 来实现子组件向父组件传递信息，我们在 comment-view.component.ts 模块中添加 @Output 向每个调用它的父组件传信息，我们是嵌套的，这样一层一层传出来，直到传给 comment-component.ts 组件。我们看代码怎么实现。</p>
+<h4 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h4><p>comment-view.component.ts</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment-view&apos;,</span><br><span class="line">  templateUrl: &apos;./comment-view.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment-view.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentViewComponent implements OnInit &#123;</span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line">  // 点击回复时返回数据</span><br><span class="line">  @Output()</span><br><span class="line">  public contentEvent: EventEmitter&lt;Comment&gt; = new EventEmitter&lt;Comment&gt;();</span><br><span class="line">  // 用于跳转到回复输入框的url拼接</span><br><span class="line">  public url: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  constructor(private router: Router,</span><br><span class="line">              private activateRoute: ActivatedRoute ) &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">    this.url = this.router.url;</span><br><span class="line">    this.url = this.url.split(&quot;#&quot;)[0];</span><br><span class="line">    this.url = this.url + &quot;#comment&quot;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  reply(comment: Comment) &#123;</span><br><span class="line">    this.contentEvent.emit(comment);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  transferToParent(event) &#123;</span><br><span class="line">    this.contentEvent.emit(event);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>comment-view.component.html</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;div *ngFor=&quot;let comment of comments&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;media&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;pull-left&quot;&gt;</span><br><span class="line">      &lt;span class=&quot;media-object&quot;&gt;&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;media-body&quot;&gt;</span><br><span class="line">      &lt;h4 class=&quot;media-heading&quot;&gt;&#123;&#123; comment.username &#125;&#125;</span><br><span class="line">        &lt;small class=&quot;pull-right&quot;&gt;&#123;&#123; comment.time &#125;&#125;&amp;nbsp;|&amp;nbsp;&lt;a href=&quot;&#123;&#123;url&#125;&#125;&quot; (click)=&quot;reply(comment)&quot; &gt;&#123;&#123; &apos;comment.reply&apos; | translate &#125;&#125;&lt;/a&gt;&lt;/small&gt;</span><br><span class="line">      &lt;/h4&gt;</span><br><span class="line">       &#123;&#123; comment.content &#125;&#125;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;comment-view *ngIf=&quot;comment.cComments != null&quot; [comments]=&quot;comment.cComments&quot; (contentEvent)=&quot;transferToParent($event)&quot;&gt;&lt;/comment-view&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>comment.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment&apos;,</span><br><span class="line">  templateUrl: &apos;./comment.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentComponent implements OnInit &#123;</span><br><span class="line"></span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line"></span><br><span class="line">  // 要回复的评论</span><br><span class="line">  public replyComment: Comment = new Comment();</span><br><span class="line"></span><br><span class="line">  public id: number = 0;</span><br><span class="line">  public content: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getReplyComment(event) &#123;</span><br><span class="line">    this.replyComment = event;</span><br><span class="line">    this.id = this.replyComment.id;</span><br><span class="line">    this.content = &quot;[reply]&quot; + this.replyComment.username + &quot;[reply]\n&quot;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>comment.component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Comment --&gt;</span><br><span class="line">&lt;div class=&quot;container font-small&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line"></span><br><span class="line">      &lt;comment-view [comments]=&quot;comments&quot; (contentEvent)=&quot;getReplyComment($event)&quot; &gt;&lt;/comment-view&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div class=&quot;well&quot; id=&quot;comment&quot;&gt;</span><br><span class="line">        &lt;h4&gt;&#123;&#123; &apos;comment.leaveComment&apos; | translate &#125;&#125;&lt;/h4&gt;</span><br><span class="line">        &lt;form role=&quot;form&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">            &lt;input type=&quot;hidden&quot; [(ngModel)]=&quot;id&quot; name=&quot;id&quot;&gt;</span><br><span class="line">            &lt;textarea [(ngModel)]=&quot;content&quot; name=&quot;content&quot; class=&quot;form-control&quot; rows=&quot;5&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>解释一下代码逻辑：<br>我们在 comment-view.component.ts 添加以下几点：</p>
+<ol>
+<li>定义了@Output() contentEvent</li>
+<li>添加了reply(comment: Comment) 事件在点击回复的时候触发的，触发的时候 contentEvent 将 comment 传到父模块</li>
+<li>添加 transferToParent(event) 是接受子组件传来的 event, 并且继续将 event 传到父组件</li>
+</ol>
+<p>在 comment.component.ts 中定义了 getReplyComment(event) 方法，该方法接收子组件传递来的评论信息，并将信息显示在页面上。大功告成。。。</p>
+<h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://1csh1.github.io/img/angular-comment-recursive-event/angular-comment-recursive-event.png" alt="angular-comment-recursive-event.png"></p>
+<h3 id="demo-代码"><a href="#demo-代码" class="headerlink" title="demo 代码"></a>demo 代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/e025e62e17461a6937e9b6d3e0865e1ae7c2e4d4" target="_blank" rel="noopener">James-Blog</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/31/angular-comment-recursive-display/" itemprop="url">
+                  Angular 实现类似博客评论的递归显示
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-07-31T22:30:00+08:00" content="2017-07-31">
+              2017-07-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/" itemprop="url" rel="index">
+                    <span itemprop="name">Angular</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
+                    <span itemprop="name">James-Blog</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/07/31/angular-comment-recursive-display/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/31/angular-comment-recursive-display/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/07/31/angular-comment-recursive-display/" class="leancloud_visitors" data-flag-title="Angular 实现类似博客评论的递归显示">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>摘要：本文讲述用 Angular4 来实现一般博客中经常看到的递归评论模块</p>
+</blockquote>
+<p>我们在一些技术博客中会经常看到很多递归评论，也即是我们可以回复博友的评论，且界面很美观，有梯度的显示格式，日前在空余时间写类似的 demo，所以记录下来，可以给需要的人一些借鉴的作用。<br>好了，废话少说，直奔主题。。。</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>我们在写后台程序的时候，经常会遇到生成类似树的这种数据结构，我们直觉就是使用递归的方法来实现，起初我也是这么想的，就是写一个 Angular4 的递归方法，组成一个字符串，然后在界面显示，类似下面代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &quot;comment&quot;,</span><br><span class="line">  template: &apos;&#123;&#123; comments &#125;&#125;&apos;</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentComponent &#123;</span><br><span class="line"></span><br><span class="line">  public comments: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  generateComment(Comment comment) &#123;</span><br><span class="line">    this.comments = this.comments + &quot;&lt;div&gt;&quot; + comment.content + &quot;&lt;/div&gt;&quot;;</span><br><span class="line">    if (comment.pComment != null) &#123;</span><br><span class="line">      generateComment(comment.pComment);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很天真的以为可以了，结果一试，标签不会被解析，才想起已经过了解析标签的过程了。。。</p>
+<p>后来想着，现在的前端框架都是以组件化自称， Angular4 也不例外，那么一个 Component 可以嵌入任何 Component，那肯定可以嵌入自己，也就有了类似递归的概念了，想到这立马试试。。。</p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>思路是这样子，我定义了数据的格式，是每个评论下面有一个子评论数组，而不是每个评论有一个父评论，数据格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&quot;comments&quot;: </span><br><span class="line">     [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;id&quot;: 1,</span><br><span class="line">          &quot;username&quot;: &quot;James1&quot;,</span><br><span class="line">          &quot;time&quot;: &quot;2017-07-09 21:02:21&quot;,</span><br><span class="line">          &quot;content&quot;: &quot;哈哈哈1&lt;h1&gt;哈哈哈&lt;/h1&gt;&quot;,</span><br><span class="line">          &quot;status&quot;: 1,</span><br><span class="line">          &quot;email&quot;: &quot;1xxxx@xx.com&quot;,</span><br><span class="line">          &quot;cComments&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">              &quot;id&quot;: 2,</span><br><span class="line">              &quot;username&quot;: &quot;James2&quot;,</span><br><span class="line">              &quot;time&quot;: &quot;2017-07-09 21:02:22&quot;,</span><br><span class="line">              &quot;content&quot;: &quot;哈哈哈2&quot;,</span><br><span class="line">              &quot;status&quot;: 1,</span><br><span class="line">              &quot;email&quot;: &quot;2xxxx@xx.com&quot;,</span><br><span class="line">              &quot;cComments&quot;: null</span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">     ]</span><br></pre></td></tr></table></figure>
+<p>CommentComponent 组件实现了评论模块，但是递归评论并不在这个组件实现，而是在子组件 CommentViewComponent 实现，因为 CommentComponent 还包括一个一个输入评论的文本框。 </p>
+<p>评论总模块 ComponentComponent 代码：</p>
+<p>comment.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment&apos;,</span><br><span class="line">  templateUrl: &apos;./comment.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentComponent implements OnInit &#123;</span><br><span class="line"></span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>comment.component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;container font-small&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line"></span><br><span class="line">      &lt;comment-view [comments]=&quot;comments&quot;&gt;&lt;/comment-view&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div class=&quot;well&quot; id=&quot;comment&quot;&gt;</span><br><span class="line">        &lt;h4&gt;&#123;&#123; &apos;comment.leaveComment&apos; | translate &#125;&#125;&lt;/h4&gt;</span><br><span class="line">        &lt;form role=&quot;form&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">            &lt;input type=&quot;hidden&quot; [(ngModel)]=&quot;id&quot; name=&quot;id&quot;&gt;</span><br><span class="line">            &lt;textarea [(ngModel)]=&quot;content&quot; name=&quot;content&quot; class=&quot;form-control&quot; rows=&quot;5&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>comment.component.css<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.media &#123;</span><br><span class="line">  font-size: 14px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.media-object &#123;</span><br><span class="line">  padding-left: 10px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>子模块 ComponentViewComponent 代码：</p>
+<p>component-view.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment-view&apos;,</span><br><span class="line">  templateUrl: &apos;./comment-view.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment-view.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentViewComponent implements OnInit &#123;</span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line"></span><br><span class="line">  constructor(private router: Router,</span><br><span class="line">              private activateRoute: ActivatedRoute ) &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>component-view.component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;div *ngFor=&quot;let comment of comments&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;media&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;pull-left&quot;&gt;</span><br><span class="line">      &lt;span class=&quot;media-object&quot;&gt;&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;media-body&quot;&gt;</span><br><span class="line">      &lt;h4 class=&quot;media-heading&quot;&gt;&#123;&#123; comment.username &#125;&#125;</span><br><span class="line">        &lt;small class=&quot;pull-right&quot;&gt;&#123;&#123; comment.time &#125;&#125;&amp;nbsp;|&amp;nbsp;&lt;a href=&quot;#&quot; &gt;&#123;&#123; &apos;comment.reply&apos; | translate &#125;&#125;&lt;/a&gt;&lt;/small&gt;</span><br><span class="line">      &lt;/h4&gt;</span><br><span class="line">       &#123;&#123; comment.content &#125;&#125;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;comment-view *ngIf=&quot;comment.cComments != null&quot; [comments]=&quot;comment.cComments&quot;&gt;&lt;/comment-view&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>comonent-view.component.css<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.media &#123;</span><br><span class="line">  font-size: 14px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.media-object &#123;</span><br><span class="line">  padding-left: 10px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>这时的展示结果如下图所示：</p>
+<p><img src="https://1csh1.github.io/img/angular-comment-recursive-display/angular-comment-recursive-display.png" alt="angular-comment-recursive-display.png"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/03/angular-add-clean-blog-template/" itemprop="url">
+                  在 Angular 项目中添加 clean-blog 模板
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-07-03T23:00:00+08:00" content="2017-07-03">
+              2017-07-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/" itemprop="url" rel="index">
+                    <span itemprop="name">Angular</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
+                    <span itemprop="name">James-Blog</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/07/03/angular-add-clean-blog-template/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/03/angular-add-clean-blog-template/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/07/03/angular-add-clean-blog-template/" class="leancloud_visitors" data-flag-title="在 Angular 项目中添加 clean-blog 模板">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>摘要：本文将介绍在 Angular4 项目中添加网上开源 Bootstrap 博客模板 <strong> clean-blog </strong></p>
+</blockquote>
+<h3 id="clean-blog-博客模板下载"><a href="#clean-blog-博客模板下载" class="headerlink" title="clean-blog 博客模板下载"></a>clean-blog 博客模板下载</h3><p><a href="https://startbootstrap.com/template-overviews/clean-blog/" target="_blank" rel="noopener">clean-blog</a><br>或者在下面链接下载<br><a href="https://1csh1.github.io/file/angular-add-clean-blog-template/startbootstrap-clean-blog-4-dev.zip">startbootstrap-clean-blog-4-dev.zip</a></p>
+<h3 id="解压并拷贝"><a href="#解压并拷贝" class="headerlink" title="解压并拷贝"></a>解压并拷贝</h3><p>解压下载的文件,将所有文件拷贝到 <strong> assets/clean-blog </strong> 目录下<br><img src="https://1csh1.github.io/img/angular-add-clean-blog-template/angular-add-clean-blog-template-1.png" alt="angular-add-clean-blog-template-1.png"></p>
+<h3 id="拷贝代码"><a href="#拷贝代码" class="headerlink" title="拷贝代码"></a>拷贝代码</h3><h4 id="将-clean-blog-的-index-html-内容拷贝到-app-component-html"><a href="#将-clean-blog-的-index-html-内容拷贝到-app-component-html" class="headerlink" title="将 clean-blog 的 index.html 内容拷贝到 app.component.html"></a>将 clean-blog 的 index.html 内容拷贝到 app.component.html</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--The whole content below can be removed with the new code.--&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Navigation --&gt;</span><br><span class="line">&lt;nav class=&quot;navbar fixed-top navbar-toggleable-md navbar-light&quot; id=&quot;mainNav&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">    &lt;button class=&quot;navbar-toggler navbar-toggler-right&quot; type=&quot;button&quot; data-toggle=&quot;collapse&quot;</span><br><span class="line">            data-target=&quot;#navbarResponsive&quot; aria-controls=&quot;navbarResponsive&quot; aria-expanded=&quot;false&quot;</span><br><span class="line">            aria-label=&quot;Toggle navigation&quot;&gt;</span><br><span class="line">      Menu &lt;i class=&quot;fa fa-bars&quot;&gt;&lt;/i&gt;</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">    &lt;a class=&quot;navbar-brand&quot; href=&quot;index.html&quot;&gt;Start Bootstrap&lt;/a&gt;</span><br><span class="line">    &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navbarResponsive&quot;&gt;</span><br><span class="line">      &lt;ul class=&quot;navbar-nav ml-auto&quot;&gt;</span><br><span class="line">        &lt;li class=&quot;nav-item&quot;&gt;</span><br><span class="line">          &lt;a class=&quot;nav-link&quot; href=&quot;index.html&quot;&gt;Home&lt;/a&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;nav-item&quot;&gt;</span><br><span class="line">          &lt;a class=&quot;nav-link&quot; href=&quot;../assets/clean-blog/about.html&quot;&gt;About&lt;/a&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;nav-item&quot;&gt;</span><br><span class="line">          &lt;a class=&quot;nav-link&quot; href=&quot;../assets/clean-blog/post.html&quot;&gt;Sample Post&lt;/a&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;nav-item&quot;&gt;</span><br><span class="line">          &lt;a class=&quot;nav-link&quot; href=&quot;../assets/clean-blog/contact.html&quot;&gt;Contact&lt;/a&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">      &lt;/ul&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/nav&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Page Header --&gt;</span><br><span class="line">&lt;header class=&quot;masthead&quot; style=&quot;background-image: url(&apos;../assets/clean-blog/img/home-bg.jpg&apos;)&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">      &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;site-heading&quot;&gt;</span><br><span class="line">          &lt;h1&gt;Clean Blog&lt;/h1&gt;</span><br><span class="line">          &lt;span class=&quot;subheading&quot;&gt;A Blog Theme by Start Bootstrap&lt;/span&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/header&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Main Content --&gt;</span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line">      &lt;div class=&quot;post-preview&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;../assets/clean-blog/post.html&quot;&gt;</span><br><span class="line">          &lt;h2 class=&quot;post-title&quot;&gt;</span><br><span class="line">            Man must explore, and this is exploration at its greatest</span><br><span class="line">          &lt;/h2&gt;</span><br><span class="line">          &lt;h3 class=&quot;post-subtitle&quot;&gt;</span><br><span class="line">            Problems look mighty small from 150 miles up</span><br><span class="line">          &lt;/h3&gt;</span><br><span class="line">        &lt;/a&gt;</span><br><span class="line">        &lt;p class=&quot;post-meta&quot;&gt;Posted by &lt;a href=&quot;#&quot;&gt;Start Bootstrap&lt;/a&gt; on September 24, 2017&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;div class=&quot;post-preview&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;../assets/clean-blog/post.html&quot;&gt;</span><br><span class="line">          &lt;h2 class=&quot;post-title&quot;&gt;</span><br><span class="line">            I believe every human has a finite number of heartbeats. I don&apos;t intend to waste any of mine.</span><br><span class="line">          &lt;/h2&gt;</span><br><span class="line">        &lt;/a&gt;</span><br><span class="line">        &lt;p class=&quot;post-meta&quot;&gt;Posted by &lt;a href=&quot;#&quot;&gt;Start Bootstrap&lt;/a&gt; on September 18, 2017&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;div class=&quot;post-preview&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;../assets/clean-blog/post.html&quot;&gt;</span><br><span class="line">          &lt;h2 class=&quot;post-title&quot;&gt;</span><br><span class="line">            Science has not yet mastered prophecy</span><br><span class="line">          &lt;/h2&gt;</span><br><span class="line">          &lt;h3 class=&quot;post-subtitle&quot;&gt;</span><br><span class="line">            We predict too much for the next year and yet far too little for the next ten.</span><br><span class="line">          &lt;/h3&gt;</span><br><span class="line">        &lt;/a&gt;</span><br><span class="line">        &lt;p class=&quot;post-meta&quot;&gt;Posted by &lt;a href=&quot;#&quot;&gt;Start Bootstrap&lt;/a&gt; on August 24, 2017&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;div class=&quot;post-preview&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;../assets/clean-blog/post.html&quot;&gt;</span><br><span class="line">          &lt;h2 class=&quot;post-title&quot;&gt;</span><br><span class="line">            Failure is not an option</span><br><span class="line">          &lt;/h2&gt;</span><br><span class="line">          &lt;h3 class=&quot;post-subtitle&quot;&gt;</span><br><span class="line">            Many say exploration is part of our destiny, but it’s actually our duty to future generations.</span><br><span class="line">          &lt;/h3&gt;</span><br><span class="line">        &lt;/a&gt;</span><br><span class="line">        &lt;p class=&quot;post-meta&quot;&gt;Posted by &lt;a href=&quot;#&quot;&gt;Start Bootstrap&lt;/a&gt; on July 8, 2017&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;!-- Pager --&gt;</span><br><span class="line">      &lt;div class=&quot;clearfix&quot;&gt;</span><br><span class="line">        &lt;a class=&quot;btn btn-secondary float-right&quot; href=&quot;#&quot;&gt;Older Posts &amp;rarr;&lt;/a&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;hr&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Footer --&gt;</span><br><span class="line">&lt;footer&gt;</span><br><span class="line">  &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">      &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line">        &lt;ul class=&quot;list-inline text-center&quot;&gt;</span><br><span class="line">          &lt;li class=&quot;list-inline-item&quot;&gt;</span><br><span class="line">            &lt;a href=&quot;#&quot;&gt;</span><br><span class="line">              &lt;span class=&quot;fa-stack fa-lg&quot;&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-circle fa-stack-2x&quot;&gt;&lt;/i&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-twitter fa-stack-1x fa-inverse&quot;&gt;&lt;/i&gt;</span><br><span class="line">              &lt;/span&gt;</span><br><span class="line">            &lt;/a&gt;</span><br><span class="line">          &lt;/li&gt;</span><br><span class="line">          &lt;li class=&quot;list-inline-item&quot;&gt;</span><br><span class="line">            &lt;a href=&quot;#&quot;&gt;</span><br><span class="line">              &lt;span class=&quot;fa-stack fa-lg&quot;&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-circle fa-stack-2x&quot;&gt;&lt;/i&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-facebook fa-stack-1x fa-inverse&quot;&gt;&lt;/i&gt;</span><br><span class="line">              &lt;/span&gt;</span><br><span class="line">            &lt;/a&gt;</span><br><span class="line">          &lt;/li&gt;</span><br><span class="line">          &lt;li class=&quot;list-inline-item&quot;&gt;</span><br><span class="line">            &lt;a href=&quot;#&quot;&gt;</span><br><span class="line">              &lt;span class=&quot;fa-stack fa-lg&quot;&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-circle fa-stack-2x&quot;&gt;&lt;/i&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-github fa-stack-1x fa-inverse&quot;&gt;&lt;/i&gt;</span><br><span class="line">              &lt;/span&gt;</span><br><span class="line">            &lt;/a&gt;</span><br><span class="line">          &lt;/li&gt;</span><br><span class="line">        &lt;/ul&gt;</span><br><span class="line">        &lt;p class=&quot;copyright text-muted&quot;&gt;Copyright &amp;copy; Your Website 2017&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/footer&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="styles-css-添加代码"><a href="#styles-css-添加代码" class="headerlink" title=" styles.css  添加代码"></a><strong> styles.css </strong> 添加代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/* clean-blog */</span><br><span class="line">@import &quot;assets/clean-blog/vendor/font-awesome/css/font-awesome.min.css&quot;;</span><br><span class="line">@import &quot;https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic&quot;;</span><br><span class="line">@import &quot;https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&quot;;</span><br><span class="line">@import &quot;assets/clean-blog/css/clean-blog.min.css&quot;;</span><br><span class="line"></span><br><span class="line">.navbar-toggler &#123;</span><br><span class="line">  z-index: 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@media (max-width: 576px) &#123;</span><br><span class="line">  nav &gt; .container &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="index-html-添加-JS-引用"><a href="#index-html-添加-JS-引用" class="headerlink" title=" index.html  添加 JS 引用"></a><strong> index.html </strong> 添加 JS 引用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- clean-blog --&gt;</span><br><span class="line">&lt;script src=&quot;assets/clean-blog/js/clean-blog.min.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p><img src="https://1csh1.github.io/img/angular-add-clean-blog-template/angular-add-clean-blog-template-2.png" alt="angular-add-clean-blog-template-2.png"></p>
+<p><strong> 提示: </strong>  文中的配置只是把 clean-blog 给搭建在 Angular4 的项目中，但是并没有大改其中的东西，比如链接等，现在还是一个静态的网页，后期才会添加自己的代码上去</p>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/4505a4fa26e2835b33914be1976b5aaac1254e20" target="_blank" rel="noopener">angular + clean-blog</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/07/02/angular-add-ng-bootstrap/" itemprop="url">
+                  在 Angular 项目中添加插件 ng-bootstrap
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-07-02T20:00:00+08:00" content="2017-07-02">
+              2017-07-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/" itemprop="url" rel="index">
+                    <span itemprop="name">Angular</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
+                    <span itemprop="name">James-Blog</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Angular/James-Blog/ng-bootstrap/" itemprop="url" rel="index">
+                    <span itemprop="name">ng-bootstrap</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/07/02/angular-add-ng-bootstrap/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/02/angular-add-ng-bootstrap/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/07/02/angular-add-ng-bootstrap/" class="leancloud_visitors" data-flag-title="在 Angular 项目中添加插件 ng-bootstrap">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>摘要：本文将介绍在 Angular4 项目中配置 ng-bootstrap</p>
+</blockquote>
+<h3 id="npm-安装-ng-bootstrap-模块"><a href="#npm-安装-ng-bootstrap-模块" class="headerlink" title="npm 安装 ng-bootstrap 模块"></a>npm 安装 ng-bootstrap 模块</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @ng-bootstrap/ng-bootstrap --save</span><br></pre></td></tr></table></figure>
+<h3 id="在-Angular-项目配置"><a href="#在-Angular-项目配置" class="headerlink" title="在 Angular 项目配置"></a>在 Angular 项目配置</h3><h4 id="app-module-ts"><a href="#app-module-ts" class="headerlink" title="app.module.ts"></a>app.module.ts</h4><p>添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import &#123; NgbModule &#125; from &quot;@ng-bootstrap/ng-bootstrap&quot;;</span><br><span class="line"></span><br><span class="line">  imports: [</span><br><span class="line">    /**</span><br><span class="line">     * ngx-bootstrap</span><br><span class="line">     */</span><br><span class="line">    NgbModule.forRoot()</span><br><span class="line">  ],</span><br></pre></td></tr></table></figure></p>
+<h4 id="添加-bootstrap-min-css-样式"><a href="#添加-bootstrap-min-css-样式" class="headerlink" title="添加 bootstrap.min.css 样式"></a>添加 bootstrap.min.css 样式</h4><p>在 <strong> assets </strong> 文件夹下 <strong> bootstrap/bootstrap.min.css </strong>， 并在 <strong> style.css </strong> 文件中添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@import &quot;assets/bootstrap/bootstrap.min.css&quot;;</span><br></pre></td></tr></table></figure>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="app-component-html"><a href="#app-component-html" class="headerlink" title="app.component.html"></a>app.component.html</h4><p>添加代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">  &lt;span&gt; test the ng-bootstrap&lt;/span&gt;</span><br><span class="line">  &lt;div [(ngModel)]=&quot;model&quot; ngbRadioGroup name=&quot;radioBasic&quot;&gt;</span><br><span class="line">    &lt;label class=&quot;btn btn-primary&quot;&gt;</span><br><span class="line">      &lt;input type=&quot;radio&quot; [value]=&quot;1&quot;&gt; Left (pre-checked)</span><br><span class="line">    &lt;/label&gt;</span><br><span class="line">    &lt;label class=&quot;btn btn-primary&quot;&gt;</span><br><span class="line">      &lt;input type=&quot;radio&quot; value=&quot;middle&quot;&gt; Middle</span><br><span class="line">    &lt;/label&gt;</span><br><span class="line">    &lt;label class=&quot;btn btn-primary&quot;&gt;</span><br><span class="line">      &lt;input type=&quot;radio&quot; [value]=&quot;false&quot;&gt; Right</span><br><span class="line">    &lt;/label&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;hr&gt;</span><br><span class="line">  &lt;pre&gt;&#123;&#123;model&#125;&#125;&lt;/pre&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h3><p><img src="https://1csh1.github.io/img/angular-add-ng-bootstrap/angular-ng-bootstrap-result.png" alt="angular-ng-bootstrap-result"></p>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/6c2c1503b4102c28b14f8b9e7fb447f8d52e1548" target="_blank" rel="noopener">angular + ng-bootstrap</a></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://github.com/ng-bootstrap/ng-bootstrap" target="_blank" rel="noopener">NG Bootstrap - Angular directives specific to Bootstrap 4</a><br><a href="https://ng-bootstrap.github.io/#/home" target="_blank" rel="noopener">Bootstrap 4 components, powered by Angular</a><br><a href="https://github.com/ngx-translate/core" target="_blank" rel="noopener">ngx-translate core</a></p>
 
           
         
@@ -750,7 +982,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -791,7 +1023,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-count">120</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -808,7 +1040,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-count">138</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

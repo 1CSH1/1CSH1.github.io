@@ -1,0 +1,900 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OpenJDK," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="[TOC] 最近因写文章需要查看 JVM 源码，有时代码逻辑不是很清晰，找半天，趁国庆假期，抽空下载了 OpenJDK13 搭建了 JVM debug 环境，把操作记录写在这篇文章里，让有需要的朋友可以参考，少踩坑。 我是在 Ubuntu 18.04 下编译的，不是在 Windows，建议不在 Windows 下折腾，会遇到比在 Linux 环境下多得多的问题。如果你电脑也是 Windows，">
+<meta name="keywords" content="OpenJDK">
+<meta property="og:type" content="article">
+<meta property="og:title" content="原创 | 全网最新最简单的 openjdk13 代码编译">
+<meta property="og:url" content="https://1csh1.github.io/2019/10/10//openjdk13_build/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="[TOC] 最近因写文章需要查看 JVM 源码，有时代码逻辑不是很清晰，找半天，趁国庆假期，抽空下载了 OpenJDK13 搭建了 JVM debug 环境，把操作记录写在这篇文章里，让有需要的朋友可以参考，少踩坑。 我是在 Ubuntu 18.04 下编译的，不是在 Windows，建议不在 Windows 下折腾，会遇到比在 Linux 环境下多得多的问题。如果你电脑也是 Windows，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.liebrother.com/upload/6f0d236c9bc14e0c92064942c957044a_Dukenocoffeecup768x531.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/632f0236e9b54f9b8f214c8602cbaf9f_00011.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/748bce52cb964359918cf72b72639900_00012.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/09745a309c76482e87abf1ed833d1e1d_0001.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/e07944ad2eb84aea916c882483f5c5bc_0002.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/8a0230ade2424aebb8da0c6b05971bc0_0003.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg">
+<meta property="og:updated_time" content="2019-10-10T00:59:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="原创 | 全网最新最简单的 openjdk13 代码编译">
+<meta name="twitter:description" content="[TOC] 最近因写文章需要查看 JVM 源码，有时代码逻辑不是很清晰，找半天，趁国庆假期，抽空下载了 OpenJDK13 搭建了 JVM debug 环境，把操作记录写在这篇文章里，让有需要的朋友可以参考，少踩坑。 我是在 Ubuntu 18.04 下编译的，不是在 Windows，建议不在 Windows 下折腾，会遇到比在 Linux 环境下多得多的问题。如果你电脑也是 Windows，">
+<meta name="twitter:image" content="http://www.liebrother.com/upload/6f0d236c9bc14e0c92064942c957044a_Dukenocoffeecup768x531.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 原创 | 全网最新最简单的 openjdk13 代码编译 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                原创 | 全网最新最简单的 openjdk13 代码编译
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-10-10T08:58:31+08:00" content="2019-10-10">
+              2019-10-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/10/10/openjdk13_build/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/10//openjdk13_build/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/10/10/openjdk13_build/" class="leancloud_visitors" data-flag-title="原创 | 全网最新最简单的 openjdk13 代码编译">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://www.liebrother.com/upload/6f0d236c9bc14e0c92064942c957044a_Dukenocoffeecup768x531.jpg" alt="图片来自网络，侵删"> </p>
+<p>[TOC]</p>
+<p>最近因写文章需要查看 JVM 源码，有时代码逻辑不是很清晰，找半天，趁国庆假期，抽空下载了 OpenJDK13 搭建了 JVM debug 环境，把操作记录写在这篇文章里，让有需要的朋友可以参考，少踩坑。</p>
+<p>我是在 Ubuntu 18.04 下编译的，不是在 Windows，建议不在 Windows 下折腾，会遇到比在 Linux 环境下多得多的问题。如果你电脑也是 Windows，可以像我这样，安装个 <strong>VMware</strong> 虚拟机软件，在里面装个 <strong>Ubuntu</strong> 系统，在虚拟机里面玩，这 2 个软件在官网下载就行，当然如果懒得去找也可以<code>在我的公众号后台回复: 虚拟机</code> 获取 <strong>VMware</strong> 软件和 <strong>Ubuntu 18.04</strong> 镜像。</p>
+<p>安装 Ubuntu 虚拟机就不在这篇文章说了，网上有相关的资料。</p>
+<h2 id="开始咯"><a href="#开始咯" class="headerlink" title="开始咯"></a>开始咯</h2><h3 id="1-下载源码"><a href="#1-下载源码" class="headerlink" title="1.下载源码"></a>1.下载源码</h3><p>平时咱用的代码管理工具大多数是 Git，OpenJDK 并不是，而是用 Mercurial 管理工具，所以我们要安装它。通过下面命令安装。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install mercurial</span><br></pre></td></tr></table></figure>
+<p>安装完代码管理工具后，我们就可以下载 OpenJDK13 的源码了，使用如下命令即可下载。这个过程根据网络状况，需要的时间不一，我下载花了十来分钟。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hg clone http://hg.openjdk.java.net/jdk/jdk13/</span><br></pre></td></tr></table></figure>
+<p>嗯，我就是这样干等了十来分钟，因为具体的官方操作文档也在里面，没下载下来无法看，网上也找不到相关的 Ubuntu 18 编译 OpenJDK13 的文章，所以不知道具体要安装哪些依赖。<strong>现在你看到这篇文章，可以不用干等着了，接下来步骤 2 和 3 不依赖源代码，可以继续操作。</strong></p>
+<h3 id="2-安装编译需要的依赖"><a href="#2-安装编译需要的依赖" class="headerlink" title="2.安装编译需要的依赖"></a>2.安装编译需要的依赖</h3><p>这一部分是查看了官方文档，做了总结，官方文档里面是按软件区分的，那样一个命令一个命令敲有点繁琐，就把它整合成一个命令，执行就完了，满足有些朋友想尽快编译完，少些多余的东西。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libfreetype6-dev libcups2-dev libx11-dev libxext-dev libxrender-dev libxrandr-dev libxtst-dev libxt-dev libasound2-dev libffi-dev autoconf gcc clang libfontconfig1-dev</span><br></pre></td></tr></table></figure>
+<p>想了解这些依赖软件是干嘛用的，可以看看官方文档，文档的位置如下图。</p>
+<p><img src="http://www.liebrother.com/upload/632f0236e9b54f9b8f214c8602cbaf9f_00011.jpg" alt=""> </p>
+<h3 id="3-安装-jdk-12"><a href="#3-安装-jdk-12" class="headerlink" title="3.安装 jdk 12"></a>3.安装 jdk 12</h3><p>这个在文档里面称为 <strong>Boot JDK</strong>，就是编译时需要上一个版本的 JDK 做为基础，一般是使用 N-1 版本，比如编译 OpenJDK8 就使用 JDK7 作为 Boot JDK，我们这里是编译 OpenJDK13，所以使用的是 JDK12。也是执行下面命令就搞定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:openjdk-r/ppa</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install openjdk-12-jdk</span><br></pre></td></tr></table></figure>
+<p>安装完可以通过 <code>java -version</code> 来验证一下是否成功安装。见到如下结果就妥妥的。</p>
+<p><img src="http://www.liebrother.com/upload/748bce52cb964359918cf72b72639900_00012.jpg" alt=""> </p>
+<p>执行完上面步骤，那么恭喜你，现在就可以开始编译了。</p>
+<h3 id="4-检查配置"><a href="#4-检查配置" class="headerlink" title="4.检查配置"></a>4.检查配置</h3><p>我们安装了上面那么多东西，需要来检查一下是不是已经安装完所需要的软件，通过下面命令来检查。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash configure</span><br></pre></td></tr></table></figure>
+<p>如果执行过程中有异常，就根据异常和提示信息，安装所缺的软件就行。如果看到下面的结果，那么再一次恭喜你，所有依赖软件都准备好了。</p>
+<p><img src="http://www.liebrother.com/upload/09745a309c76482e87abf1ed833d1e1d_0001.jpg" alt=""> </p>
+<h3 id="5-开始编译"><a href="#5-开始编译" class="headerlink" title="5.开始编译"></a>5.开始编译</h3><p>最激动人心的时刻到来了，敲入下面的命令，开始编译吧。这个过程大概需要半个小时，耐心等候，可以稍作休息，喝杯 82 年的咖啡。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make images</span><br></pre></td></tr></table></figure>
+<p>见证奇迹的图片。看到下图说明编译成功啦。</p>
+<p><img src="http://www.liebrother.com/upload/e07944ad2eb84aea916c882483f5c5bc_0002.jpg" alt=""> </p>
+<h3 id="6-验证是否成功"><a href="#6-验证是否成功" class="headerlink" title="6.验证是否成功"></a>6.验证是否成功</h3><p>还需要再稳一点，验证编译后的 java 是否可用，通过下面的命令来验证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./build/*/images/jdk/bin/java -version</span><br></pre></td></tr></table></figure>
+<p>看下图，出现 <code>&quot;13-internal&quot; 2019-09-17</code> 字样，我们编译出来的 JDK13 可以用啦。<br><img src="http://www.liebrother.com/upload/8a0230ade2424aebb8da0c6b05971bc0_0003.jpg" alt=""> </p>
+<p>这标题起得不过分吧，上面版本日期是 <strong>2019-09-17</strong>，还不到一个月，网上相关资料也没，就只有官方文档了（当然也是最好的资料）。<code>跟着步骤走，不会丢</code>，为了验证这句话，还把上面的步骤在我快退休的笔记本上跑了一遍，妥妥的。</p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>我们这篇文章就讲了编译 OpenJDK13，接下来会再写一篇怎么搭建 Debug JVM 环境，可以关注公众号，期待下一篇。</p>
+<p><code>推荐阅读</code></p>
+<p><a href="https://mp.weixin.qq.com/s/Fh8d9ITNhvwYlfF2kY8P-g" target="_blank" rel="noopener">了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑</a></p>
+<p><a href="https://mp.weixin.qq.com/s/NSlEeXMK22-clfDv44h60w" target="_blank" rel="noopener">线程最最基础的知识</a></p>
+<p><a href="https://mp.weixin.qq.com/s/cIj_uzT6gZjROO44rNFHFQ" target="_blank" rel="noopener">老板叫你别阻塞了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Euc2NKvK_TsqvcT-DWpD5A" target="_blank" rel="noopener">吃个快餐都能学到串行、并行、并发</a></p>
+<p><a href="https://mp.weixin.qq.com/s/yWqFw_S7suYpqszuJFDsGg" target="_blank" rel="noopener">泡一杯茶，学一学同异步</a></p>
+<p><a href="https://mp.weixin.qq.com/s/HJIVxnzyDesYPGGyJsaFyQ" target="_blank" rel="noopener">进程知多少？</a></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OpenJDK/" rel="tag">#OpenJDK</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/24/thread_priority/" rel="next" title="了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑">
+                <i class="fa fa-chevron-left"></i> 了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/11/openjdk13_debug/" rel="prev" title="写了那么多年 Java 代码，终于 debug 到 JVM 了">
+                写了那么多年 Java 代码，终于 debug 到 JVM 了 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/10/10//openjdk13_build/"
+           data-title="原创 | 全网最新最简单的 openjdk13 代码编译" data-url="https://1csh1.github.io/2019/10/10/openjdk13_build/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">120</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">138</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开始咯"><span class="nav-number">1.</span> <span class="nav-text">开始咯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-下载源码"><span class="nav-number">1.1.</span> <span class="nav-text">1.下载源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-安装编译需要的依赖"><span class="nav-number">1.2.</span> <span class="nav-text">2.安装编译需要的依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-安装-jdk-12"><span class="nav-number">1.3.</span> <span class="nav-text">3.安装 jdk 12</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-检查配置"><span class="nav-number">1.4.</span> <span class="nav-text">4.检查配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-开始编译"><span class="nav-number">1.5.</span> <span class="nav-text">5.开始编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-验证是否成功"><span class="nav-number">1.6.</span> <span class="nav-text">6.验证是否成功</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回顾"><span class="nav-number">2.</span> <span class="nav-text">回顾</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'content',
+        blogId: '15497-1572145892011-295',
+        name: 'LieBrother',
+        qrcode: 'http://www.liebrother.com/upload/2ead36875d2647ef9f857b904cdbb3e6_.jpg',
+        keyword: 'github',
+    });
+</script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

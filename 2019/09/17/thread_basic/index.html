@@ -1,0 +1,918 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java多线程,线程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="Java 多线程系列文章第 5 篇。  什么是线程试想一下没有线程的程序是怎么样的？百度网盘在上传文件时就无法下载文件了，得等文件上传完成后才能下载文件。这个我们现在看起来很反人性，因为我们习惯了一个程序同时可以进行运行多个功能，而这些都是线程的功劳。 之前的文章 进程知多少 中讲到，为了实现多个程序并行执行，引入了进程概念。现在引入线程是为了让一个程序能够并发执行。 线程的组成线程ID：线">
+<meta name="keywords" content="Java多线程,线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线程最最基础的知识">
+<meta property="og:url" content="https://1csh1.github.io/2019/09/17//thread_basic/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="Java 多线程系列文章第 5 篇。  什么是线程试想一下没有线程的程序是怎么样的？百度网盘在上传文件时就无法下载文件了，得等文件上传完成后才能下载文件。这个我们现在看起来很反人性，因为我们习惯了一个程序同时可以进行运行多个功能，而这些都是线程的功劳。 之前的文章 进程知多少 中讲到，为了实现多个程序并行执行，引入了进程概念。现在引入线程是为了让一个程序能够并发执行。 线程的组成线程ID：线">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.liebrother.com/upload/69152be5467f4bd6b6bb3739f82304f3_dxc_0005_00.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/887bee2bae0b40a5b1fc3e4ff751ef39_dxc_0005_03.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/68ae1f24617f4cde8bf1f3382db17e42_dxc_0005_01.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/90963a7629a946fa8a262aa9e9d94b35_dxc_0005_02.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg">
+<meta property="og:updated_time" content="2019-09-17T15:03:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="线程最最基础的知识">
+<meta name="twitter:description" content="Java 多线程系列文章第 5 篇。  什么是线程试想一下没有线程的程序是怎么样的？百度网盘在上传文件时就无法下载文件了，得等文件上传完成后才能下载文件。这个我们现在看起来很反人性，因为我们习惯了一个程序同时可以进行运行多个功能，而这些都是线程的功劳。 之前的文章 进程知多少 中讲到，为了实现多个程序并行执行，引入了进程概念。现在引入线程是为了让一个程序能够并发执行。 线程的组成线程ID：线">
+<meta name="twitter:image" content="http://www.liebrother.com/upload/69152be5467f4bd6b6bb3739f82304f3_dxc_0005_00.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 线程最最基础的知识 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                线程最最基础的知识
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-09-17T23:03:45+08:00" content="2019-09-17">
+              2019-09-17
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/09/17/thread_basic/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/09/17//thread_basic/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/09/17/thread_basic/" class="leancloud_visitors" data-flag-title="线程最最基础的知识">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://www.liebrother.com/upload/69152be5467f4bd6b6bb3739f82304f3_dxc_0005_00.jpg" alt=""> </p>
+<blockquote>
+<p>Java 多线程系列文章第 5 篇。</p>
+</blockquote>
+<h2 id="什么是线程"><a href="#什么是线程" class="headerlink" title="什么是线程"></a>什么是线程</h2><p>试想一下没有线程的程序是怎么样的？百度网盘在上传文件时就无法下载文件了，得等文件上传完成后才能下载文件。这个我们现在看起来很反人性，因为我们习惯了一个程序同时可以进行运行多个功能，而这些都是线程的功劳。</p>
+<p>之前的文章 <a href="http://www.baidu.com" target="_blank" rel="noopener">进程知多少</a> 中讲到，为了实现多个程序并行执行，引入了进程概念。现在引入线程是为了让一个程序能够并发执行。</p>
+<h2 id="线程的组成"><a href="#线程的组成" class="headerlink" title="线程的组成"></a>线程的组成</h2><p><strong>线程ID</strong>：线程标识符。</p>
+<p><strong>当前指令指针（PC）</strong>：指向要执行的指令。</p>
+<p><strong>寄存器集合</strong>：存储单元寄存器的集合。</p>
+<p><strong>堆栈</strong>：暂时存放数据和地址，一般用来保护断点和现场。</p>
+<h2 id="线程与进程区别"><a href="#线程与进程区别" class="headerlink" title="线程与进程区别"></a>线程与进程区别</h2><p>线程和进程之间的区别，我觉得可以用这个例子来看出两者的不同，进程就是一栋房子，房子住着 3 个人，线程就是住在房子里的人。进程是一个独立的个体，有自己的资源，线程是在进程里的，多个线程共享着进程的资源。</p>
+<h2 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h2><p>我们看到 Java 源代码里面，线程状态的枚举有如下 6 个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public enum State &#123;</span><br><span class="line"></span><br><span class="line"> //新建状态</span><br><span class="line"> NEW,</span><br><span class="line"></span><br><span class="line"> //运行状态</span><br><span class="line"> RUNNABLE,</span><br><span class="line"></span><br><span class="line"> //阻塞状态</span><br><span class="line"> BLOCKED,</span><br><span class="line"></span><br><span class="line"> //等待状态</span><br><span class="line"> WAITING,</span><br><span class="line"></span><br><span class="line"> //等待状态（区别在于这个有等待的时间）</span><br><span class="line"> TIMED_WAITING,</span><br><span class="line"></span><br><span class="line"> //终止状态</span><br><span class="line"> TERMINATED;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面给这 6 个状态一一做下解释。</p>
+<p><strong>NEW</strong>：新建状态。在创建完 Thread ，还没执行 start() 之前，线程的状态一直是 NEW。可以说这个时候还没有真正的一个线程映射着，只是一个对象。</p>
+<p><strong>RUNNABLE</strong>：运行状态。线程对象调用 start() 之后，就进入 RUNNABLE 状态，该状态说明在 JVM 中有一个真实的线程存在。</p>
+<p><strong>BLOCKED</strong>：阻塞状态。线程在等待锁的释放，也就是等待获取 monitor 锁。</p>
+<p><strong>WAITING</strong>：等待状态。线程在这个状态的时候，不会被分配 CPU，而且需要被显示地唤醒，否则会一直等待下去。</p>
+<p><strong>TIMED_WAITING</strong>：超时等待状态。这个状态的线程也一样不会被分配 CPU，但是它不会无限等待下去，有时间限制，时间一到就停止等待。</p>
+<p><strong>TERMINATED</strong>：终止状态。线程执行完成结束，但不代表这个对象已经没有了，对象可能还是存在的，只是线程不存在了。</p>
+<p>线程既然有这么多个状态，那肯定就有状态机，也就是在什么情况下 A 状态会变成 B 状态。下面就来简单描述一下。</p>
+<p>结合下图，我们 new 出线程类的时候，就是 <code>NEW</code> 状态，调用 <strong>start()</strong> 方法，就进入了 <code>RUNNABLE</code> 状态，这时如果触发等待，则进入了 <code>WAITING</code> 状态，如果触发超时等待，则进入 <code>TIMED_WAITING</code> 状态，当访问需要同步的资源时，则只有一个线程能访问，其他线程就进入 <code>BLOCKED</code> 状态，当线程执行完后，进入 <code>TERMINATED</code> 状态。</p>
+<p><img src="http://www.liebrother.com/upload/887bee2bae0b40a5b1fc3e4ff751ef39_dxc_0005_03.jpg" alt="图片来源于网路，侵删"> </p>
+<p>其实在 JVM 中，线程是有 9 个状态，如下所示，有兴趣的同学可以深入了解一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">javaClasses.hpp</span><br><span class="line">enum ThreadStatus &#123;</span><br><span class="line">    NEW = 0,</span><br><span class="line">    RUNNABLE = JVMTI_THREAD_STATE_ALIVE + // runnable / running</span><br><span class="line">                               JVMTI_THREAD_STATE_RUNNABLE,</span><br><span class="line">    SLEEPING = JVMTI_THREAD_STATE_ALIVE + // Thread.sleep()</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING +</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING_WITH_TIMEOUT +</span><br><span class="line">                               JVMTI_THREAD_STATE_SLEEPING,</span><br><span class="line">    IN_OBJECT_WAIT = JVMTI_THREAD_STATE_ALIVE + // Object.wait()</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING +</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING_INDEFINITELY +</span><br><span class="line">                               JVMTI_THREAD_STATE_IN_OBJECT_WAIT,</span><br><span class="line">    IN_OBJECT_WAIT_TIMED = JVMTI_THREAD_STATE_ALIVE + // Object.wait(long)</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING +</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING_WITH_TIMEOUT +</span><br><span class="line">                               JVMTI_THREAD_STATE_IN_OBJECT_WAIT,</span><br><span class="line">    PARKED = JVMTI_THREAD_STATE_ALIVE + // LockSupport.park()</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING +</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING_INDEFINITELY +</span><br><span class="line">                               JVMTI_THREAD_STATE_PARKED,</span><br><span class="line">    PARKED_TIMED = JVMTI_THREAD_STATE_ALIVE + // LockSupport.park(long)</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING +</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING_WITH_TIMEOUT +</span><br><span class="line">                               JVMTI_THREAD_STATE_PARKED,</span><br><span class="line">    BLOCKED_ON_MONITOR_ENTER = JVMTI_THREAD_STATE_ALIVE + // (re-)entering a synchronization block</span><br><span class="line">                               JVMTI_THREAD_STATE_BLOCKED_ON_MONITOR_ENTER,</span><br><span class="line">    TERMINATED = JVMTI_THREAD_STATE_TERMINATED</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="Java-线程实现"><a href="#Java-线程实现" class="headerlink" title="Java 线程实现"></a>Java 线程实现</h2><p>下面讲一讲在 Java 中如何创建一个线程。众所周知，实现 Java 线程有 2 种方式：继承 Thread 类和实现 Runnable 接口。</p>
+<h3 id="继承-Thread-类"><a href="#继承-Thread-类" class="headerlink" title="继承 Thread 类"></a>继承 Thread 类</h3><p>继承 Thread 类，重写 <code>run()</code> 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class MyThread extends Thread &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;MyThread&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实现-Runnable-接口"><a href="#实现-Runnable-接口" class="headerlink" title="实现 Runnable 接口"></a>实现 Runnable 接口</h3><p>实现 Runnable 接口，实现 <code>run()</code> 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class MyRunnable implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;MyRunnable&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这 2 种线程的启动方式也不一样。<code>MyThread</code> 是一个线程类，所以可以直接 <code>new</code> 出一个对象出来，接着调用 <code>start()</code> 方法来启动线程；而 <code>MyRunnable</code> 只是一个普通的类，需要 <code>new</code> 出线程基类 <code>Thread</code> 对象，将 <code>MyRunnable</code> 对象传进去。</p>
+<p>下面是启动线程的方式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ThreadImpl &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        Thread myRunnable = new Thread(new MyRunnable());</span><br><span class="line">        System.out.println(&quot;main Thread begin&quot;);</span><br><span class="line">        myThread.start();</span><br><span class="line">        myRunnable.start();</span><br><span class="line">        System.out.println(&quot;main Thread end&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main Thread begin</span><br><span class="line">main Thread end</span><br><span class="line">MyThread</span><br><span class="line">MyRunnable</span><br></pre></td></tr></table></figure>
+<p>看这结果，不像咱们之前的串行执行依次打印，主线程不会等待子线程执行完。</p>
+<p><strong>敲重点</strong>：不能直接调用 <code>run()</code>，直接调用 <code>run()</code> 不会创建线程，而是主线程直接执行 <code>run()</code> 的内容，相当于执行普通函数。这时就是串行执行的。看下面代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ThreadImpl &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        Thread myRunnable = new Thread(new MyRunnable());</span><br><span class="line">        System.out.println(&quot;main Thread begin&quot;);</span><br><span class="line">        myThread.run();</span><br><span class="line">        myRunnable.run();</span><br><span class="line">        System.out.println(&quot;main Thread end&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main Thread begin</span><br><span class="line">MyThread</span><br><span class="line">MyRunnable</span><br><span class="line">main Thread end</span><br></pre></td></tr></table></figure></p>
+<p>从结果看出只是串行的，但看不出没有线程，我们看下面例子来验证直接调用 <code>run()</code> 方法没有创建新的线程，使用 <strong>VisualVM</strong> 工具来观察线程情况。</p>
+<p>我们对代码做一下修改，加上 <code>Thread.sleep(1000000)</code> 让它睡眠一段时间，这样方便用工具查看线程情况。</p>
+<p>调用 <code>run()</code> 的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">public class ThreadImpl &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        myThread.setName(&quot;MyThread&quot;);</span><br><span class="line">        Thread myRunnable = new Thread(new MyRunnable());</span><br><span class="line">        myRunnable.setName(&quot;MyRunnable&quot;);</span><br><span class="line">        System.out.println(&quot;main Thread begin&quot;);</span><br><span class="line">        myThread.run();</span><br><span class="line">        myRunnable.run();</span><br><span class="line">        System.out.println(&quot;main Thread end&quot;);</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1000000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyThread extends Thread &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;MyThread&quot;);</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1000000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyRunnable implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;MyRunnable&quot;);</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1000000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">main Thread begin</span><br><span class="line">MyThread</span><br></pre></td></tr></table></figure>
+<p><img src="http://www.liebrother.com/upload/68ae1f24617f4cde8bf1f3382db17e42_dxc_0005_01.jpg" alt=""> </p>
+<p>只打印出 2 句日志，观察线程时也只看到 <code>main</code> 线程，没有看到 <code>MyThread</code> 和 <code>MyRunnable</code> 线程，印证了上面咱们说的：<strong>直接调用 <code>run()</code> 方法，没有创建线程</strong>。</p>
+<p>下面我们来看看有<br>调用 <code>start()</code> 的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class ThreadImpl &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        myThread.setName(&quot;MyThread&quot;);</span><br><span class="line">        Thread myRunnable = new Thread(new MyRunnable());</span><br><span class="line">        myRunnable.setName(&quot;MyRunnable&quot;);</span><br><span class="line">        System.out.println(&quot;main Thread begin&quot;);</span><br><span class="line">        myThread.start();</span><br><span class="line">        myRunnable.start();</span><br><span class="line">        System.out.println(&quot;main Thread end&quot;);</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1000000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main Thread begin</span><br><span class="line">main Thread end</span><br><span class="line">MyThread</span><br><span class="line">MyRunnable</span><br></pre></td></tr></table></figure>
+<p><img src="http://www.liebrother.com/upload/90963a7629a946fa8a262aa9e9d94b35_dxc_0005_02.jpg" alt=""> </p>
+<p>所有日志都打印出来了，并且通过 <strong>VisualVM</strong> 工具可以看到 <code>MyThread</code> 和 <code>MyRunnable</code> 线程。看到了这个结果，切记创建线程要调用 <code>start()</code> 方法。</p>
+<p>今天就先讲到这，继续关注后面的内容。</p>
+<p><code>推荐阅读</code></p>
+<p><a href="https://mp.weixin.qq.com/s/NSlEeXMK22-clfDv44h60w" target="_blank" rel="noopener">线程最最基础的知识</a></p>
+<p><a href="https://mp.weixin.qq.com/s/cIj_uzT6gZjROO44rNFHFQ" target="_blank" rel="noopener">老板叫你别阻塞了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Euc2NKvK_TsqvcT-DWpD5A" target="_blank" rel="noopener">吃个快餐都能学到串行、并行、并发</a></p>
+<p><a href="https://mp.weixin.qq.com/s/yWqFw_S7suYpqszuJFDsGg" target="_blank" rel="noopener">泡一杯茶，学一学同异步</a></p>
+<p><a href="https://mp.weixin.qq.com/s/HJIVxnzyDesYPGGyJsaFyQ" target="_blank" rel="noopener">进程知多少？</a></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java多线程/" rel="tag">#Java多线程</a>
+          
+            <a href="/tags/线程/" rel="tag">#线程</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/10/book_the_richest_man_in_babylon/" rel="next" title="读书 | 巴比伦最富有的人（内含思维导图）">
+                <i class="fa fa-chevron-left"></i> 读书 | 巴比伦最富有的人（内含思维导图）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/24/thread_priority/" rel="prev" title="了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑">
+                了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/09/17//thread_basic/"
+           data-title="线程最最基础的知识" data-url="https://1csh1.github.io/2019/09/17/thread_basic/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">120</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">138</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是线程"><span class="nav-number">1.</span> <span class="nav-text">什么是线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程的组成"><span class="nav-number">2.</span> <span class="nav-text">线程的组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程与进程区别"><span class="nav-number">3.</span> <span class="nav-text">线程与进程区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程状态"><span class="nav-number">4.</span> <span class="nav-text">线程状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-线程实现"><span class="nav-number">5.</span> <span class="nav-text">Java 线程实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#继承-Thread-类"><span class="nav-number">5.1.</span> <span class="nav-text">继承 Thread 类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现-Runnable-接口"><span class="nav-number">5.2.</span> <span class="nav-text">实现 Runnable 接口</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'content',
+        blogId: '15497-1572145892011-295',
+        name: 'LieBrother',
+        qrcode: 'http://www.liebrother.com/upload/2ead36875d2647ef9f857b904cdbb3e6_.jpg',
+        keyword: 'github',
+    });
+</script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

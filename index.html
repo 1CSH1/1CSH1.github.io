@@ -226,8 +226,8 @@
             
               
                 
-                <a class="post-title-link" href="/2018/01/20/vmware-install-in-window10-typer-v/" itemprop="url">
-                  Window 10 中 创建 VMware 虚拟机时 Hyper-V 问题
+                <a class="post-title-link" href="/2019/10/28/xiyingdafa/" itemprop="url">
+                  周末学了个“吸英大法”
                 </a>
               
             
@@ -240,38 +240,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2018-01-20T11:00:00+08:00" content="2018-01-20">
-              2018-01-20
+            <time itemprop="dateCreated" datetime="2019-10-28T12:47:32+08:00" content="2019-10-28">
+              2019-10-28
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Tool/" itemprop="url" rel="index">
-                    <span itemprop="name">Tool</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2018/01/20/vmware-install-in-window10-typer-v/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/20/vmware-install-in-window10-typer-v/" itemprop="commentsCount"></span>
+                <a href="/2019/10/28/xiyingdafa/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/28//xiyingdafa/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -281,7 +262,7 @@
 
           
           
-             <span id="/2018/01/20/vmware-install-in-window10-typer-v/" class="leancloud_visitors" data-flag-title="Window 10 中 创建 VMware 虚拟机时 Hyper-V 问题">
+             <span id="/2019/10/28/xiyingdafa/" class="leancloud_visitors" data-flag-title="周末学了个“吸英大法”">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -304,24 +285,66 @@
       
         
           
-            <blockquote>
-<p>摘要：本文简述了博主在 Window 10 安装用 VMware 创建 CentOS 虚拟机时，遇到的 Hyper-V 问题，以及解决方案。</p>
-</blockquote>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p><img src="https://1csh1.github.io/img/vmware-install-in-window10-typer-v/01.hyper-v.png" alt="问题描述"></p>
-<p>&emsp;&emsp;安装虚拟机的时候提示上图问题，开启 Hyper-V 也不能解决，找了一些资料，发现一篇文档的操作可以解决这个问题，所以记录下来。</p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><ol>
-<li><p>关闭掉 Virtualization Based Security，如图操作<br><img src="https://1csh1.github.io/img/vmware-install-in-window10-typer-v/02.close-virtualization-based-security.png" alt="关闭 Virtualization Based Security"></p>
-</li>
-<li><p>关闭 Hyper-V，如图操作<br><img src="https://1csh1.github.io/img/vmware-install-in-window10-typer-v/03.close-hyper-v.png" alt="关闭 Hyper-V"></p>
-</li>
-<li><p>执行如下命令，<strong>提示：确认驱盘X是没在使用的，可以修改为你没使用的驱盘</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mountvol X: /s</span><br><span class="line">copy %WINDIR%\System32\SecConfig.efi X:\EFI\Microsoft\Boot\SecConfig.efi /Y</span><br><span class="line">bcdedit /create &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; /d &quot;DebugTool&quot; /application osloader</span><br><span class="line">bcdedit /set &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; path &quot;\EFI\Microsoft\Boot\SecConfig.efi&quot;</span><br><span class="line">bcdedit /set &#123;bootmgr&#125; bootsequence &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125;</span><br><span class="line">bcdedit /set &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; loadoptions DISABLE-LSA-ISO,DISABLE-VBS</span><br><span class="line">bcdedit /set &#123;0cb3b571-2f2e-4343-a879-d86a476d7215&#125; device partition=X:</span><br><span class="line">mountvol X: /d</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>然后重启电脑，就可以安装虚拟机啦。</p>
-</li>
+            <p><img src="https://img.hacpai.com/bing/20180926.jpg?imageView2/1/w/960/h/520/interlace/1/q/100" alt=""> </p>
+<p><a href="https://v.qq.com/x/page/o3010zxz73y.html" target="_blank" rel="noopener">曦曦粉丝会视频链接</a>: <a href="https://v.qq.com/x/page/o3010zxz73y.html" target="_blank" rel="noopener">https://v.qq.com/x/page/o3010zxz73y.html</a></p>
+<iframe height="498" width="810" frameborder="0" src="https://v.qq.com/txp/iframe/player.html?vid=d3010vbi3k3" allowfullscreen="true"></iframe>
+
+<p>周末闲看微信时，看到了上面这个视频，一个 4 岁的小孩，面对一群大人提出的人问题，回答得头头是道，燃起了我的好奇心：一个还没上学的小孩竟然知道这么多东西，是怎么学会的？而且看起来小孩看起来很快乐，很享受这个过程，是不是在学习的时候也是这种愉快的状态？小孩的父母是什么人，怎么培养小孩的？。。。带着这些问题，开始 Google 搜索，刚开始找到了另外的 2 个视频。<br>一个是这位名叫曦曦的小孩在 1 岁 11 个月的时候就会背圆周率小数点后 50 位。</p>
+<p><a href="https://youtu.be/8kH4qmM-dSg" target="_blank" rel="noopener">2岁背圆周率视频链接</a>: <a href="https://youtu.be/8kH4qmM-dSg" target="_blank" rel="noopener">https://youtu.be/8kH4qmM-dSg</a></p>
+<iframe height="498" width="810" frameborder="0" src="https://youtu.be/8kH4qmM-dSg" allowfullscreen="true"></iframe>
+
+<p>一个也是 4 岁时的曦曦，在众人面前把几何学的公式都背出来了，连椭圆这种初高中才学的也都会，先不评论他是否会理解这些知识，能记住这些我觉得对一个 4 岁的小孩来说已经很棒了。这视频能看到小孩父亲一直在引导他，给他一些提示，从这个细节可以看出这些都是老爸教的。接下来我的关注点在他老爸身上，搜他。</p>
+<p><a href="https://youtu.be/eBEjoXAyOeg" target="_blank" rel="noopener">4岁几何学视频链接</a>: <a href="https://youtu.be/eBEjoXAyOeg" target="_blank" rel="noopener">https://youtu.be/eBEjoXAyOeg</a></p>
+<iframe height="498" width="810" frameborder="0" src="https://youtu.be/eBEjoXAyOeg" allowfullscreen="true"></iframe>
+
+<p>陈光。标签是亚洲记忆大师、国际记忆大师。要是以往，我会揪住这些标签，看是不是很有水分，但是现在不会了，只想了解到我关注的地方。通过简单的搜索，发现这个陈光老师研究和传播记忆学的原因：他妹妹自杀了，因为陈光和他哥哥、姐姐成绩太优秀了，他妹妹成绩不好，最终压力太大自杀。</p>
+<p>看到了<strong>记忆</strong>这块，以前没关注这个，引起了我的好奇心，接着搜了他的一些教程，看到“吸英大法”，这套教程是教学生背单词的，总共有 3 集，3 个小时的课程。想想花 3 个小时了解一下是有多么玄的记忆学，学了没用没关系，有用那就赚了，周末 2 天用这套视频下饭，带着疑惑：难道小孩知道的知识也是用这个记忆学方法学的？</p>
+<p>3 个视频链接如下：</p>
+<p><a href="http://player.youku.com/embed/XMjc4OTUzNDQ=" target="_blank" rel="noopener">视频 1</a>：<a href="http://player.youku.com/embed/XMjc4OTUzNDQ=" target="_blank" rel="noopener">http://player.youku.com/embed/XMjc4OTUzNDQ=</a></p>
+<iframe height="498" width="810" src="http://player.youku.com/embed/XMjc4OTUzNDQ=" frameborder="0" 'allowfullscreen'=""></iframe>
+
+<p><a href="http://player.youku.com/embed/XMjc4OTQ4NjA=" target="_blank" rel="noopener">视频 2</a>: <a href="http://player.youku.com/embed/XMjc4OTQ4NjA=" target="_blank" rel="noopener">http://player.youku.com/embed/XMjc4OTQ4NjA=</a></p>
+<iframe height="498" width="810" src="http://player.youku.com/embed/XMjc4OTQ4NjA=" frameborder="0" 'allowfullscreen'=""></iframe>
+
+<p><a href="http://player.youku.com/embed/XMjc4OTUxODA=" target="_blank" rel="noopener">视频 3</a>：<a href="http://player.youku.com/embed/XMjc4OTUxODA=" target="_blank" rel="noopener">http://player.youku.com/embed/XMjc4OTUxODA=</a></p>
+<iframe height="498" width="810" src="http://player.youku.com/embed/XMjc4OTUxODA=" frameborder="0" 'allowfullscreen'=""></iframe>
+
+<p>把 3 个视频看下来，给我最大的体验就是，这东西还真有点用。可能以前我接触的东西比较少，学习也没啥方法技巧，所以看着视频，至少现在几天过去了，我还记得视频里面记忆的东西，比如视频开头的工作分为几种：上班族、自由职业、专家、投资、企业家。再比如：鬼火、婴儿、中央山脉、馒头、西瓜、马桶、007、淋巴球、棺材、衣领、筷子、蛋、雨伞、椅子、鹦鹉、女王、天平、尾巴、救火车、邻居，这 20 个毫无联系的词，也能默写出来，其实教程里面把这 20 个词给加了逻辑，所以就很容易记。</p>
+<p>主要讲了有如下几点：</p>
+<h3 id="7-±-2-原理"><a href="#7-±-2-原理" class="headerlink" title="7 ± 2 原理"></a>7 ± 2 原理</h3><p>人的脑子有天然的缺陷，一次无法记住太长的东西，举个例子，手机号码 11 位，我们常见的记法是 344，没有人是 11 个数字直接记的吧？有的话那只能说牛逼！！！这个原理就是要把记住的东西进行分割，太长的就分割成几个短的来记。</p>
+<h3 id="倒着记忆"><a href="#倒着记忆" class="headerlink" title="倒着记忆"></a>倒着记忆</h3><p>我发现视频有个小细节，就是不管拆分多少个来记，陈光老师都会要求倒过来背一次，我也挺好奇的，结合另外一个视频，讲解了突触的概念，我就明白了为什么要倒着记，就是激发大脑的逻辑，训练思维。</p>
+<h3 id="记单词"><a href="#记单词" class="headerlink" title="记单词"></a>记单词</h3><p>视频里面讲的记单词的步骤：</p>
+<ol>
+<li>中文磁化</li>
+<li>7 ± 2 原理</li>
+<li>英文磁化（能用相近的英文单词则用英文单词）</li>
+<li>加入逻辑</li>
 </ol>
-<p>希望本文可以帮助到你！</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://kb.vmware.com/s/article/2146361" target="_blank" rel="noopener">Powering on a vm in VMware Workstation on Windows 10 host where Credential Guard/Device Guard is enabled fails with BSOD (2146361)</a></p>
+<p>举个例子：<br>我们要背单词：hypertension</p>
+<ol>
+<li>中文磁化：理解高血压是一种病。</li>
+<li>7 ± 2 原理：12 个字母，超过 7 个，所以需要分割。</li>
+<li>英文磁化：hyper（中文发音“害怕”） + ten（中文发音“天”） + sion（中文发音“旋”） 。</li>
+<li>加入逻辑：害怕天旋的人有高血压。</li>
+</ol>
+<p>是不是一下子就把这个单词记住了？</p>
+<h3 id="艾宾浩斯遗忘曲线"><a href="#艾宾浩斯遗忘曲线" class="headerlink" title="艾宾浩斯遗忘曲线"></a>艾宾浩斯遗忘曲线</h3><p>遗忘曲线也是一个大脑缺陷，在学习完后，因为我们记住的是短时记忆，会有一个遗忘曲线，时间越久记忆量越少，只有在一段时间后重新回忆起来，经过不断的加强，才会形成永久记忆，所以陈光老师推荐每天睡觉前和起床后进行一次回忆来加强记忆。下图记录了遗忘曲线的一些数据统计。</p>
+<p><img src="http://www.liebrother.com/upload/ccb64d922f734fcea7bafc181bb45069_962bd40735fae6cdbd3f83740fb30f2442a70f1f.jpg" alt=""> </p>
+<h2 id="闲谈"><a href="#闲谈" class="headerlink" title="闲谈"></a>闲谈</h2><p>最近网络好像对第一个视频里面的曦曦小孩反映很大，说他爸爸为了利益，拿自己小孩去做营销啥的，有的说小孩很惨，这么小就被塞进那么多知识，没有了童年的快乐。。。其实我想，这老爸也挺难的，假如自己的小孩和普通人一样，那别人就会说，你的记忆方法那么好，为啥你的小孩和别人一样；现在小孩记忆学得好，人家又说小孩真惨。我是这么觉得的，从 Facebook 陈光老师发的一些小孩日常学习交流的视频，看得出小孩是非常喜欢那种学习的状态的，小孩享受那种过程，这是一个父亲和小孩相处的一种方式。每一个人都是第一次当父母，都有自己养育孩子的方法，没有对错，自己觉得合适就好，不同的养育方式会带来不同的人生。</p>
+<p>有兴趣的朋友可以去看那 3 集《吸英大法》，看对自己是不是有用。</p>
+<p><code>推荐阅读</code></p>
+<p><a href="https://mp.weixin.qq.com/s/GsdMqNAHGY4VoLtA0nSXEA" target="_blank" rel="noopener">写了那么多年 Java 代码，终于 debug 到 JVM 了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/5gO0YJZB7huG9cOByH5Qow" target="_blank" rel="noopener">全网最新最简单的 openjdk13 代码编译</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Fh8d9ITNhvwYlfF2kY8P-g" target="_blank" rel="noopener">了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑</a></p>
+<p><a href="https://mp.weixin.qq.com/s/NSlEeXMK22-clfDv44h60w" target="_blank" rel="noopener">线程最最基础的知识</a></p>
+<p><a href="https://mp.weixin.qq.com/s/cIj_uzT6gZjROO44rNFHFQ" target="_blank" rel="noopener">老板叫你别阻塞了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Euc2NKvK_TsqvcT-DWpD5A" target="_blank" rel="noopener">吃个快餐都能学到串行、并行、并发</a></p>
+<p><a href="https://mp.weixin.qq.com/s/yWqFw_S7suYpqszuJFDsGg" target="_blank" rel="noopener">泡一杯茶，学一学同异步</a></p>
+<p><a href="https://mp.weixin.qq.com/s/HJIVxnzyDesYPGGyJsaFyQ" target="_blank" rel="noopener">进程知多少？</a></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
 
           
         
@@ -367,8 +390,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/11/06/spring-cloud-options-forbidden/" itemprop="url">
-                  Spring Cloud 项目出现 Options Forbidden 403 问题解决
+                <a class="post-title-link" href="/2019/10/27/daemon/" itemprop="url">
+                  从 JVM 视角看看 Java 守护线程
                 </a>
               
             
@@ -381,50 +404,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-11-06T21:00:00+08:00" content="2017-11-06">
-              2017-11-06
+            <time itemprop="dateCreated" datetime="2019-10-27T16:16:23+08:00" content="2019-10-27">
+              2019-10-27
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Spring-Cloud/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring Cloud</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Spring-Cloud/Cors/" itemprop="url" rel="index">
-                    <span itemprop="name">Cors</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/11/06/spring-cloud-options-forbidden/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/06/spring-cloud-options-forbidden/" itemprop="commentsCount"></span>
+                <a href="/2019/10/27/daemon/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/27//daemon/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -434,7 +426,7 @@
 
           
           
-             <span id="/2017/11/06/spring-cloud-options-forbidden/" class="leancloud_visitors" data-flag-title="Spring Cloud 项目出现 Options Forbidden 403 问题解决">
+             <span id="/2019/10/27/daemon/" class="leancloud_visitors" data-flag-title="从 JVM 视角看看 Java 守护线程">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -457,22 +449,211 @@
       
         
           
-            <blockquote>
-<p>摘要：本文简述了博主在开发过程中，需要跨域调试的时候，出现了 OPTIONS 请求 Forbidden 的问题，以及解决方法。</p>
+            <p><img src="http://www.liebrother.com/upload/92a6e414eeb444968d663b9d5706549c_dxc_0007_0001.jpg" alt=""> </p>
+<blockquote>
+<p>Java 多线程系列第 7 篇。</p>
 </blockquote>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p><img src="https://1csh1.github.io/img/spring-cloud-options-forbidden/options-forbidden.png" alt="options-forbidden"></p>
-<p>&emsp;&emsp;在使用 Spring Cloud 的项目中，本地跨域调试发现 POST 请求转为了 OPTIONS 请求，并且服务端拒绝访问，其实是 CORS 请求的问题。</p>
-<p>&emsp;&emsp;CORS 请求分为2类： 简单请求 和 非简单请求。两者主要的区分点在于：</p>
+<p>这篇我们来讲讲线程的另一个特性：守护线程 or 用户线程？</p>
+<p>我们先来看看 <code>Thread.setDaemon()</code> 方法的注释，如下所示。</p>
+<blockquote>
+<ol>
+<li>Marks this thread as either a daemon thread or a user thread. </li>
+<li>The Java Virtual Machine exits when the only threads running are all daemon threads.</li>
+<li>This method must be invoked before the thread is started.</li>
+</ol>
+</blockquote>
+<p>里面提到了 3 点信息，一一来做下解释：</p>
+<h2 id="官方特性"><a href="#官方特性" class="headerlink" title="官方特性"></a>官方特性</h2><h3 id="1-用户线程-or-守护线程？"><a href="#1-用户线程-or-守护线程？" class="headerlink" title="1. 用户线程 or 守护线程？"></a>1. 用户线程 or 守护线程？</h3><p>把 Java 线程分成 2 类，一类是<strong>用户线程</strong>，也就是我们创建线程时，默认的一类线程，属性 <code>daemon = false</code>；另一类是<strong>守护线程</strong>，当我们设置 <code>daemon = true</code> 时，就是这类线程。</p>
+<p>两者的一般关系是：用户线程就是运行在前台的线程，守护线程就是运行在后台的线程，一般情况下，守护线程是为用户线程提供一些服务。比如在 Java 中，我们常说的 GC 内存回收线程就是守护线程。</p>
+<h3 id="2-JVM-与用户线程共存亡"><a href="#2-JVM-与用户线程共存亡" class="headerlink" title="2. JVM 与用户线程共存亡"></a>2. JVM 与用户线程共存亡</h3><p>上面第二点翻译过来是：<strong>当所有用户线程都执行完，只存在守护线程在运行时，JVM 就退出</strong>。看了网上资料以及一些书籍，全都有这句话，但是也都只是有这句话，没有讲明是为啥，好像这句话就成了定理，不需要证明的样子。既然咱最近搭建了 JVM Debug 环境，那就得来查个究竟。（查得好辛苦，花了很久的时间才查出来）</p>
+<p>我们看到 JVM 源码 <code>thread.cpp</code> 文件，这里是实现线程的代码。我们通过上面那句话，说明是有一个地方监测着当前非守护线程的数量，不然怎么知道现在只剩下守护线程呢？很有可能是在移除线程的方法里面，跟着这个思路，我们看看该文件的 <code>remove()</code> 方法。代码如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 移除线程 p</span><br><span class="line"> */</span><br><span class="line">void Threads::remove(JavaThread* p, bool is_daemon) &#123;</span><br><span class="line"></span><br><span class="line">  // Reclaim the ObjectMonitors from the omInUseList and omFreeList of the moribund thread.</span><br><span class="line">  ObjectSynchronizer::omFlush(p);</span><br><span class="line"></span><br><span class="line">  /**</span><br><span class="line">   * 创建一个监控锁对象 ml</span><br><span class="line">   */</span><br><span class="line">  // Extra scope needed for Thread_lock, so we can check</span><br><span class="line">  // that we do not remove thread without safepoint code notice</span><br><span class="line">  &#123; MonitorLocker ml(Threads_lock);</span><br><span class="line"></span><br><span class="line">    assert(ThreadsSMRSupport::get_java_thread_list()-&gt;includes(p), &quot;p must be present&quot;);</span><br><span class="line"></span><br><span class="line">    // Maintain fast thread list</span><br><span class="line">    ThreadsSMRSupport::remove_thread(p);</span><br><span class="line"></span><br><span class="line">    // 当前线程数减 1</span><br><span class="line">    _number_of_threads--;</span><br><span class="line">    if (!is_daemon) &#123;</span><br><span class="line">        /**</span><br><span class="line">         * 非守护线程数量减 1</span><br><span class="line">         */</span><br><span class="line">      _number_of_non_daemon_threads--;</span><br><span class="line"></span><br><span class="line">      /**</span><br><span class="line">       * 当非守护线程数量为 1 时，唤醒在 destroy_vm() 方法等待的线程</span><br><span class="line">       */</span><br><span class="line">      // Only one thread left, do a notify on the Threads_lock so a thread waiting</span><br><span class="line">      // on destroy_vm will wake up.</span><br><span class="line">      if (number_of_non_daemon_threads() == 1) &#123;</span><br><span class="line">        ml.notify_all();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    /**</span><br><span class="line">     * 移除掉线程</span><br><span class="line">     */</span><br><span class="line">    ThreadService::remove_thread(p, is_daemon);</span><br><span class="line"></span><br><span class="line">    // Make sure that safepoint code disregard this thread. This is needed since</span><br><span class="line">    // the thread might mess around with locks after this point. This can cause it</span><br><span class="line">    // to do callbacks into the safepoint code. However, the safepoint code is not aware</span><br><span class="line">    // of this thread since it is removed from the queue.</span><br><span class="line">    p-&gt;set_terminated_value();</span><br><span class="line">  &#125; // unlock Threads_lock</span><br><span class="line"></span><br><span class="line">  // Since Events::log uses a lock, we grab it outside the Threads_lock</span><br><span class="line">  Events::log(p, &quot;Thread exited: &quot; INTPTR_FORMAT, p2i(p));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我在里面加了一些注释，可以发现，果然是我们想的那样，里面有记录着非守护线程的数量，而且当非守护线程为 1 时，就会唤醒在 <code>destory_vm()</code> 方法里面等待的线程，我们确认已经找到 JVM 在非守护线程数为 1 时会触发唤醒监控 JVM 退出的线程代码。紧接着我们看看 <code>destory_vm()</code> 代码，同样是在 <code>thread.cpp</code> 文件下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">bool Threads::destroy_vm() &#123;</span><br><span class="line">  JavaThread* thread = JavaThread::current();</span><br><span class="line"></span><br><span class="line">#ifdef ASSERT</span><br><span class="line">  _vm_complete = false;</span><br><span class="line">#endif</span><br><span class="line">  /**</span><br><span class="line">   * 等待自己是最后一个非守护线程条件</span><br><span class="line">   */</span><br><span class="line">  // Wait until we are the last non-daemon thread to execute</span><br><span class="line">  &#123; MonitorLocker nu(Threads_lock);</span><br><span class="line">    while (Threads::number_of_non_daemon_threads() &gt; 1)</span><br><span class="line">        /**</span><br><span class="line">         * 非守护线程数大于 1，则一直等待</span><br><span class="line">         */</span><br><span class="line">      // This wait should make safepoint checks, wait without a timeout,</span><br><span class="line">      // and wait as a suspend-equivalent condition.</span><br><span class="line">      nu.wait(0, Mutex::_as_suspend_equivalent_flag);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  /**</span><br><span class="line">   * 下面代码是关闭 VM 的逻辑</span><br><span class="line">   */</span><br><span class="line">  EventShutdown e;</span><br><span class="line">  if (e.should_commit()) &#123;</span><br><span class="line">    e.set_reason(&quot;No remaining non-daemon Java threads&quot;);</span><br><span class="line">    e.commit();</span><br><span class="line">  &#125;</span><br><span class="line">  ...... 省略余下代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们这里看到当非守护线程数量大于 1 时，就一直等待，直到剩下一个非守护线程时，就会在线程执行完后，退出 JVM。这时候又有一个点需要定位，什么时候调用 <code>destroy_vm()</code> 方法呢？还是通过查看代码以及注释，发现是在 <code>main()</code> 方法执行完成后触发的。</p>
+<p>在 <code>java.c</code> 文件的 <code>JavaMain()</code> 方法里面，最后执行完调用了 <code>LEAVE()</code> 方法，该方法调用了 <code>(*vm)-&gt;DestroyJavaVM(vm);</code> 来触发 JVM 退出，最终调用 <code>destroy_vm()</code> 方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#define LEAVE() \</span><br><span class="line">    do &#123; \</span><br><span class="line">        if ((*vm)-&gt;DetachCurrentThread(vm) != JNI_OK) &#123; \</span><br><span class="line">            JLI_ReportErrorMessage(JVM_ERROR2); \</span><br><span class="line">            ret = 1; \</span><br><span class="line">        &#125; \</span><br><span class="line">        if (JNI_TRUE) &#123; \</span><br><span class="line">            (*vm)-&gt;DestroyJavaVM(vm); \</span><br><span class="line">            return ret; \</span><br><span class="line">        &#125; \</span><br><span class="line">    &#125; while (JNI_FALSE)</span><br></pre></td></tr></table></figure></p>
+<p>所以我们也知道了，为啥 main 线程可以比子线程先退出？虽然 main 线程退出前调用了 <code>destroy_vm()</code> 方法，但是在 <code>destroy_vm()</code> 方法里面等待着非守护线程执行完，子线程如果是非守护线程，则 JVM 会一直等待，不会立即退出。</p>
+<p>我们对这个点总结一下：<strong>Java 程序在 main 线程执行退出时，会触发执行 JVM 退出操作，但是 JVM 退出方法 <code>destroy_vm()</code> 会等待所有非守护线程都执行完，里面是用变量 number_of_non_daemon_threads 统计非守护线程的数量，这个变量在新增线程和删除线程时会做增减操作</strong>。</p>
+<p>另外衍生一点就是：<strong>当 JVM 退出时，所有还存在的守护线程会被抛弃，既不会执行 finally 部分代码，也不会执行 stack unwound 操作（也就是也不会 catch 异常）</strong>。这个很明显，JVM 都退出了，守护线程自然退出了，当然这是守护线程的一个特性。</p>
+<h3 id="3-是男是女？生下来就注定了"><a href="#3-是男是女？生下来就注定了" class="headerlink" title="3. 是男是女？生下来就注定了"></a>3. 是男是女？生下来就注定了</h3><p>这个比较好理解，就是线程是用户线程还是守护线程，在线程还未启动时就得确定。在调用 <code>start()</code> 方法之前，还只是个对象，没有映射到 JVM 中的线程，这个时候可以修改 <code>daemon</code> 属性，调用 <code>start()</code> 方法之后，JVM 中就有一个线程映射这个线程对象，所以不能做修改了。</p>
+<h2 id="其他的特性"><a href="#其他的特性" class="headerlink" title="其他的特性"></a>其他的特性</h2><h3 id="1-守护线程属性继承自父线程"><a href="#1-守护线程属性继承自父线程" class="headerlink" title="1.守护线程属性继承自父线程"></a>1.守护线程属性继承自父线程</h3><p>这个咱就不用写代码来验证了，直接看 Thread 源代码构造方法里面就可以知道，代码如下所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">private Thread(ThreadGroup g, Runnable target, String name,</span><br><span class="line">               long stackSize, AccessControlContext acc,</span><br><span class="line">               boolean inheritThreadLocals) &#123;</span><br><span class="line">   ...省略一堆代码</span><br><span class="line">    this.daemon = parent.isDaemon();</span><br><span class="line">   ...省略一堆代码</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-守护线程优先级比用户线程低"><a href="#2-守护线程优先级比用户线程低" class="headerlink" title="2.守护线程优先级比用户线程低"></a>2.守护线程优先级比用户线程低</h3><p>看到很多书籍和资料都这么说，我也很怀疑。所以写了下面代码来测试是不是守护线程优先级比用户线程低？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">public class TestDaemon &#123;</span><br><span class="line">    static AtomicLong daemonTimes = new AtomicLong(0);</span><br><span class="line">    static AtomicLong userTimes = new AtomicLong(0);</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        int count = 2000;</span><br><span class="line">        List&lt;MyThread&gt; threads = new ArrayList&lt;&gt;(count);</span><br><span class="line">        for (int i = 0; i &lt; count; i ++) &#123;</span><br><span class="line">            MyThread userThread = new MyThread();</span><br><span class="line">            userThread.setDaemon(false);</span><br><span class="line">            threads.add(userThread);</span><br><span class="line"></span><br><span class="line">            MyThread daemonThread = new MyThread();</span><br><span class="line">            daemonThread.setDaemon(true);</span><br><span class="line">            threads.add(daemonThread);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        for (int i = 0; i &lt; count; i++) &#123;</span><br><span class="line">            threads.get(i).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(10000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;daemon 统计：&quot; + daemonTimes.get());</span><br><span class="line">        System.out.println(&quot;user 统计：&quot; + userTimes.get());</span><br><span class="line">        System.out.println(&quot;daemon 和 user 相差时间：&quot; + (daemonTimes.get() - userTimes.get()) + &quot;ms&quot;);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static class MyThread extends Thread &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            if (this.isDaemon()) &#123;</span><br><span class="line">                daemonTimes.getAndAdd(System.currentTimeMillis());</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                userTimes.getAndAdd(System.currentTimeMillis());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">结果1：</span><br><span class="line">daemon 统计：1570785465411405</span><br><span class="line">user 统计：1570785465411570</span><br><span class="line">daemon 和 user 相差时间：-165ms</span><br><span class="line"></span><br><span class="line">结果2：</span><br><span class="line">daemon 统计：1570786615081403</span><br><span class="line">user 统计：1570786615081398</span><br><span class="line">daemon 和 user 相差时间：5ms</span><br></pre></td></tr></table></figure>
+<p>是不是很惊讶，居然相差无几，但是这个案例我也不能下定义说：守护线程和用户线程优先级是一样的。看了 JVM 代码也没找到守护线程优先级比用户线程低，这个点还是保持怀疑，有了解的朋友可以留言说一些，互相交流学习。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结一下这篇文章讲解的点，一个是线程被分为 2 种类型，一种是用户线程，另一种是守护线程；如果要把线程设置为守护线程，需要在线程调用<code>start()</code>方法前设置 <code>daemon</code> 属性；还有从 JVM 源码角度分析为什么当用户线程都执行完的时候，JVM 会自动退出。接着讲解了守护线程有继承性，父线程是守护线程，那么子线程默认就是守护线程；另外对一些书籍和资料所说的 <strong>守护线程优先级比用户线程低</strong> 提出自己的疑问，并希望有了解的朋友能帮忙解答。</p>
+<p>如果觉得这篇文章看了有收获，麻烦点个<code>在看</code>，支持一下，原创不易。 </p>
+<p><code>推荐阅读</code></p>
+<p><a href="https://mp.weixin.qq.com/s/GsdMqNAHGY4VoLtA0nSXEA" target="_blank" rel="noopener">写了那么多年 Java 代码，终于 debug 到 JVM 了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/5gO0YJZB7huG9cOByH5Qow" target="_blank" rel="noopener">全网最新最简单的 openjdk13 代码编译</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Fh8d9ITNhvwYlfF2kY8P-g" target="_blank" rel="noopener">了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑</a></p>
+<p><a href="https://mp.weixin.qq.com/s/NSlEeXMK22-clfDv44h60w" target="_blank" rel="noopener">线程最最基础的知识</a></p>
+<p><a href="https://mp.weixin.qq.com/s/cIj_uzT6gZjROO44rNFHFQ" target="_blank" rel="noopener">老板叫你别阻塞了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Euc2NKvK_TsqvcT-DWpD5A" target="_blank" rel="noopener">吃个快餐都能学到串行、并行、并发</a></p>
+<p><a href="https://mp.weixin.qq.com/s/yWqFw_S7suYpqszuJFDsGg" target="_blank" rel="noopener">泡一杯茶，学一学同异步</a></p>
+<p><a href="https://mp.weixin.qq.com/s/HJIVxnzyDesYPGGyJsaFyQ" target="_blank" rel="noopener">进程知多少？</a></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/10/11/openjdk13_debug/" itemprop="url">
+                  写了那么多年 Java 代码，终于 debug 到 JVM 了
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-10-11T22:28:12+08:00" content="2019-10-11">
+              2019-10-11
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/10/11/openjdk13_debug/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/11//openjdk13_debug/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/10/11/openjdk13_debug/" class="leancloud_visitors" data-flag-title="写了那么多年 Java 代码，终于 debug 到 JVM 了">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://img.hacpai.com/bing/20190309.jpg?imageView2/1/w/960/h/520/interlace/1/q/100" alt=""> </p>
+<p>继上篇文章 <a href="https://mp.weixin.qq.com/s/5gO0YJZB7huG9cOByH5Qow" target="_blank" rel="noopener">原创 | 全网最新最简单的 openjdk13 代码编译</a> 之后，我们有了自己编译后的 jdk 和 hotspot，如下图所示。接下来就来干一番事情。</p>
+<p><img src="http://www.liebrother.com/upload/4cb1057c29624944bc48ac10eb833ab0_2001.jpg" alt=""> </p>
+<h2 id="搭建调试环境"><a href="#搭建调试环境" class="headerlink" title="搭建调试环境"></a>搭建调试环境</h2><h3 id="1-下载-CLion-软件"><a href="#1-下载-CLion-软件" class="headerlink" title="1.下载 CLion 软件"></a>1.下载 CLion 软件</h3><p>Jetbrains 是一家非常牛逼的公司，咱 Java 里面用到的 IDEA 功能很强大，这公司也为 C/C++ 提供一个 IDE，名叫 <a href="https://www.jetbrains.com/clion/" target="_blank" rel="noopener">CLion</a>，咱需要下载这个 IDE 来调试 JVM 源码。</p>
+<h3 id="2-导入源码"><a href="#2-导入源码" class="headerlink" title="2.导入源码"></a>2.导入源码</h3><p>安装完 CLion 之后，咱就可以先导入代码，下面简单记录一下操作步骤。</p>
+<p>选择 <strong>New CMake Project from Sources</strong>。</p>
+<p><img src="http://www.liebrother.com/upload/bc787524beab41a1b49ae1959fa56b81_2002.jpg" alt=""> </p>
+<p>打开我们下载 OpenJDK13 的目录，我的目录是 <code>/opt/java/openjdk/jdk13</code>。</p>
+<p><img src="http://www.liebrother.com/upload/536c6bcde8dc45de9676084e54522855_2003.jpg" alt=""> </p>
+<p>接下来有弹框点击 Next 就行了，等待导入源码完成（需要几分钟，可以喝杯茶）。</p>
+<h3 id="3-启动配置"><a href="#3-启动配置" class="headerlink" title="3.启动配置"></a>3.启动配置</h3><p>导完源码后，我们需要配置启动程序，这里有些配置需要重新指定，主要有下面 2 点。</p>
 <ul>
-<li>1: 请求方法为 HEAD, GET, POST; </li>
-<li>2: HTTP 头信息为以下几个： Accept， Accept-Language，Content-Language， Last-Event-ID，Content-Type （值为 application/x-www-form-urlencoded、multipart/form-data、text/plain）。</li>
+<li><strong>Executable</strong> 修改为咱们编译后的 <code>java</code> 程序。</li>
 </ul>
-<p>&emsp;&emsp;只要满足以上两点，则为简单请求；否则为非简单请求。</p>
-<p>&emsp;&emsp;简单请求的处理方式是浏览器直接发送 CORS 请求。非简单请求的处理方式是浏览器发送预检请求，表示询问服务器当前的域名是否可以访问正常服务器，如果可以访问，则发送正常的请求到服务器；否则报错。</p>
-<p>&emsp;&emsp;现在确定遇到的问题就是在 CORS 请求预检的时候发现域名不在服务器端的白名单里面，所以需要修改服务端的请求返回报文。</p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>在网关中添加下面的过滤器，在每次请求返回报文中添加报文头，即可正常访问</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">public class CorsFilter implements Filter &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException &#123;</span><br><span class="line">        HttpServletResponse response = (HttpServletResponse) res;</span><br><span class="line">        response.setHeader(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);</span><br><span class="line">        response.setHeader(&quot;Access-Control-Allow-Methods&quot;, &quot;POST, GET, PUT, OPTIONS, DELETE, PATCH&quot;);</span><br><span class="line">        response.setHeader(&quot;Access-Control-Max-Age&quot;, &quot;3600&quot;);</span><br><span class="line">        response.setHeader(&quot;Access-Control-Allow-Headers&quot;, &quot;Origin, X-Requested-With, Content-Type, Accept&quot;);</span><br><span class="line">        response.setHeader(&quot;Access-Control-Expose-Headers&quot;, &quot;Location&quot;);</span><br><span class="line">        chain.doFilter(req, res);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void init(FilterConfig filterConfig) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void destroy() &#123;&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>参考文章：<br><a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="noopener">跨域资源共享 CORS 详解</a></p>
+<p><img src="http://www.liebrother.com/upload/ed248abe3d874d24ab13c24150c8ed75_2004.jpg" alt=""> </p>
+<ul>
+<li><strong>Build</strong> 需要删除掉。</li>
+</ul>
+<p><img src="http://www.liebrother.com/upload/5cd2ca1bf30b4c0b80685ea4952833c1_2005.jpg" alt=""> </p>
+<h3 id="4-打下断电"><a href="#4-打下断电" class="headerlink" title="4.打下断电"></a>4.打下断电</h3><p>我们在 <code>thread.cpp</code> 代码的 <code>Threads::create_vm</code> 方法打下断点。</p>
+<p><img src="http://www.liebrother.com/upload/c204498143ad4ce5968006f5d1901a73_2006.jpg" alt=""> </p>
+<h3 id="5-开始-Debug"><a href="#5-开始-Debug" class="headerlink" title="5.开始 Debug"></a>5.开始 Debug</h3><p>点击 Debug 按钮，开始调试我们的 JVM 代码。可以看到我们打的断点生效了，如下图所示。</p>
+<p><img src="http://www.liebrother.com/upload/5426d08d04be414997a4844738da7094_2007.jpg" alt=""> </p>
+<p>恭喜，我们成功调试 JVM 代码。不过发现了下面这个异常信息，解决它。</p>
+<h3 id="6-发现这个异常"><a href="#6-发现这个异常" class="headerlink" title="6.发现这个异常"></a>6.发现这个异常</h3><p>按 F9 让程序继续跑，我们发现 Console 出现了下面红框的一行字。</p>
+<p><img src="http://www.liebrother.com/upload/d763a59ed1ef48ce93d71599a24e2e1c_2008.jpg" alt=""> </p>
+<p>这是 GDB 的异常信息，我们可以通过在我们的用户目录下添加配置来解决这个问题。创建 <code>~/.gdbinit</code> 文件，添加如下配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">handle SIGSEGV nostop noprint pass</span><br><span class="line">handle SIGBUS nostop noprint pass</span><br><span class="line">handle SIGFPE nostop noprint pass</span><br><span class="line">handle SIGPIPE nostop noprint pass</span><br><span class="line">handle SIGILL nostop noprint pass</span><br></pre></td></tr></table></figure>
+<p>再运行就不会有这个异常信息了。</p>
+<h2 id="调试自己的代码"><a href="#调试自己的代码" class="headerlink" title="调试自己的代码"></a>调试自己的代码</h2><p>上面已经调通了我们编译的 JVM 源码，有同学可能想知道，那要调试自己写的代码得怎么操作呢？我们上面已经看到 Debug 到 JVM 源码了，我们自己的代码则可以通过我们编译后的 JDK 来编译，然后在程序执行参数那里指定。下面举个例子。</p>
+<h3 id="1-编写-Test-代码"><a href="#1-编写-Test-代码" class="headerlink" title="1.编写 Test 代码"></a>1.编写 Test 代码</h3><p>我们编写一个简单的 Hello JVM 程序，代码如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        System.out.println(&quot;hello jvm&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="2-javac-编译"><a href="#2-javac-编译" class="headerlink" title="2.javac 编译"></a>2.javac 编译</h3><p>通过我们编译后的 JDK 命令 javac Test.java 来编译。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">liebrother@liebrother:/opt/java/openjdk/jdk13/build/linux-x86_64-server-release/jdk/bin$ ./javac Test.java</span><br></pre></td></tr></table></figure>
+<h3 id="3-配置启动参数"><a href="#3-配置启动参数" class="headerlink" title="3.配置启动参数"></a>3.配置启动参数</h3><p>然后在 Clion 程序启动配置那里指定我们的类 Test。</p>
+<p><img src="http://www.liebrother.com/upload/6990aa20b0c146dea1703e3dad8d5215_2009.jpg" alt=""> </p>
+<p>结果就是我们的程序被运行了。</p>
+<p><img src="http://www.liebrother.com/upload/bc707088373347a59979915b26fa281c_20010.jpg" alt=""> </p>
+<p>以上就是我们今天要讲的在 JVM 层面上调试我们自己写的程序。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总结一下搭建这套 JVM 环境。搭建过程中其实没有很波折，官方文档写的很清晰（虽然都是英文的），这 2 篇文章也是尽最大的努力，把一些步骤简化，也截图保留下来，<strong>一方面给自己回顾的机会，一方面也是给有想要搭建这套环境的朋友们一个捷径</strong>。这套环境接下来的定义是：<strong>给自己深入了解 JVM 的机会，在遇到某些知识点不清晰，不明白原理的时候，就可以看一看源码，揪出源头的逻辑</strong>。</p>
+<p>非常建议朋友们搭建这么一套环境，也不要怕 JVM 里面都是 C/C++ 代码，可能刚开始看的时候会很费劲，看多了就习惯了。</p>
+<p><code>推荐阅读</code></p>
+<p><a href="https://mp.weixin.qq.com/s/GsdMqNAHGY4VoLtA0nSXEA" target="_blank" rel="noopener">写了那么多年 Java 代码，终于 debug 到 JVM 了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/5gO0YJZB7huG9cOByH5Qow" target="_blank" rel="noopener">原创 | 全网最新最简单的 openjdk13 代码编译</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Fh8d9ITNhvwYlfF2kY8P-g" target="_blank" rel="noopener">了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑</a></p>
+<p><a href="https://mp.weixin.qq.com/s/NSlEeXMK22-clfDv44h60w" target="_blank" rel="noopener">线程最最基础的知识</a></p>
+<p><a href="https://mp.weixin.qq.com/s/cIj_uzT6gZjROO44rNFHFQ" target="_blank" rel="noopener">老板叫你别阻塞了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Euc2NKvK_TsqvcT-DWpD5A" target="_blank" rel="noopener">吃个快餐都能学到串行、并行、并发</a></p>
+<p><a href="https://mp.weixin.qq.com/s/yWqFw_S7suYpqszuJFDsGg" target="_blank" rel="noopener">泡一杯茶，学一学同异步</a></p>
+<p><a href="https://mp.weixin.qq.com/s/HJIVxnzyDesYPGGyJsaFyQ" target="_blank" rel="noopener">进程知多少？</a></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
 
           
         
@@ -518,8 +699,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/11/05/angular-display-css/" itemprop="url">
-                  Angular4 中显示内容的 CSS 样式
+                <a class="post-title-link" href="/2019/10/10/openjdk13_build/" itemprop="url">
+                  原创 | 全网最新最简单的 openjdk13 代码编译
                 </a>
               
             
@@ -532,38 +713,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-11-05T21:00:00+08:00" content="2017-11-05">
-              2017-11-05
+            <time itemprop="dateCreated" datetime="2019-10-10T08:58:31+08:00" content="2019-10-10">
+              2019-10-10
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/" itemprop="url" rel="index">
-                    <span itemprop="name">Angular</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/11/05/angular-display-css/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/05/angular-display-css/" itemprop="commentsCount"></span>
+                <a href="/2019/10/10/openjdk13_build/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/10/10//openjdk13_build/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -573,7 +735,7 @@
 
           
           
-             <span id="/2017/11/05/angular-display-css/" class="leancloud_visitors" data-flag-title="Angular4 中显示内容的 CSS 样式">
+             <span id="/2019/10/10/openjdk13_build/" class="leancloud_visitors" data-flag-title="原创 | 全网最新最简单的 openjdk13 代码编译">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -596,17 +758,49 @@
       
         
           
-            <blockquote>
-<p>摘要：本文简单介绍在使用 Angular4 的时候，显示要内容的 CSS 样式</p>
-</blockquote>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>Angular 中有 innerHTML 属性来设置要显示的内容，但是如果内容包含 CSS 样式，无法显示样式的效果。<br>比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public content: string = &quot;&lt;div style=&apos;font-size:30px&apos;&gt;Hello Angular&lt;/div&gt;&quot;;</span><br><span class="line"></span><br><span class="line">&lt;p [innerHTML]=&quot;content&quot;&gt;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
-<p>只会显示 Hello World ,字体不会是 30px，也就是 CSS 样式没有效果。</p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>自定义一个 Pipe 来对内容做转换。看下面代码。</p>
-<h4 id="写一个-HtmlPipe-类"><a href="#写一个-HtmlPipe-类" class="headerlink" title="写一个 HtmlPipe 类"></a>写一个 HtmlPipe 类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import &#123;Pipe, PipeTransform&#125; from &quot;@angular/core&quot;;</span><br><span class="line">import &#123;DomSanitizer&#125; from &quot;@angular/platform-browser&quot;;</span><br><span class="line"></span><br><span class="line">@Pipe(&#123;</span><br><span class="line">  name: &quot;html&quot;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">export class HtmlPipe implements PipeTransform&#123;</span><br><span class="line"></span><br><span class="line">  constructor (private sanitizer: DomSanitizer) &#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  transform(style) &#123;</span><br><span class="line">    return this.sanitizer.bypassSecurityTrustHtml(style);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="在需要的模块里面引入管道-HtmlPipe"><a href="#在需要的模块里面引入管道-HtmlPipe" class="headerlink" title="在需要的模块里面引入管道 HtmlPipe"></a>在需要的模块里面引入管道 HtmlPipe</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@NgModule(&#123;</span><br><span class="line">  declarations: [</span><br><span class="line">    HtmlPipe</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h4 id="在-innerHtml-中增加管道名字"><a href="#在-innerHtml-中增加管道名字" class="headerlink" title="在 innerHtml 中增加管道名字"></a>在 innerHtml 中增加管道名字</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p [innerHTML]=&quot;content | html&quot;&gt;&lt;/p&gt;</span><br></pre></td></tr></table></figure>
-<p>这样就可以显示 content 的 CSS 样式。</p>
+            <p><img src="http://www.liebrother.com/upload/6f0d236c9bc14e0c92064942c957044a_Dukenocoffeecup768x531.jpg" alt="图片来自网络，侵删"> </p>
+<p>[TOC]</p>
+<p>最近因写文章需要查看 JVM 源码，有时代码逻辑不是很清晰，找半天，趁国庆假期，抽空下载了 OpenJDK13 搭建了 JVM debug 环境，把操作记录写在这篇文章里，让有需要的朋友可以参考，少踩坑。</p>
+<p>我是在 Ubuntu 18.04 下编译的，不是在 Windows，建议不在 Windows 下折腾，会遇到比在 Linux 环境下多得多的问题。如果你电脑也是 Windows，可以像我这样，安装个 <strong>VMware</strong> 虚拟机软件，在里面装个 <strong>Ubuntu</strong> 系统，在虚拟机里面玩，这 2 个软件在官网下载就行，当然如果懒得去找也可以<code>在我的公众号后台回复: 虚拟机</code> 获取 <strong>VMware</strong> 软件和 <strong>Ubuntu 18.04</strong> 镜像。</p>
+<p>安装 Ubuntu 虚拟机就不在这篇文章说了，网上有相关的资料。</p>
+<h2 id="开始咯"><a href="#开始咯" class="headerlink" title="开始咯"></a>开始咯</h2><h3 id="1-下载源码"><a href="#1-下载源码" class="headerlink" title="1.下载源码"></a>1.下载源码</h3><p>平时咱用的代码管理工具大多数是 Git，OpenJDK 并不是，而是用 Mercurial 管理工具，所以我们要安装它。通过下面命令安装。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install mercurial</span><br></pre></td></tr></table></figure>
+<p>安装完代码管理工具后，我们就可以下载 OpenJDK13 的源码了，使用如下命令即可下载。这个过程根据网络状况，需要的时间不一，我下载花了十来分钟。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hg clone http://hg.openjdk.java.net/jdk/jdk13/</span><br></pre></td></tr></table></figure>
+<p>嗯，我就是这样干等了十来分钟，因为具体的官方操作文档也在里面，没下载下来无法看，网上也找不到相关的 Ubuntu 18 编译 OpenJDK13 的文章，所以不知道具体要安装哪些依赖。<strong>现在你看到这篇文章，可以不用干等着了，接下来步骤 2 和 3 不依赖源代码，可以继续操作。</strong></p>
+<h3 id="2-安装编译需要的依赖"><a href="#2-安装编译需要的依赖" class="headerlink" title="2.安装编译需要的依赖"></a>2.安装编译需要的依赖</h3><p>这一部分是查看了官方文档，做了总结，官方文档里面是按软件区分的，那样一个命令一个命令敲有点繁琐，就把它整合成一个命令，执行就完了，满足有些朋友想尽快编译完，少些多余的东西。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libfreetype6-dev libcups2-dev libx11-dev libxext-dev libxrender-dev libxrandr-dev libxtst-dev libxt-dev libasound2-dev libffi-dev autoconf gcc clang libfontconfig1-dev</span><br></pre></td></tr></table></figure>
+<p>想了解这些依赖软件是干嘛用的，可以看看官方文档，文档的位置如下图。</p>
+<p><img src="http://www.liebrother.com/upload/632f0236e9b54f9b8f214c8602cbaf9f_00011.jpg" alt=""> </p>
+<h3 id="3-安装-jdk-12"><a href="#3-安装-jdk-12" class="headerlink" title="3.安装 jdk 12"></a>3.安装 jdk 12</h3><p>这个在文档里面称为 <strong>Boot JDK</strong>，就是编译时需要上一个版本的 JDK 做为基础，一般是使用 N-1 版本，比如编译 OpenJDK8 就使用 JDK7 作为 Boot JDK，我们这里是编译 OpenJDK13，所以使用的是 JDK12。也是执行下面命令就搞定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo add-apt-repository ppa:openjdk-r/ppa</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install openjdk-12-jdk</span><br></pre></td></tr></table></figure>
+<p>安装完可以通过 <code>java -version</code> 来验证一下是否成功安装。见到如下结果就妥妥的。</p>
+<p><img src="http://www.liebrother.com/upload/748bce52cb964359918cf72b72639900_00012.jpg" alt=""> </p>
+<p>执行完上面步骤，那么恭喜你，现在就可以开始编译了。</p>
+<h3 id="4-检查配置"><a href="#4-检查配置" class="headerlink" title="4.检查配置"></a>4.检查配置</h3><p>我们安装了上面那么多东西，需要来检查一下是不是已经安装完所需要的软件，通过下面命令来检查。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash configure</span><br></pre></td></tr></table></figure>
+<p>如果执行过程中有异常，就根据异常和提示信息，安装所缺的软件就行。如果看到下面的结果，那么再一次恭喜你，所有依赖软件都准备好了。</p>
+<p><img src="http://www.liebrother.com/upload/09745a309c76482e87abf1ed833d1e1d_0001.jpg" alt=""> </p>
+<h3 id="5-开始编译"><a href="#5-开始编译" class="headerlink" title="5.开始编译"></a>5.开始编译</h3><p>最激动人心的时刻到来了，敲入下面的命令，开始编译吧。这个过程大概需要半个小时，耐心等候，可以稍作休息，喝杯 82 年的咖啡。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make images</span><br></pre></td></tr></table></figure>
+<p>见证奇迹的图片。看到下图说明编译成功啦。</p>
+<p><img src="http://www.liebrother.com/upload/e07944ad2eb84aea916c882483f5c5bc_0002.jpg" alt=""> </p>
+<h3 id="6-验证是否成功"><a href="#6-验证是否成功" class="headerlink" title="6.验证是否成功"></a>6.验证是否成功</h3><p>还需要再稳一点，验证编译后的 java 是否可用，通过下面的命令来验证。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./build/*/images/jdk/bin/java -version</span><br></pre></td></tr></table></figure>
+<p>看下图，出现 <code>&quot;13-internal&quot; 2019-09-17</code> 字样，我们编译出来的 JDK13 可以用啦。<br><img src="http://www.liebrother.com/upload/8a0230ade2424aebb8da0c6b05971bc0_0003.jpg" alt=""> </p>
+<p>这标题起得不过分吧，上面版本日期是 <strong>2019-09-17</strong>，还不到一个月，网上相关资料也没，就只有官方文档了（当然也是最好的资料）。<code>跟着步骤走，不会丢</code>，为了验证这句话，还把上面的步骤在我快退休的笔记本上跑了一遍，妥妥的。</p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>我们这篇文章就讲了编译 OpenJDK13，接下来会再写一篇怎么搭建 Debug JVM 环境，可以关注公众号，期待下一篇。</p>
+<p><code>推荐阅读</code></p>
+<p><a href="https://mp.weixin.qq.com/s/Fh8d9ITNhvwYlfF2kY8P-g" target="_blank" rel="noopener">了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑</a></p>
+<p><a href="https://mp.weixin.qq.com/s/NSlEeXMK22-clfDv44h60w" target="_blank" rel="noopener">线程最最基础的知识</a></p>
+<p><a href="https://mp.weixin.qq.com/s/cIj_uzT6gZjROO44rNFHFQ" target="_blank" rel="noopener">老板叫你别阻塞了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Euc2NKvK_TsqvcT-DWpD5A" target="_blank" rel="noopener">吃个快餐都能学到串行、并行、并发</a></p>
+<p><a href="https://mp.weixin.qq.com/s/yWqFw_S7suYpqszuJFDsGg" target="_blank" rel="noopener">泡一杯茶，学一学同异步</a></p>
+<p><a href="https://mp.weixin.qq.com/s/HJIVxnzyDesYPGGyJsaFyQ" target="_blank" rel="noopener">进程知多少？</a></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
 
           
         
@@ -652,8 +846,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/11/03/mybatis-select-in-sql/" itemprop="url">
-                  MyBatis 在 @Select 写 IN SQL
+                <a class="post-title-link" href="/2019/09/24/thread_priority/" itemprop="url">
+                  了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑
                 </a>
               
             
@@ -666,38 +860,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-11-03T22:00:00+08:00" content="2017-11-03">
-              2017-11-03
+            <time itemprop="dateCreated" datetime="2019-09-24T09:32:47+08:00" content="2019-09-24">
+              2019-09-24
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Mybatis/" itemprop="url" rel="index">
-                    <span itemprop="name">Mybatis</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/11/03/mybatis-select-in-sql/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/11/03/mybatis-select-in-sql/" itemprop="commentsCount"></span>
+                <a href="/2019/09/24/thread_priority/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/09/24//thread_priority/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -707,7 +882,7 @@
 
           
           
-             <span id="/2017/11/03/mybatis-select-in-sql/" class="leancloud_visitors" data-flag-title="MyBatis 在 @Select 写 IN SQL">
+             <span id="/2019/09/24/thread_priority/" class="leancloud_visitors" data-flag-title="了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -730,163 +905,183 @@
       
         
           
-            <blockquote>
-<p>摘要：本文简单介绍在 MyBatis 的注解方式中，写包含 in 语法的 SQL</p>
+            <p><img src="http://www.liebrother.com/upload/99667eca2d1948979308f1eecb46dfdb_dxc_0006_01.jpg" alt=""> </p>
+<blockquote>
+<p>Java 多线程系列第 6 篇。</p>
 </blockquote>
-<p>直接了断看下面的代码，SQL 是获取某几个 ID 的文章</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Select(&quot;&lt;script&gt;&quot; +</span><br><span class="line">            &quot;select * from article where id in &quot; +</span><br><span class="line">            &quot;&lt;foreach item=&apos;item&apos; index=&apos;index&apos; collection=&apos;articleIds&apos; open=&apos;(&apos; separator=&apos;, &apos; close=&apos;)&apos;&gt;&quot; +</span><br><span class="line">                &quot;#&#123;item&#125;&quot; +</span><br><span class="line">            &quot;&lt;/foreach&gt;&quot; +</span><br><span class="line">        &quot;&lt;/script&gt;&quot;)</span><br><span class="line">List&lt;Article&gt; getArticlesByIds(@Param(&quot;articleIds&quot;) List&lt;Long&gt; articleIds);</span><br></pre></td></tr></table></figure>
+<p>这篇我们来看看 Java 线程的优先级。</p>
+<h2 id="Java-线程优先级"><a href="#Java-线程优先级" class="headerlink" title="Java 线程优先级"></a>Java 线程优先级</h2><p><code>Thread</code> 类中，使用如下属性来代表优先级。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> priority;</span><br></pre></td></tr></table></figure>
+<p>我们可以通过 <code>setPriority(int newPriority)</code> 来设置新的优先级，通过 <code>getPriority()</code> 来获取线程的优先级。 </p>
+<p>有些资料通过下面的例子就得出了一个结论：<del><strong>Java 线程默认优先级是 5</strong></del>。     </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread();</span><br><span class="line">    System.out.println(thread.getPriority());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印结果：5</span></span><br></pre></td></tr></table></figure>
+<p>其实这是大错特错的，只是看到了表面，看看下面的例子，我们把当前线程的优先级改为 4，发现子线程 thread 的优先级也是 4。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Thread.currentThread().setPriority(<span class="number">4</span>);</span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread();</span><br><span class="line">    System.out.println(thread.getPriority());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印结果：4</span></span><br></pre></td></tr></table></figure>
+<p>这啪啪啪打脸了，如果是线程默认优先级是 5，我们新创建的 thread 线程，没设置优先级，理应是 5，但实际是 4。我们看看 <code>Thread</code> 初始化 <code>priority</code> 的源代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Thread parent = currentThread();</span><br><span class="line"><span class="keyword">this</span>.priority = parent.getPriority();</span><br></pre></td></tr></table></figure>
+<p>原来，线程默认的优先级是继承父线程的优先级，上面例子我们把父线程的优先级设置为 4，所以导致子线程的优先级也变成 4。</p>
+<p>严谨一点说，<strong>子线程默认优先级和父线程一样，Java 主线程默认的优先级是 5。</strong></p>
+<p>Java 中定义了 3 种优先级，分别是<code>最低优先级（1）</code>、<code>正常优先级（5）</code>、<code>最高优先级（10）</code>，代码如下所示。Java 优先级范围是 <strong>[1, 10]</strong>，设置其他数字的优先级都会抛出 <code>IllegalArgumentException</code> 异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The minimum priority that a thread can have.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MIN_PRIORITY = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The default priority that is assigned to a thread.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> NORM_PRIORITY = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The maximum priority that a thread can have.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MAX_PRIORITY = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<p>接下来说说线程优先级的作用。先看下面代码，代码逻辑是创建了 3000 个线程，分别是： 1000 个优先级为 1 的线程， 1000 个优先级为 5 的线程，1000 个优先级为 10 的线程。用 <code>minTimes</code> 来记录 1000 个 <code>MIN_PRIORITY</code> 线程运行时时间戳之和，用 <code>normTimes</code> 来记录 1000 个 <code>NORM_PRIORITY</code> 线程运行时时间戳之和，用 <code>maxTimes</code> 来记录 1000 个 <code>MAX_PRIORITY</code> 线程运行时时间戳之和。通过统计每个优先级的运行的时间戳之和，值越小代表的就是越优先执行。我们运行看看。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestPriority</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> AtomicLong minTimes = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">static</span> AtomicLong normTimes = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">static</span> AtomicLong maxTimes = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;MyThread&gt; minThreadList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;MyThread&gt; normThreadList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;MyThread&gt; maxThreadList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1000</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            MyThread myThread = <span class="keyword">new</span> MyThread(<span class="string">"min----"</span> + i);</span><br><span class="line">            myThread.setPriority(Thread.MIN_PRIORITY);</span><br><span class="line">            minThreadList.add(myThread);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            MyThread myThread = <span class="keyword">new</span> MyThread(<span class="string">"norm---"</span> + i);</span><br><span class="line">            myThread.setPriority(Thread.NORM_PRIORITY);</span><br><span class="line">            normThreadList.add(myThread);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            MyThread myThread = <span class="keyword">new</span> MyThread(<span class="string">"max----"</span> + i);</span><br><span class="line">            myThread.setPriority(Thread.MAX_PRIORITY);</span><br><span class="line">            maxThreadList.add(myThread);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            maxThreadList.get(i).start();</span><br><span class="line">            normThreadList.get(i).start();</span><br><span class="line">            minThreadList.get(i).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"maxPriority 统计："</span> + maxTimes.get());</span><br><span class="line">        System.out.println(<span class="string">"normPriority 统计："</span> + normTimes.get());</span><br><span class="line">        System.out.println(<span class="string">"minPriority 统计："</span> + minTimes.get());</span><br><span class="line">        System.out.println(<span class="string">"普通优先级与最高优先级相差时间："</span> + (normTimes.get() - maxTimes.get()) + <span class="string">"ms"</span>);</span><br><span class="line">        System.out.println(<span class="string">"最低优先级与普通优先级相差时间："</span> + (minTimes.get() - normTimes.get()) + <span class="string">"ms"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyThread</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(name);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="keyword">this</span>.getName() + <span class="string">" priority: "</span> + <span class="keyword">this</span>.getPriority());</span><br><span class="line">            <span class="keyword">switch</span> (<span class="keyword">this</span>.getPriority()) &#123;</span><br><span class="line">                <span class="keyword">case</span> Thread.MAX_PRIORITY :</span><br><span class="line">                    maxTimes.getAndAdd(System.currentTimeMillis());</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> Thread.NORM_PRIORITY :</span><br><span class="line">                    normTimes.getAndAdd(System.currentTimeMillis());</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> Thread.MIN_PRIORITY :</span><br><span class="line">                    minTimes.getAndAdd(System.currentTimeMillis());</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># 第一部分</span><br><span class="line">max----0 priority: 10</span><br><span class="line">norm---0 priority: 5</span><br><span class="line">max----1 priority: 10</span><br><span class="line">max----2 priority: 10</span><br><span class="line">norm---2 priority: 5</span><br><span class="line">min----4 priority: 1</span><br><span class="line">.......</span><br><span class="line">max----899 priority: 10</span><br><span class="line">min----912 priority: 1</span><br><span class="line">min----847 priority: 5</span><br><span class="line">min----883 priority: 1</span><br><span class="line"></span><br><span class="line"># 第二部分</span><br><span class="line">maxPriority 统计：1568986695523243</span><br><span class="line">normPriority 统计：1568986695526080</span><br><span class="line">minPriority 统计：1568986695545414</span><br><span class="line">普通优先级与最高优先级相差时间：2837ms</span><br><span class="line">最低优先级与普通优先级相差时间：19334ms</span><br></pre></td></tr></table></figure></p>
+<p>我们一起来分析一下结果。先看看第一部分，最开始执行的线程高优先级、普通优先级、低优先级都有，最后执行的线程也都有各个优先级的，这说明了：<strong>优先级高的线程不代表一定比优先级低的线程优先执行</strong>。也可以换另一种说法：<strong>代码执行顺序跟线程的优先级无关</strong>。看看第二部分的结果，我们可以发现最高优先级的 1000 个线程执行时间戳之和最小，而最低优先级的 1000 个线程执行时间戳之和最大，因此可以得知：<strong>一批高优先级的线程会比一批低优先级的线程优先执行</strong>，即<strong>高优先级的线程大概率比低优先的线程优先获得 CPU 资源</strong>。</p>
+<h2 id="各操作系统中真有-10-个线程等级么？"><a href="#各操作系统中真有-10-个线程等级么？" class="headerlink" title="各操作系统中真有 10 个线程等级么？"></a>各操作系统中真有 10 个线程等级么？</h2><p>Java 作为跨平台语言，线程有 10 个等级，但是映射到不同操作系统的线程优先级值不一样。接下来教大家怎么在 <code>OpenJDK</code> 源码中查各个操作系统中线程优先级映射的值。</p>
+<ol>
+<li>看到 <strong>Thread</strong> 源代码，设置线程优先级最终调用了本地方法 <code>setPriority0()</code>；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">setPriority0</span><span class="params">(<span class="keyword">int</span> newPriority)</span></span>;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>接着我们在 <strong>OpenJDK</strong> 的 <code>Thread.c</code> 代码中找到 <code>setPriority0()</code> 对应的方法 <code>JVM_SetThreadPriority</code>；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> JNINativeMethod methods[] = &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#123;<span class="string">"setPriority0"</span>,     <span class="string">"(I)V"</span>,       (<span class="keyword">void</span> *)&amp;JVM_SetThreadPriority&#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>我们根据 <code>JVM_SetThreadPriority</code> 找到 <strong>jvm.cpp</strong> 中对应的代码段；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">JVM_ENTRY(<span class="keyword">void</span>, JVM_SetThreadPriority(JNIEnv* env, jobject jthread, jint prio))</span><br><span class="line">  JVMWrapper(<span class="string">"JVM_SetThreadPriority"</span>);</span><br><span class="line">  <span class="comment">// Ensure that the C++ Thread and OSThread structures aren't freed before we operate</span></span><br><span class="line">  <span class="function">MutexLocker <span class="title">ml</span><span class="params">(Threads_lock)</span></span>;</span><br><span class="line">  oop java_thread = JNIHandles::resolve_non_null(jthread);</span><br><span class="line">  java_lang_Thread::set_priority(java_thread, (ThreadPriority)prio);</span><br><span class="line">  JavaThread* thr = java_lang_Thread::thread(java_thread);</span><br><span class="line">  <span class="keyword">if</span> (thr != NULL) &#123;                  <span class="comment">// Thread not yet started; priority pushed down when it is</span></span><br><span class="line">    Thread::set_priority(thr, (ThreadPriority)prio);</span><br><span class="line">  &#125;</span><br><span class="line">JVM_END</span><br></pre></td></tr></table></figure>
+<ol>
+<li>根据第 3 步中的代码，我们可以发现关键是 <code>java_lang_Thread::set_Priority()</code> 这段代码，继续找 <strong>thread.cpp</strong> 代码中的 <code>set_Priority()</code> 方法；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Thread::set_priority(Thread* thread, ThreadPriority priority) &#123;</span><br><span class="line">  trace(<span class="string">"set priority"</span>, thread);</span><br><span class="line">  debug_only(check_for_dangling_thread_pointer(thread);)</span><br><span class="line">  <span class="comment">// Can return an error!</span></span><br><span class="line">  (<span class="keyword">void</span>)os::set_priority(thread, priority);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>发现上面代码最终调用的是 <code>os::set_priority()</code>，接着继续找出 <strong>os.cpp</strong> 的 <code>set_priority()</code> 方法；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">OSReturn os::set_priority(Thread* thread, ThreadPriority p) &#123;</span><br><span class="line">#ifdef ASSERT</span><br><span class="line">  <span class="keyword">if</span> (!(!thread-&gt;is_Java_thread() ||</span><br><span class="line">         Thread::current() == thread  ||</span><br><span class="line">         Threads_lock-&gt;owned_by_self()</span><br><span class="line">         || thread-&gt;is_Compiler_thread()</span><br><span class="line">        )) &#123;</span><br><span class="line">    <span class="keyword">assert</span>(<span class="keyword">false</span>, <span class="string">"possibility of dangling Thread pointer"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (p &gt;= MinPriority &amp;&amp; p &lt;= MaxPriority) &#123;</span><br><span class="line">    <span class="keyword">int</span> priority = java_to_os_priority[p];</span><br><span class="line">    <span class="keyword">return</span> set_native_priority(thread, priority);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">assert</span>(<span class="keyword">false</span>, <span class="string">"Should not happen"</span>);</span><br><span class="line">    <span class="keyword">return</span> OS_ERR;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>终于发现了最终转换为各操作系统的优先级代码 <code>java_to_os_priority[p]</code>，接下来就是找各个操作系统下的该数组的值。比如下面是 <strong>Linux</strong> 系统的优先级值。</li>
+</ol>
+<pre><code class="java"><span class="keyword">int</span> os::java_to_os_priority[CriticalPriority + <span class="number">1</span>] = {
+  <span class="number">19</span>,              <span class="comment">// 0 Entry should never be used</span>
 
-          
-        
-      
-    </div>
+   <span class="number">4</span>,              <span class="comment">// 1 MinPriority</span>
+   <span class="number">3</span>,              <span class="comment">// 2</span>
+   <span class="number">2</span>,              <span class="comment">// 3</span>
 
-    <div>
-      
-    </div>
+   <span class="number">1</span>,              <span class="comment">// 4</span>
+   <span class="number">0</span>,              <span class="comment">// 5 NormPriority</span>
+  -<span class="number">1</span>,              <span class="comment">// 6</span>
 
-    <footer class="post-footer">
-      
+  -<span class="number">2</span>,              <span class="comment">// 7</span>
+  -<span class="number">3</span>,              <span class="comment">// 8</span>
+  -<span class="number">4</span>,              <span class="comment">// 9 NearMaxPriority</span>
 
-      
+  -<span class="number">5</span>,              <span class="comment">// 10 MaxPriority</span>
 
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/08/03/angular-reactive-forms/" itemprop="url">
-                  Angular 的响应式表单
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-08-03T22:30:00+08:00" content="2017-08-03">
-              2017-08-03
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/" itemprop="url" rel="index">
-                    <span itemprop="name">Angular</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
-                    <span itemprop="name">James-Blog</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/08/03/angular-reactive-forms/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/03/angular-reactive-forms/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2017/08/03/angular-reactive-forms/" class="leancloud_visitors" data-flag-title="Angular 的响应式表单">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>摘要：本文简单介绍 Angular 的响应式表单，还是以之前的评论模块为例</p>
-</blockquote>
-<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Angular 总共提供了 3 中表单实现方式，分别是：<a href="https://angular.io/guide/forms" target="_blank" rel="noopener">Template-driven Forms （模板驱动表单）</a>、 <a href="https://angular.io/guide/reactive-forms" target="_blank" rel="noopener">Reactive Forms （响应式表单）</a>、<a href="https://angular.io/guide/dynamic-form" target="_blank" rel="noopener">Dynamic Forms （动态表单）</a>。本文只介绍响应式表单。</p>
-<p>响应式表单是什么呢？其实跟我们以前用 JQuery 或者其他框架实现的思路差不多，就是使用 HTML 显示数据，然后通过定义一定的校验器、校验规则以及校验提示语，通过事件触发校验后校验不通过的显示提示语，只不过用了 Angular，我们就使用 Angular 提供的语法来实现这个校验过程。</p>
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>接下来我们通过代码例子来介绍如何使用响应式表单。</p>
-<h4 id="引入响应式表单模块"><a href="#引入响应式表单模块" class="headerlink" title="引入响应式表单模块"></a>引入响应式表单模块</h4><p>在我们要使用响应式表单的那个模块里面引入响应式表单模块，比如我们在文章模块中使用响应式表单，我们就要在 imports 中添加 ReactiveFormsModule。代码如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@NgModule(&#123;</span><br><span class="line">  imports: [</span><br><span class="line">    RouterModule,</span><br><span class="line">    RouterModule.forChild(articleRoutes),</span><br><span class="line">    SharedModule,</span><br><span class="line">    ReactiveFormsModule,</span><br><span class="line">    NgbModule.forRoot()</span><br><span class="line">  ],</span><br><span class="line">  declarations: [</span><br><span class="line">    HomeComponent,</span><br><span class="line">    DetailComponent,</span><br><span class="line">    CommentComponent,</span><br><span class="line">    CommentViewComponent</span><br><span class="line">  ],</span><br><span class="line">  providers: [</span><br><span class="line">    HomeService,</span><br><span class="line">    DetailService,</span><br><span class="line">    CommentService</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br><span class="line">export class ArticleModule &#123; &#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="编写校验器代码"><a href="#编写校验器代码" class="headerlink" title="编写校验器代码"></a>编写校验器代码</h4><p>首先我们这里的表单有 3 个字段，分别是 nickname、email、content； nickname 添加必填校验器，email 添加必填和邮箱格式校验器，content添加必填校验器。</p>
-<p>首先在 CommentComponent 中注入 FormBuilder 对象，并添加 commentForm 表单组以及创建一个评论对象 comment。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public commentForm: FormGroup;</span><br><span class="line">public comment: Comment = new Comment();</span><br><span class="line"></span><br><span class="line">constructor(private formBuilder: FormBuilder)&#123;&#125;</span><br></pre></td></tr></table></figure></p>
-<p>定义校验器的提示语 validationMessages， formErrors 是在模板中显示的提示语，提示语来自 validationMessages<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public formErrors = &#123;</span><br><span class="line">  &quot;nickname&quot;: &quot;&quot;,</span><br><span class="line">  &quot;email&quot;: &quot;&quot;,</span><br><span class="line">  &quot;content&quot;: &quot;&quot;,</span><br><span class="line">  &quot;formError&quot;: &quot;&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public validationMessages = &#123;</span><br><span class="line">  &quot;nickname&quot;: &#123;</span><br><span class="line">    &quot;required&quot;: &quot;昵称不能为空&quot;,</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;email&quot;: &#123;</span><br><span class="line">    &quot;required&quot;: &quot;邮箱不能为空&quot;,</span><br><span class="line">    &quot;pattern&quot;: &quot;请输入正确的邮箱地址&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;content&quot;: &#123;</span><br><span class="line">    &quot;required&quot;: &quot;内容不能为空&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在组件启动的函数中构造表单，这时候为每个字段添加了校验器，并且绑定在什么时候触发校验，这里我们在每个值改变的时候触发。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">ngOnInit(): void &#123;</span><br><span class="line">  this.buildForm();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private buildForm() &#123;</span><br><span class="line">  this.commentForm = this.formBuilder.group(&#123;</span><br><span class="line">    &quot;nickname&quot;:[</span><br><span class="line">      this.comment.nickname,</span><br><span class="line">      [</span><br><span class="line">        Validators.required</span><br><span class="line">      ]</span><br><span class="line">    ],</span><br><span class="line">    &quot;email&quot;: [</span><br><span class="line">      this.comment.email,</span><br><span class="line">      [</span><br><span class="line">        Validators.required,</span><br><span class="line">        Validators.pattern(&quot;^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]&#123;2,3&#125;)&#123;1,2&#125;)$&quot;)</span><br><span class="line">      ]</span><br><span class="line">    ],</span><br><span class="line">    &quot;content&quot;: [</span><br><span class="line">      this.comment.content,</span><br><span class="line">      [</span><br><span class="line">        Validators.required</span><br><span class="line">      ]</span><br><span class="line">    ]</span><br><span class="line">  &#125;);</span><br><span class="line">  this.commentForm.valueChanges.subscribe(data =&gt; this.onValueChanged(data));</span><br><span class="line">  this.onValueChanged();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>onValueChanged() 方法实现了判断是那个字段校验不通过，然后将该字段的 validationMessages 提示语赋值给 formErrors，在模板那里有判断如果 formErrors.email 等等字段不为空则显示改内容，也即是校验器的提示语<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">onValueChanged(data?: any) &#123;</span><br><span class="line">  if (!this.commentForm) &#123;</span><br><span class="line">    return;</span><br><span class="line">  &#125;</span><br><span class="line">  const form = this.commentForm;</span><br><span class="line">  for (const field in this.formErrors) &#123;</span><br><span class="line">    this.formErrors[field] = &apos;&apos;;</span><br><span class="line">    const control = form.get(field);</span><br><span class="line">    if (control &amp;&amp; control.dirty &amp;&amp; !control.valid) &#123;</span><br><span class="line">      const messages = this.validationMessages[field];</span><br><span class="line">      for (const key in control.errors) &#123;</span><br><span class="line">        this.formErrors[field] += messages[key] + &apos; &apos;;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="HTML-模板代码"><a href="#HTML-模板代码" class="headerlink" title="HTML 模板代码"></a>HTML 模板代码</h4><p>我们要关注的是 [formGroup]=”commentForm”、novalidate、formControlName=”nickname”、以及 *ngIf=”formErrors.nickname” 这几个点，并不是指具体的点，而是着重看这些语法的每一个地方，在你自己实现的时候需要根据你的代码修改的。<br>还有一个是 (ngSubmit)=”sendComment()” 定义了该表单点击提交时调用的函数。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&lt;form [formGroup]=&quot;commentForm&quot; (ngSubmit)=&quot;sendComment()&quot; role=&quot;form&quot; novalidate&gt;</span><br><span class="line">  &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;form-group floating-label-form-group controls&quot; [ngClass]=&quot;&#123;&apos;has-error&apos;: formErrors.nickname&#125;&quot;&gt;</span><br><span class="line">      &lt;label&gt;&#123;&#123; &apos;comment.nickname&apos; | translate &#125;&#125;&lt;/label&gt;</span><br><span class="line">      &lt;input formControlName=&quot;nickname&quot; type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;&#123;&#123; &apos;comment.nickname&apos; | translate &#125;&#125;&quot;&gt;</span><br><span class="line">      &lt;p *ngIf=&quot;formErrors.nickname&quot; class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">        &#123;&#123; formErrors.nickname &#125;&#125;</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;control-group&quot; &gt;</span><br><span class="line">    &lt;div class=&quot;form-group floating-label-form-group controls&quot; [ngClass]=&quot;&#123;&apos;has-error&apos;: formErrors.email&#125;&quot;&gt;</span><br><span class="line">      &lt;label&gt;&#123;&#123; &apos;comment.email&apos; | translate &#125;&#125;&lt;/label&gt;</span><br><span class="line">      &lt;input formControlName=&quot;email&quot; type=&quot;email&quot;   class=&quot;form-control&quot; placeholder=&quot;&#123;&#123; &apos;comment.email&apos; | translate &#125;&#125;&quot;&gt;</span><br><span class="line">      &lt;p *ngIf=&quot;formErrors.email&quot; class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">        &#123;&#123; formErrors.email &#125;&#125;</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;form-group floating-label-form-group controls&quot;  [ngClass]=&quot;&#123;&apos;has-error&apos;: formErrors.content&#125;&quot;&gt;</span><br><span class="line">      &lt;label&gt;&#123;&#123; &apos;comment.content&apos; | translate &#125;&#125;&lt;/label&gt;</span><br><span class="line">      &lt;textarea formControlName=&quot;content&quot; rows=&quot;5&quot; class=&quot;form-control&quot; placeholder=&quot;&#123;&#123; &apos;comment.content&apos; | translate &#125;&#125;&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">      &lt;p *ngIf=&quot;formErrors.content&quot;  class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">        &#123;&#123; formErrors.content &#125;&#125;</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;p *ngIf=&quot;formErrors.formError&quot;  class=&quot;help-block text-danger&quot;&gt;</span><br><span class="line">    &#123;&#123; formErrors.formError &#125;&#125;</span><br><span class="line">  &lt;/p&gt;</span><br><span class="line">  &lt;br&gt;</span><br><span class="line">  &lt;div id=&quot;success&quot;&gt;&lt;/div&gt;</span><br><span class="line">  &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">    &lt;button [disabled]=&quot;commentForm.invalid&quot; type=&quot;submit&quot; class=&quot;btn btn-secondary&quot; &gt;&#123;&#123; &apos;comment.submit&apos; | translate &#125;&#125;&lt;/button&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="GitHub-代码"><a href="#GitHub-代码" class="headerlink" title="GitHub 代码"></a>GitHub 代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/f96a6af5f10261ba484ddb93cc52a9dae5c5dc03" target="_blank" rel="noopener">James-Blog 中的 comment.component.ts 文件</a></p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://angular.io/guide/reactive-forms" target="_blank" rel="noopener">Reactive Forms</a></p>
-<h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://1csh1.github.io/img/angular-reactive-forms/angular-reactive-forms.png" alt="angular-reactive-forms.png"></p>
+  -<span class="number">5</span>               <span class="comment">// 11 CriticalPriority</span>
+};
+</code></pre>
+<p>好了，大家应该知道怎么找出 Java 线程优先级 [1,10] 一一对应各个操作系统中的优先级值。下面给大家统计一下。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Java 线程优先级</th>
+<th style="text-align:left">Linux</th>
+<th style="text-align:left">Windows</th>
+<th style="text-align:left">Apple</th>
+<th style="text-align:left">Bsd</th>
+<th style="text-align:left">Solaris</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">THREAD_PRIORITY_LOWEST(-2)</td>
+<td style="text-align:left">27</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">THREAD_PRIORITY_LOWEST(-2)</td>
+<td style="text-align:left">28</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">32</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">THREAD_PRIORITY_BELOW_NORMAL(-1)</td>
+<td style="text-align:left">29</td>
+<td style="text-align:left">6</td>
+<td style="text-align:left">64</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">THREAD_PRIORITY_BELOW_NORMAL(-1)</td>
+<td style="text-align:left">30</td>
+<td style="text-align:left">10</td>
+<td style="text-align:left">96</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">THREAD_PRIORITY_NORMAL(0)</td>
+<td style="text-align:left">31</td>
+<td style="text-align:left">15</td>
+<td style="text-align:left">127</td>
+</tr>
+<tr>
+<td style="text-align:left">6</td>
+<td style="text-align:left">-1</td>
+<td style="text-align:left">THREAD_PRIORITY_NORMAL(0)</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">18</td>
+<td style="text-align:left">127</td>
+</tr>
+<tr>
+<td style="text-align:left">7</td>
+<td style="text-align:left">-2</td>
+<td style="text-align:left">THREAD_PRIORITY_ABOVE_NORMAL(1)</td>
+<td style="text-align:left">33</td>
+<td style="text-align:left">21</td>
+<td style="text-align:left">127</td>
+</tr>
+<tr>
+<td style="text-align:left">8</td>
+<td style="text-align:left">-3</td>
+<td style="text-align:left">THREAD_PRIORITY_ABOVE_NORMAL(1)</td>
+<td style="text-align:left">34</td>
+<td style="text-align:left">25</td>
+<td style="text-align:left">127</td>
+</tr>
+<tr>
+<td style="text-align:left">9</td>
+<td style="text-align:left">-4</td>
+<td style="text-align:left">THREAD_PRIORITY_HIGHEST(2)</td>
+<td style="text-align:left">35</td>
+<td style="text-align:left">28</td>
+<td style="text-align:left">127</td>
+</tr>
+<tr>
+<td style="text-align:left">10</td>
+<td style="text-align:left">-5</td>
+<td style="text-align:left">THREAD_PRIORITY_HIGHEST(2)</td>
+<td style="text-align:left">36</td>
+<td style="text-align:left">31</td>
+<td style="text-align:left">127</td>
+</tr>
+</tbody>
+</table>
+<p>Windows 系统的在 <strong>OpenJDK</strong> 源码中只找到上面的常量，值是通过微软提供的函数接口文档查到的，链接在这：<a href="https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreadpriority?redirectedfrom=MSDN" target="_blank" rel="noopener">setthreadpriority</a></p>
+<p>我们从这个表格中也可以发现一些问题，即使我们在 Java 代码中设置了比较高的优先级，其实映射到操作系统的线程里面，并不一定比设置了低优先级的线程高，很有可能是相同的优先级。看看 <strong>Solaris 操作系统</strong> 这个极端的例子，优先级 5 到 10 映射的是相同的线程等级。</p>
+<p>回头想想上面的例子为什么 3000 个线程，<code>MAX_PRIORITY</code> 优先级的 1000 个线程会优先执行呢？因为我们的 3 个优先级分别映射到 <strong>Windows</strong> 操作系统线程的 3 个不同的等级，所以才会生效。假设将 1、5、10 改成 5、6、7，运行结果那就不大一样了。</p>
+<p>最后记住：<strong>切莫把线程优先级当做银弹，优先级高的线程不一定比优先级低的线程优先执行</strong>。</p>
+<p>这篇<strong>线程优先级</strong>文章也告段落了，朋友们看完觉得有用麻烦帮点个<code>在看</code>，推荐给身边朋友看看，原创不易。</p>
+<p><code>推荐阅读</code></p>
+<p><a href="https://mp.weixin.qq.com/s/Fh8d9ITNhvwYlfF2kY8P-g" target="_blank" rel="noopener">了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑</a></p>
+<p><a href="https://mp.weixin.qq.com/s/NSlEeXMK22-clfDv44h60w" target="_blank" rel="noopener">线程最最基础的知识</a></p>
+<p><a href="https://mp.weixin.qq.com/s/cIj_uzT6gZjROO44rNFHFQ" target="_blank" rel="noopener">老板叫你别阻塞了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Euc2NKvK_TsqvcT-DWpD5A" target="_blank" rel="noopener">吃个快餐都能学到串行、并行、并发</a></p>
+<p><a href="https://mp.weixin.qq.com/s/yWqFw_S7suYpqszuJFDsGg" target="_blank" rel="noopener">泡一杯茶，学一学同异步</a></p>
+<p><a href="https://mp.weixin.qq.com/s/HJIVxnzyDesYPGGyJsaFyQ" target="_blank" rel="noopener">进程知多少？</a></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
 
           
         
@@ -915,7 +1110,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -956,7 +1151,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-count">120</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -973,7 +1168,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-count">138</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -1,0 +1,886 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="复盘,四象限工作法,惯性思维," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="有整整 10 天木有更文了，这段时间确实比较忙。 有加我微信的朋友知道我上周末出去春游了，部门组织去了趟外伶仃岛，环境挺不错的，这段时间去的人也比较少，值得去玩。 今天讲讲上周末一次生产问题的复盘。 1 事情经过周日中午从外伶仃岛回来就直奔公司，因为生产出了些问题。问题是这样的：HBase 的一些节点挂了，导致一些数据丢失。丢失数据的客户来授信或者借款，都会卡件。在确定数据短时间没法恢复时，就">
+<meta name="keywords" content="复盘,四象限工作法,惯性思维">
+<meta property="og:type" content="article">
+<meta property="og:title" content="复盘一次生产问题">
+<meta property="og:url" content="https://1csh1.github.io/2019/03/25//reflection/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="有整整 10 天木有更文了，这段时间确实比较忙。 有加我微信的朋友知道我上周末出去春游了，部门组织去了趟外伶仃岛，环境挺不错的，这段时间去的人也比较少，值得去玩。 今天讲讲上周末一次生产问题的复盘。 1 事情经过周日中午从外伶仃岛回来就直奔公司，因为生产出了些问题。问题是这样的：HBase 的一些节点挂了，导致一些数据丢失。丢失数据的客户来授信或者借款，都会卡件。在确定数据短时间没法恢复时，就">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.liebrother.com/upload/ffffaf460e7a4b67a62473a08d6f75f0_0053_01.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/87297ad089c941e2826039fae3812682_.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg">
+<meta property="og:updated_time" content="2019-03-25T01:22:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="复盘一次生产问题">
+<meta name="twitter:description" content="有整整 10 天木有更文了，这段时间确实比较忙。 有加我微信的朋友知道我上周末出去春游了，部门组织去了趟外伶仃岛，环境挺不错的，这段时间去的人也比较少，值得去玩。 今天讲讲上周末一次生产问题的复盘。 1 事情经过周日中午从外伶仃岛回来就直奔公司，因为生产出了些问题。问题是这样的：HBase 的一些节点挂了，导致一些数据丢失。丢失数据的客户来授信或者借款，都会卡件。在确定数据短时间没法恢复时，就">
+<meta name="twitter:image" content="http://www.liebrother.com/upload/ffffaf460e7a4b67a62473a08d6f75f0_0053_01.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 复盘一次生产问题 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                复盘一次生产问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-03-25T09:22:04+08:00" content="2019-03-25">
+              2019-03-25
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/03/25/reflection/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/03/25//reflection/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/03/25/reflection/" class="leancloud_visitors" data-flag-title="复盘一次生产问题">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://www.liebrother.com/upload/ffffaf460e7a4b67a62473a08d6f75f0_0053_01.jpg" alt="夜空"> </p>
+<p>有整整 10 天木有更文了，这段时间确实比较忙。</p>
+<p>有加我微信的朋友知道我上周末出去春游了，部门组织去了趟外伶仃岛，环境挺不错的，这段时间去的人也比较少，值得去玩。</p>
+<p>今天讲讲上周末一次生产问题的复盘。</p>
+<h2 id="1-事情经过"><a href="#1-事情经过" class="headerlink" title="1 事情经过"></a>1 事情经过</h2><p>周日中午从外伶仃岛回来就直奔公司，因为生产出了些问题。问题是这样的：HBase 的一些节点挂了，导致一些数据丢失。丢失数据的客户来授信或者借款，都会卡件。在确定数据短时间没法恢复时，就决定从系统的层面去解决这个问题。这时我咨询了 2 位老员工，这些数据虽然是规则的入参数据，但是规则可能没用这些数据去做决策，能否先跟规则的同事确认这些数据是否有使用，如果没有，就可以先暂停这些数据的获取，减少影响面，再来细致的分析数据。得到的回复都是这些数据很早前就上线了，肯定有在用。这时只能分析系统数据，恰巧丢失的数据是原始数据，不是加工数据，原始数据不做规则入参，所以就简单的修改了获取数据源的代码。</p>
+<p>在测试同事进行简单回归测试时，发现了一个奇怪的现象，旧数据被覆盖，检查了各种 SQL 配置，没有发现问题，因为以前也有很多模型和规则入参都是这样配置的，接着就陷入历史问题的 debug 中，还是没有发现问题所在，到了晚上快 11 点，有同事联系了规则同事，才发现卡件的数据他们并没有在借款的规则中使用，也就是可以通过关闭获取数据源来解决借款卡件问题，作罢，先解决数据卡件问题，后面再细致分析历史问题，搞完回到家 1 点半。</p>
+<h2 id="2-复盘"><a href="#2-复盘" class="headerlink" title="2 复盘"></a>2 复盘</h2><p>这周也是持续在跟进这个生产历史问题，最终发现是系统框架的 Bug，在数据处理的时候，私有的数据被公共的数据覆盖导致的。这段时间也一直在思考这次生产问题，从马后炮来说，其实可以很快就把卡件问题解决，但是其中却经历了整整 10 个小时的折腾，肯定是有原因的，通过这篇文章复盘一下。</p>
+<h3 id="2-1-惯性思维"><a href="#2-1-惯性思维" class="headerlink" title="2.1 惯性思维"></a>2.1 惯性思维</h3><p>从维基百科上看这个定义：<code>惯性思维（Inertial thinking）</code>指人习惯性地因循以前的思路思考问题，仿佛物体运动的惯性。惯性思维常会造成思考事情时有些盲点，且缺少创新或改变的可能性。</p>
+<p>上面的过程发现了 2 处惯性思维。</p>
+<ol>
+<li>一处是同事们因为经历了整个系统的开发过程，所以直接否定了确认规则是否有在使用丢失的数据的方案；而我因为没有经历前程的开发，算是一个旁观者去看待这个问题，所以才有这个想法先确定数据有没在使用。这里的惯性思维是：<strong>因为数据很早前就上线了，当时就在使用，所以现在数据还在使用</strong>。</li>
+<li>另外一处则是我对待生产出现的历史问题，一直在通过检查业务代码和 SQL 配置去尝试解决这个问题，因为以前也是这样使用的，以前没出现问题。这里的惯性思维是：<strong>以前这样使用没问题，这一次有问题应该是业务代码或者 SQL 配置有问题</strong>。</li>
+</ol>
+<p>这里都是因为以前做过某些事情是没错的，导致<code>在遇到相同问题的时候会去把以前没错的做法当成是正确答案</code>，而其实没错不等于正确，<code>以前没错的做法只是参考答案，不是正确答案</code>，这里就涉及到思维问题，如果当成参考答案，那么思维是发散的，这个参考答案觉得不对则可以再找其他参考答案或者去发现其他解决方案；如果当成正确答案，那么思维是僵化的，会把这个正确答案一直往里套，就会走不出来。</p>
+<p>理解了上面这点，那有什么可以去摆脱惯性思维呢？下面这两点不确定是不是对的，但是是我通过思考，决定接下来要尝试去执行的。</p>
+<ol>
+<li><code>告诉自己，这是惯性思维</code>。《正念的奇迹》书中讲过洗碗、吃橘子的案例，都是去感受洗碗、去感受吃橘子的感觉。有健身的朋友也会知道，健身肌肉酸痛的时候，去感受那个感觉。让自己去清晰的正面对待惯性思维，而不是去埋怨自己怎么又陷入惯性思维，正面对待它，然后告诉自己，这是惯性思维，这个参考答案是错的，找另一个答案。</li>
+<li><code>空杯状态</code>。如果没有好的参考答案，放空自己，根据眼前看到的事情，按正常的解决思路去解决。</li>
+</ol>
+<h3 id="2-2-明确轻重缓急"><a href="#2-2-明确轻重缓急" class="headerlink" title="2.2 明确轻重缓急"></a>2.2 明确轻重缓急</h3><p>当时最紧要的事情是解决生产卡件的问题。在解决的过程中，却发现了一个历史遗留的 Bug，这时卡件的问题代码已经验证通过了，应该直接就上生产，解决当前的燃眉之急，再解决历史遗留的 Bug。现实是一直去把心思放到历史遗留的 Bug 中，导致延迟了很久才把 hotfix 上线。</p>
+<p>明确轻重缓急很重要，不仅在特殊紧急的情况，在平时工作中也是一样重要，每天要做的事情很多，要学会先做什么，后做什么。解决这个问题，可以采用<code>四象限工作法</code>，什么是四象限工作法？看下图。</p>
+<p><img src="http://www.liebrother.com/upload/87297ad089c941e2826039fae3812682_.jpg" alt="四象限工作法"><br><span style="font-size:0.8em;">（注：这里的象限划分和数学上的有些差别，数学上三、四象限和图上是相反的，这里是按照事情的重要紧急程度排序）</span></p>
+<p>每件工作用 2 个维度去衡量，分别是<code>重要性</code>和<code>紧急度</code>。按照这 2 个维度进行分析后落位到各个象限，然后根据象限的顺序去执行，比如上面遇到的卡件以及历史 Bug 问题，卡件这个是放在一象限，历史 Bug 是放在二象限，所以应该分开解决，解决好了卡件问题之后，再去解决历史 Bug。当时有这个意识的话，在验证卡件 hotfix 代码没问题后，就可以直接上线了，后续再分析历史 Bug。</p>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3 总结"></a>3 总结</h2><p>经过这次事情，让自己静下心来思考，思考哪些地方做错了，思考犯错的本质，思考如何去避免再犯同样的错，思考怎么去用实际的行动改进。犯错不可怕，可怕的是一错再错。嗯，这一刻，我又成长了。希望我的复盘也能给你一些启示。</p>
+<p>推荐阅读：</p>
+<p><a href="https://mp.weixin.qq.com/s/1DqPjUZNT5UuRrZwl5QjqQ" target="_blank" rel="noopener">行为型模式：观察者模式</a></p>
+<p><a href="https://mp.weixin.qq.com/s/ItQUqfzzXw4387PVK0ib_g" target="_blank" rel="noopener">行为型模式：迭代器模式</a></p>
+<p><a href="https://mp.weixin.qq.com/s/jaejRfi4zAtnMEL8Bf0avg" target="_blank" rel="noopener">行为型模式：策略模式</a></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/复盘/" rel="tag">#复盘</a>
+          
+            <a href="/tags/四象限工作法/" rel="tag">#四象限工作法</a>
+          
+            <a href="/tags/惯性思维/" rel="tag">#惯性思维</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/14/state-pattern/" rel="next" title="行为型模式：状态模式">
+                <i class="fa fa-chevron-left"></i> 行为型模式：状态模式
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/27/memento-pattern/" rel="prev" title="行为型模式：备忘录模式">
+                行为型模式：备忘录模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/03/25//reflection/"
+           data-title="复盘一次生产问题" data-url="https://1csh1.github.io/2019/03/25/reflection/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">120</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">138</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-事情经过"><span class="nav-number">1.</span> <span class="nav-text">1 事情经过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-复盘"><span class="nav-number">2.</span> <span class="nav-text">2 复盘</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-惯性思维"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 惯性思维</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-明确轻重缓急"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 明确轻重缓急</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-总结"><span class="nav-number">3.</span> <span class="nav-text">3 总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'content',
+        blogId: '15497-1572145892011-295',
+        name: 'LieBrother',
+        qrcode: 'http://www.liebrother.com/upload/2ead36875d2647ef9f857b904cdbb3e6_.jpg',
+        keyword: 'github',
+    });
+</script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

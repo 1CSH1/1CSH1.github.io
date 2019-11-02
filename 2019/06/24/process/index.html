@@ -1,0 +1,967 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java多线程,进程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="本文目录 [TOC]    Java 多线程系列文章第 1 篇  要讲线程，一般都得讲一讲进程，进程是何方神圣呢？下面来简单介绍一下。 先通过任务管理器看看 Windows 系统下的进程。   从图片来看，每一个进程都占有 CPU、内存、磁盘、网络等资源。站在操作系统的角度，进程是分配资源的基本单位，也是最小单位。 进程为什么出现？引入进程的目的：为了使多个程序能并发执行，以提高资源的利用率和系统">
+<meta name="keywords" content="Java多线程,进程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程知多少？">
+<meta property="og:url" content="https://1csh1.github.io/2019/06/24//process/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="本文目录 [TOC]    Java 多线程系列文章第 1 篇  要讲线程，一般都得讲一讲进程，进程是何方神圣呢？下面来简单介绍一下。 先通过任务管理器看看 Windows 系统下的进程。   从图片来看，每一个进程都占有 CPU、内存、磁盘、网络等资源。站在操作系统的角度，进程是分配资源的基本单位，也是最小单位。 进程为什么出现？引入进程的目的：为了使多个程序能并发执行，以提高资源的利用率和系统">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.liebrother.com/upload/e0e9132bf71b4e72b1269e23adf257e0_0063_01.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/6d219a1b742d4d87a3b8721999843cbf_0063_02.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/eae39f00d0af4fbc873b98792edb2484_0063_05.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/623a001261014c5ca8391a5e5e8bd535_0063_06.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/c4793a3e287b4b348165a92b309e198f_0063_07.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/f7d9615c2c6e4b9ea8ab8b49ffeab991_0063_10.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/6c51868bc22d433a8f9fd703ebd8ba3a_0063_09.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/438fc37c874845e69a85068dd1a5edfc_0063_08.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/d8bd7ca9f741421bae44086e46017e38_0063_03.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/724e7560357a453ea0b2436522f465e5_0063_04.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/8e4c95cdd3984f858dc04027cea864c7_0063_11.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg">
+<meta property="og:updated_time" content="2019-06-24T14:36:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="进程知多少？">
+<meta name="twitter:description" content="本文目录 [TOC]    Java 多线程系列文章第 1 篇  要讲线程，一般都得讲一讲进程，进程是何方神圣呢？下面来简单介绍一下。 先通过任务管理器看看 Windows 系统下的进程。   从图片来看，每一个进程都占有 CPU、内存、磁盘、网络等资源。站在操作系统的角度，进程是分配资源的基本单位，也是最小单位。 进程为什么出现？引入进程的目的：为了使多个程序能并发执行，以提高资源的利用率和系统">
+<meta name="twitter:image" content="http://www.liebrother.com/upload/e0e9132bf71b4e72b1269e23adf257e0_0063_01.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 进程知多少？ | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                进程知多少？
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-06-24T08:13:21+08:00" content="2019-06-24">
+              2019-06-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/06/24/process/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/06/24//process/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/06/24/process/" class="leancloud_visitors" data-flag-title="进程知多少？">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文目录</p>
+<p>[TOC]</p>
+<p><img src="http://www.liebrother.com/upload/e0e9132bf71b4e72b1269e23adf257e0_0063_01.jpg" alt=""> </p>
+<blockquote>
+<p>Java 多线程系列文章第 1 篇</p>
+</blockquote>
+<p>要讲线程，一般都得讲一讲进程，进程是何方神圣呢？下面来简单介绍一下。</p>
+<p>先通过任务管理器看看 Windows 系统下的进程。</p>
+<p><img src="http://www.liebrother.com/upload/6d219a1b742d4d87a3b8721999843cbf_0063_02.jpg" alt=""> </p>
+<p>从图片来看，每一个进程都占有 CPU、内存、磁盘、网络等资源。<strong>站在操作系统的角度，进程是分配资源的基本单位，也是最小单位</strong>。</p>
+<h2 id="进程为什么出现？"><a href="#进程为什么出现？" class="headerlink" title="进程为什么出现？"></a>进程为什么出现？</h2><p>引入进程的目的：<strong>为了使多个程序能并发执行，以提高资源的利用率和系统的吞吐量</strong>。怎么理解这句话呢？一个程序在运行过程中会涉及很多操作，利用 CPU 计算、通过磁盘 IO 进行数据传输等等，我们知道当程序在进行磁盘 IO 的时候，因为速度问题，会比较慢，所在在这个过程中 CPU 会空闲下来，这会造成资源的浪费，正因为引入进程，在 A 进程进行磁盘 IO 的时候，会让出 CPU 给 B 进程，合理地利用了 CPU 资源，使得程序之间可以并发执行。</p>
+<p>从 CPU 角度，执行过程是这样子的：CPU 一直在负责执行指令，进程之间互相竞争 CPU 资源，下图有 A 和 B 进程，在一个时间点，CPU 只执行一个进程的指令，因为 CPU 运行很快，所以在咱们看起来，像是多个进程在同时跑。这就是进程带来的好处：<strong>提高资源利用率，并发地执行多个程序</strong>。</p>
+<p>当然引入进程也不是有益无害，它增加了系统的<strong>时间</strong>和<strong>空间</strong>开销。空间开销这个好理解，进程有自己的组成部分（下面会讲），这个就占用了空间。时间开销则是进程程切换需要时间。</p>
+<p><img src="http://www.liebrother.com/upload/eae39f00d0af4fbc873b98792edb2484_0063_05.jpg" alt=""> </p>
+<h2 id="进程的组成"><a href="#进程的组成" class="headerlink" title="进程的组成"></a>进程的组成</h2><p>进程由 3 个部分组成，分别是<strong>程序代码</strong>、<strong>数据集、栈</strong>和<strong>进程控制块（Process Control Block）</strong>。</p>
+<p>各自的作用如下：</p>
+<ol>
+<li><strong>程序代码</strong>：描述了进程需要完成的功能。</li>
+<li><strong>数据集、栈</strong>：程序在执行时所需要的数据和工作区。</li>
+<li><strong>进程控制块</strong>：包含进程的描述信息和控制信息，它是进程存在的唯一标识。</li>
+</ol>
+<h2 id="如何竞争资源（调度算法）"><a href="#如何竞争资源（调度算法）" class="headerlink" title="如何竞争资源（调度算法）"></a>如何竞争资源（调度算法）</h2><p>进程之间需要竞争资源，一般都是竞争 CPU 资源，因为 CPU 运行速度太快了，其他介质都赶不上。有了竞争就需要有规则，就像游戏一样，每个游戏都需要规则，不同规则会有不同的侧重点，这个看过“最强大脑”这个节目的朋友就非常清楚，每道题都有不同的考核侧重点，有些是侧重空间思维、有些侧重逻辑推算等等。下面我们就简单地一一讲解竞争资源的游戏规则。</p>
+<h3 id="FCFS"><a href="#FCFS" class="headerlink" title="FCFS"></a>FCFS</h3><p><strong>First In First Out（先来先服务）</strong>：最先进入就绪队列的进程，先运行，运行到完成或者阻塞时，再重新调度。一般情况下，这种调度算法会和优先级策略结合，比如每个优先级一条队列，每条队列中的调度都使用 FCFS。</p>
+<p>特点：<strong>简单</strong>、比较<strong>偏于长进程</strong>、相对于其他调度算法<strong>平均周转时间长</strong>。</p>
+<h3 id="RR"><a href="#RR" class="headerlink" title="RR"></a>RR</h3><p><strong>Round Robin（轮转）</strong>：进程按提交顺序存在就绪队列，依次轮流占用 CPU 资源，运行一段固定的时间，时间到后如果还没执行完，就继续进入就绪队列队尾，排队等待下次执行。</p>
+<p>特点：<strong>公平</strong>、对进程的<strong>响应时间较短</strong>。</p>
+<h3 id="SPN"><a href="#SPN" class="headerlink" title="SPN"></a>SPN</h3><p><strong>Shortest Process Next（最短进程优先）</strong>：将预期占用运行时间最短的进程优先执行，直到运行完成或阻塞时，再重新调度。</p>
+<p>特点：<strong>有利于短进程</strong>。</p>
+<h3 id="SRT"><a href="#SRT" class="headerlink" title="SRT"></a>SRT</h3><p><strong>Shortest Remaining Time（最短剩余时间优先）</strong>：新进程进来时，如果新进程的预计运行时间比当前进程的剩余运行时间更短，就抢占当前进程，</p>
+<p>特点：<strong>有利于短进程</strong>，和 SPN 的差别在于<strong>抢占</strong>这个一点，因为抢占，所以效率会比 SPN 好一些。</p>
+<h3 id="HRRN"><a href="#HRRN" class="headerlink" title="HRRN"></a>HRRN</h3><p><strong>Highest Response Ratio Next（最高响应比优先）</strong>：当前运行的进程完成或者阻塞时发生调度，每次调度前，计算所有就绪进程的响应比，响应比高的进程优先运行。</p>
+<p>响应比公式如下所示：</p>
+<p><img src="http://www.liebrother.com/upload/623a001261014c5ca8391a5e5e8bd535_0063_06.jpg" alt=""> </p>
+<p>特点：<strong>有利于短进程</strong>，<strong>服务时间相同的进程，先来的服务会优先执行</strong>，<strong>长进程因为在等待的过程中，优先级越来越高，所以不会一直不执行</strong>。</p>
+<h3 id="FB"><a href="#FB" class="headerlink" title="FB"></a>FB</h3><p><strong>Feedback （反馈）</strong>：由多个就绪队列组成的反馈机制，它有如下规则：</p>
+<ol>
+<li>在同一个队列的进程，按 FCFS 算法调度，最后一个就绪队列按 RR 算法调度；</li>
+<li>优先级越高的队列，时间片越小；</li>
+<li>进程在一个时间片内未运行完，则降到下一个队列末尾；</li>
+<li>只有上级队列无就绪进程时，才运行本级就绪队列，本级就绪队列无进程时，才运行下级就绪队列，以此类推</li>
+</ol>
+<p>进程执行过程如下图所示</p>
+<p><img src="http://www.liebrother.com/upload/c4793a3e287b4b348165a92b309e198f_0063_07.jpg" alt=""> </p>
+<p>特点：<strong>短进程有非常大的优势，排在前面的队列都是时间较短的</strong>。</p>
+<p>以上就是几个抢占资源的调度算法的说明。</p>
+<h2 id="进程状态"><a href="#进程状态" class="headerlink" title="进程状态"></a>进程状态</h2><p>上面我们讲到，进程之间是在竞争资源，得到资源就运行，没得到就等待，这个需要有状态来维护，像很多系统一样，需要一个状态机。</p>
+<h3 id="三态图"><a href="#三态图" class="headerlink" title="三态图"></a>三态图</h3><p>三态图也是描述进程状态最简单最基础的图，它包含了进程的最基本的 3 个状态，分别是：就绪态、运行态和阻塞态。</p>
+<p><strong>Read（就绪态）</strong>：进程已得到除 CPU 以外的其他所需资源。<br><strong>Running（运行态）</strong>：进程的指令正被执行。<br><strong>Blocked（阻塞态）</strong>：进程正等待资源或某事件发生。</p>
+<p><img src="http://www.liebrother.com/upload/f7d9615c2c6e4b9ea8ab8b49ffeab991_0063_10.jpg" alt="进程三态图"> </p>
+<p><strong>就绪态</strong>的进程在被调度的时候，进入了<strong>运行态</strong>，如果时间片运行完或者有更高级别进程抢占资源，则变成<strong>就绪态</strong>等待再次被调度；如果发生事件（比如 IO 事件），则从<strong>运行态</strong>转到<strong>阻塞态</strong>，进入<strong>阻塞态</strong>的进程只能等待事件解除重新进入<strong>就绪态</strong>。</p>
+<h3 id="五态图"><a href="#五态图" class="headerlink" title="五态图"></a>五态图</h3><p>基于三态图，新增了 2 个状态，分别是：新建态和退出态。</p>
+<p><strong>New（新建态）</strong>：进程正被创建。分配内存后将被设为就绪态。</p>
+<p><strong>Exit（退出态）</strong>：进程已正常结束或出现异常结束。回收资源。</p>
+<p><img src="http://www.liebrother.com/upload/6c51868bc22d433a8f9fd703ebd8ba3a_0063_09.jpg" alt="进程五态图"> </p>
+<p>新进程刚创建还没有分配资源的时候是<strong>新建态</strong>，等到分配了资源，被加载后就进入<strong>就绪态</strong>。当进程运行完后，就从<strong>运行态</strong>进入<strong>退出态</strong>。</p>
+<h3 id="七态图"><a href="#七态图" class="headerlink" title="七态图"></a>七态图</h3><p>基于五态图，新增了 2 种挂起态，分别是就绪挂起态和阻塞挂起态。</p>
+<p><strong>就绪挂起态</strong>：另叫外存就绪态。由于内存容量有限，将原位于内存的<strong>就绪进程</strong>转存到外存（磁盘）上。</p>
+<p><strong>阻塞挂起态</strong>：另叫外存阻塞态。一样因为内存容量有限，将原位于内存的<strong>阻塞进程</strong>转存到外存（磁盘）上。</p>
+<p><img src="http://www.liebrother.com/upload/438fc37c874845e69a85068dd1a5edfc_0063_08.jpg" alt="七态图"> </p>
+<p>我们可以看出，图中新增了<strong>解除挂起</strong>的状态转换过程，一般是由于挂起进程优先级比较高或者内存空间足够，把位于外存（磁盘）的进程转存到内存中。</p>
+<h2 id="进程关系"><a href="#进程关系" class="headerlink" title="进程关系"></a>进程关系</h2><p>进程之间其实比较独立，比如我们在日常使用的 QQ 和微信，它们运行起来的进程有什么关系么？其实除了互相竞争资源之外，没有任何关系。</p>
+<h3 id="父子关系"><a href="#父子关系" class="headerlink" title="父子关系"></a>父子关系</h3><p>虽然上面说的进程之间没有关系，但是有一个特殊关系需要讲，就是<strong>父子关系</strong>。</p>
+<p>先做个试验，验证进程的父子关系。操作步骤：</p>
+<ol>
+<li>打开 CMD 命令行程序，将当前的窗口设置为 Father，在 Father 窗口通过命令<code>start cmd</code>启动另一个 CMD 命令行程序；</li>
+<li>将新开的 CMD 命令行程序的窗口设置为 Son，在 Son 窗口通过命令<code>start cmd</code>启动另一个 CMD 命令行程序；</li>
+<li>将新开的 CMD 命令行程序的窗口设置为 Grandson。</li>
+</ol>
+<p>操作过程如下图所示。</p>
+<p><img src="http://www.liebrother.com/upload/d8bd7ca9f741421bae44086e46017e38_0063_03.jpg" alt=""></p>
+<p>通过 ProcessExplorer 可以很清晰看到这 3 个 CMD 进程之间的关系。（想要 ProcessExplorer 插件可以通过百度网盘下载链接：<a href="https://pan.baidu.com/s/19531gf5tD_of1CWxpFR9Dg" target="_blank" rel="noopener">https://pan.baidu.com/s/19531gf5tD_of1CWxpFR9Dg</a> 提取码：qhc6）</p>
+<p><img src="http://www.liebrother.com/upload/724e7560357a453ea0b2436522f465e5_0063_04.jpg" alt=""> </p>
+<p>我们看到 Father、Son、Grandson 三个进程呈现出我们预料中的树形。那么什么是<strong>父子进程</strong>呢？简单的说就是在进程中创建出新的进程，这个新的进程就是子进程，一个进程可以有多个子进程，但是只能有一个父进程。在 Unix 系统中，父进程通过调用 <code>fork()</code> 创建子进程，父子进程有如下特点：</p>
+<ol>
+<li>父、子进程并发执行；</li>
+<li>父、子进程共享父进程的所有资源；</li>
+<li>子进程复制父进程的地址空间，甚至有相同的正文段和程序计数器 PC 值；</li>
+<li>利用<strong>写时复制</strong>（Copy On Write）技术减少不必要的复制：fork 时父子共用父空间，当一方试图修改时才复制。</li>
+</ol>
+<p>这里重点讲一下<strong>Copy On Write</strong>，使用了这个技术，父进程创建子进程的时候不会复制所有数据到子进程，<strong>省了复制的时间以及减少了大量的内存</strong>。这个复制不是必要的，因为如果应用程序在进程复制之后立即加载新程序，那之前的复制工作就是浪费时间和内存了。</p>
+<p>讲了<strong>进程父子关系</strong>，就免不了提一下<strong>僵尸进程</strong>和<strong>孤儿进程</strong>，下面分别介绍一下。</p>
+<h3 id="僵尸进程"><a href="#僵尸进程" class="headerlink" title="僵尸进程"></a>僵尸进程</h3><p><strong>僵尸进程</strong>：子进程退出后，父进程没有调用 wait 或 waitpid 获取子进程的状态信息，子进程的进程描述符仍保存在系统中，这种进程叫僵尸进程。</p>
+<p>僵尸进程的危害：僵尸进程会一直占用进程号，系统能使用的进程号又是有限的，如果有大量的僵尸进程，会因为没有可用进程号导致无法创建新的进程。</p>
+<h3 id="孤儿进程"><a href="#孤儿进程" class="headerlink" title="孤儿进程"></a>孤儿进程</h3><p><strong>孤儿进程</strong>：父进程结束退出，而它的子进程还在运行，这时的子进程就叫做孤儿进程。孤儿进程就被 init 进程（进程号为 1）收养，init 进程将对孤儿进程完成状态收集工作。</p>
+<p>孤儿进程没有危害，因为被 init 进程托管了，init 进程会处理孤儿进程的收集工作。</p>
+<h2 id="执行模式"><a href="#执行模式" class="headerlink" title="执行模式"></a>执行模式</h2><p>指令分为<strong>特权指令</strong>（只能由操作系统内核使用的指令）和<strong>非特权指令</strong>（只能由用户程序使用的指令），因为指令有特权和非特权之分，所以 CPU 也分为 2 种执行模式：<strong>系统态</strong>（可以执行所有指令，使用所有资源以及改变 CPU 状态）和<strong>用户态</strong>（只能执行非特权指令）。</p>
+<p>CPU 的系统态和用户态之间的切换。</p>
+<p><img src="http://www.liebrother.com/upload/8e4c95cdd3984f858dc04027cea864c7_0063_11.jpg" alt=""> </p>
+<h2 id="进程间通讯"><a href="#进程间通讯" class="headerlink" title="进程间通讯"></a>进程间通讯</h2><p>当进程之间需要数据传输、共享数据时，进程间就需要互相通讯，通讯方式有如下几种，这里只是简单概括一下，不展开讲，咱的重点在于多线程，进程咱们简单了解一下就可以，感兴趣的同学可以根据要点进行深入学习。</p>
+<h3 id="管道（Pipe）"><a href="#管道（Pipe）" class="headerlink" title="管道（Pipe）"></a>管道（Pipe）</h3><p>管道是半双工通讯，数据是单向流动，要建立进程间互相通讯，则需要 2 个管道，这种通讯方式只能在亲戚关系的进程间使用，比如父子进程。</p>
+<h3 id="流管道（Flow-Pipe）"><a href="#流管道（Flow-Pipe）" class="headerlink" title="流管道（Flow Pipe）"></a>流管道（Flow Pipe）</h3><p>流管道是管道进化来的，数据不再是单向流动，可以双向流动，但是依旧是只能在亲戚关系的进程间使用。</p>
+<h3 id="有名管道（Named-Pipe）"><a href="#有名管道（Named-Pipe）" class="headerlink" title="有名管道（Named Pipe）"></a>有名管道（Named Pipe）</h3><p>有名管道提供了新的功能，就是给管道设置名字，它改善了上面 2 种管道通讯方式，支持了非亲戚关系的进程通讯。</p>
+<h3 id="信号量（Semophore）"><a href="#信号量（Semophore）" class="headerlink" title="信号量（Semophore）"></a>信号量（Semophore）</h3><p>信号量相当于计数器，利用它来控制多个进程访问共享资源，当一个进程A在访问共享资源时，信号量防止其他进程来访问，只有当进程A不访问共享资源了，其他进程才能访问。</p>
+<h3 id="信号（Signal）"><a href="#信号（Signal）" class="headerlink" title="信号（Signal）"></a>信号（Signal）</h3><p>信号可以在任何时候发给某一进程，不需要知道该进程当前的状态，如果对方进程未执行，信号会存在内核中，直到进程执行后传递给它；如果对方进程是阻塞，则信号会延迟传递，等到对方进程阻塞取消后才传递给它。</p>
+<h3 id="消息队列（Message-Queue）"><a href="#消息队列（Message-Queue）" class="headerlink" title="消息队列（Message Queue）"></a>消息队列（Message Queue）</h3><p>消息队列是存放在内核中的链表，可以有多个进程对这个链表进行写入和读取，它解决了信号传递信息少、管道只能传输无格式字节流和缓冲区大小受限的缺点。目前有 POSIX 消息队列和 System V 消息队列。</p>
+<h3 id="共享内存（Shared-Memory）"><a href="#共享内存（Shared-Memory）" class="headerlink" title="共享内存（Shared Memory）"></a>共享内存（Shared Memory）</h3><p>共享内存即为一段能被其他进程访问的内存，多个进程访问同一个内存，达到了通讯的效果。</p>
+<h3 id="套接字（Socket）"><a href="#套接字（Socket）" class="headerlink" title="套接字（Socket）"></a>套接字（Socket）</h3><p>套接字就是我们网络编程里面的那个套接字，可以通过网络也可以在本机进行通信，它的好处在于可以跨主机进行通信。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总的来说，进程是程序在一个数据集上的一次执行过程，它就是程序运行起来的表现。这是我们学习多线程的开篇，希望通过这篇文章，让大家简单地了解进程是什么，后面我们再来深入了解多线程。</p>
+<p><strong>推荐阅读</strong></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java多线程/" rel="tag">#Java多线程</a>
+          
+            <a href="/tags/进程/" rel="tag">#进程</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/10/next/" rel="next" title="接下来。。。">
+                <i class="fa fa-chevron-left"></i> 接下来。。。
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/26/concept_of_synchronous_asynchronous/" rel="prev" title="泡一杯茶，学一学同异步">
+                泡一杯茶，学一学同异步 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/06/24//process/"
+           data-title="进程知多少？" data-url="https://1csh1.github.io/2019/06/24/process/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">120</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">138</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#进程为什么出现？"><span class="nav-number">1.</span> <span class="nav-text">进程为什么出现？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程的组成"><span class="nav-number">2.</span> <span class="nav-text">进程的组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何竞争资源（调度算法）"><span class="nav-number">3.</span> <span class="nav-text">如何竞争资源（调度算法）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FCFS"><span class="nav-number">3.1.</span> <span class="nav-text">FCFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RR"><span class="nav-number">3.2.</span> <span class="nav-text">RR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SPN"><span class="nav-number">3.3.</span> <span class="nav-text">SPN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SRT"><span class="nav-number">3.4.</span> <span class="nav-text">SRT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HRRN"><span class="nav-number">3.5.</span> <span class="nav-text">HRRN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FB"><span class="nav-number">3.6.</span> <span class="nav-text">FB</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程状态"><span class="nav-number">4.</span> <span class="nav-text">进程状态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#三态图"><span class="nav-number">4.1.</span> <span class="nav-text">三态图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五态图"><span class="nav-number">4.2.</span> <span class="nav-text">五态图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七态图"><span class="nav-number">4.3.</span> <span class="nav-text">七态图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程关系"><span class="nav-number">5.</span> <span class="nav-text">进程关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#父子关系"><span class="nav-number">5.1.</span> <span class="nav-text">父子关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#僵尸进程"><span class="nav-number">5.2.</span> <span class="nav-text">僵尸进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#孤儿进程"><span class="nav-number">5.3.</span> <span class="nav-text">孤儿进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行模式"><span class="nav-number">6.</span> <span class="nav-text">执行模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程间通讯"><span class="nav-number">7.</span> <span class="nav-text">进程间通讯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#管道（Pipe）"><span class="nav-number">7.1.</span> <span class="nav-text">管道（Pipe）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流管道（Flow-Pipe）"><span class="nav-number">7.2.</span> <span class="nav-text">流管道（Flow Pipe）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有名管道（Named-Pipe）"><span class="nav-number">7.3.</span> <span class="nav-text">有名管道（Named Pipe）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号量（Semophore）"><span class="nav-number">7.4.</span> <span class="nav-text">信号量（Semophore）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信号（Signal）"><span class="nav-number">7.5.</span> <span class="nav-text">信号（Signal）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息队列（Message-Queue）"><span class="nav-number">7.6.</span> <span class="nav-text">消息队列（Message Queue）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共享内存（Shared-Memory）"><span class="nav-number">7.7.</span> <span class="nav-text">共享内存（Shared Memory）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#套接字（Socket）"><span class="nav-number">7.8.</span> <span class="nav-text">套接字（Socket）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'content',
+        blogId: '15497-1572145892011-295',
+        name: 'LieBrother',
+        qrcode: 'http://www.liebrother.com/upload/2ead36875d2647ef9f857b904cdbb3e6_.jpg',
+        keyword: 'github',
+    });
+</script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

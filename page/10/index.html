@@ -226,8 +226,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/10/Linux下MySQL导入导出数据/" itemprop="url">
-                  Linux下MySQL导入导出数据
+                <a class="post-title-link" href="/2019/01/04/interface-segregation-principle/" itemprop="url">
+                  接口隔离原则
                 </a>
               
             
@@ -240,38 +240,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-10T21:04:28+08:00" content="2016-04-10">
-              2016-04-10
+            <time itemprop="dateCreated" datetime="2019-01-04T21:16:49+08:00" content="2019-01-04">
+              2019-01-04
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/MySQL/" itemprop="url" rel="index">
-                    <span itemprop="name">MySQL</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/10/Linux下MySQL导入导出数据/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/10/Linux下MySQL导入导出数据/" itemprop="commentsCount"></span>
+                <a href="/2019/01/04/interface-segregation-principle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/01/04//interface-segregation-principle/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -281,7 +262,7 @@
 
           
           
-             <span id="/2016/04/10/Linux下MySQL导入导出数据/" class="leancloud_visitors" data-flag-title="Linux下MySQL导入导出数据">
+             <span id="/2019/01/04/interface-segregation-principle/" class="leancloud_visitors" data-flag-title="接口隔离原则">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -304,12 +285,39 @@
       
         
           
-            <p><strong>导入数据</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">create database test;</span><br><span class="line">use test;</span><br><span class="line">source /home/xxx/data/test.sql</span><br></pre></td></tr></table></figure>
-<p><strong>导出数据</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/mysqldump -u username -p [-d] database_name &gt; xxx.sql</span><br></pre></td></tr></table></figure>
-<p>如果没有-d， 则导出表结构和数据；如果有-d，则只导出表结构</p>
-<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/mysqldump -u root -p test &gt; test.sql</span><br></pre></td></tr></table></figure></p>
+            <p><img src="http://www.liebrother.com/upload/c1c89a591a8141bfa4d0318cecfebadd_0015_01.jpg" alt="景"> </p>
+<blockquote>
+<p>设计模式六大原则之四：接口隔离原则。</p>
+</blockquote>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>姓名</strong> ：接口隔离原则</p>
+<p><strong>英文名</strong> ：Interface Segregation Principle</p>
+<p><strong>价值观</strong> ：宁缺毋滥</p>
+<p><strong>个人介绍</strong> ：</p>
+<ol>
+<li>Clients should not be forced to depend upon interfaces that they don’t use.（客户端不应该依赖它不需要的接口。）</li>
+<li>The dependency of one class to another one should depend on the smallest possible interface.（类间的依赖关系应该建立在最小的接口上。）</li>
+</ol>
+<p>也用一个故事来讲这 2 句干巴巴的定义。</p>
+<p>一小伙子跑到大城市的工厂打工，工作了一年半载，越来越觉得没劲，每天干那么多活，又领那么一点工资，和他老爸抱怨这段时间的困扰，老爸想着，家里有个小作坊，自己也一年不如一年了，要不就让儿子回老家管理这小作坊。小伙子熬不过这个年，就跑回老家跟着老爸打理小作坊。</p>
+<p><img src="http://www.liebrother.com/upload/c635b2192ca04b6783392e49f5423347_0015_02.jpg" alt="布娃娃"><br>(来自Google Image)</p>
+<p>小作坊主要是做布娃娃的，如上图，工作在于打扮包装布娃娃，工序有给布娃娃扎辫子、穿衣服、包装入箱、打标签。整个完整的流程都是一个人做的。有很多个工人每天都在做这个事情。</p>
+<p>老爸向小伙子诉苦，感觉招工挺多人的，生产力还是提不上去。小伙子记着老爸的话，在工厂里面观察了几天，他发现每个工人都要做这 4 个打扮包装布娃娃的工序，有些工人扎辫子很快但穿衣服很慢，有些工人扎辫子很慢但穿衣服快，他用了笔记本记下来：李大姨扎辫子快，王大妈穿衣服快，就这样把每个人有效率的工作都记录下来。</p>
+<p>一天晚上吃饭，小伙子跟老爸说了自己观察到的现象，也把本子拿给老爸看，跟老爸商量：可不可以做个尝试，不要每个人负责打扮包装布娃娃全步骤，而是按工序分开，每个人只负责一个工序，每个工人只干一件事，更容易熟能生巧。老爸听着觉得有道理。</p>
+<p>第二天早上，就到小作坊里，召集了所有工人，按小伙子的笔记上面的名单分工，大家都做好各自负责的内容，像流水线一样，做好了就放到下个工序的地方，让下个工序的人去做。到了下班，小伙子清点了今天工作的成果，包装完成的娃娃比前一天多了 50% 。晚上小伙子跟老爸喝着百威吃起大肉庆祝一番。</p>
+<p>这个故事你看了可能想骂爹骂娘，跟上面的定义有啥毛关系？故事只是把大家带入这个场景，我们在工作中，着手开发之前不都得先理清好需求背景，这就是要讲接口隔离原则的背景，通过代码来给大家讲解一下如何用好接口隔离原则。</p>
+<h2 id="父亲的运营模式"><a href="#父亲的运营模式" class="headerlink" title="父亲的运营模式"></a>父亲的运营模式</h2><p>先看代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Work</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">hairBraiding</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">getDressed</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">packingIntoTheBox</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">makeTag</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WangMather</span> <span class="keyword">implements</span> <span class="title">Work</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hairBraiding</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"王大妈给布娃娃扎辫子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getDressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"王大妈给布娃娃穿衣服"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">packingIntoTheBox</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"王大妈把布娃娃装入箱子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeTag</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"王大妈给箱子打标签"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LiAunt</span> <span class="keyword">implements</span> <span class="title">Work</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hairBraiding</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"李大姨给布娃娃扎辫子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getDressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"李大姨给布娃娃穿衣服"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">packingIntoTheBox</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"李大姨把布娃娃装入箱子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeTag</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"李大姨给箱子打标签"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试代码</span></span><br><span class="line">WangMather wangMather = <span class="keyword">new</span> WangMather();</span><br><span class="line">wangMather.hairBraiding();</span><br><span class="line">wangMather.getDressed();</span><br><span class="line">wangMather.packingIntoTheBox();</span><br><span class="line">wangMather.makeTag();</span><br><span class="line"></span><br><span class="line">LiAunt liAunt = <span class="keyword">new</span> LiAunt();</span><br><span class="line">liAunt.hairBraiding();</span><br><span class="line">liAunt.getDressed();</span><br><span class="line">liAunt.packingIntoTheBox();</span><br><span class="line">liAunt.makeTag();</span><br></pre></td></tr></table></figure>
+<p>在父亲管理下的小作坊，是大家各自完成好一个布娃娃，工作互不交接，在这种运营模式下，我们把所有工作都合并在一个接口 Work 是没有问题的。有人可能要问，不是说接口隔离么？这里面 Work 接口的 4 个方法都可以分离开，它们都是各自的工作内容。稍等一下，我们现在是基于老父亲运营的模式下实现，如果小作坊一直都是这种模式运营，这段代码有问题么？其实没问题的，我们根据当时的业务考虑，在这种情况下，把 Work 抽成 4 个接口不是不可以，只是不现实，每个工人都去实现一模一样的 4 个接口在老父亲运营模式下是不切实际。</p>
+<h2 id="儿子的运营模式"><a href="#儿子的运营模式" class="headerlink" title="儿子的运营模式"></a>儿子的运营模式</h2><p>接下来介绍儿子的运营模式。儿子提倡的是每个工人职责分明，只负责一个事情，在这种情况下，如果还是用老父亲的 Work 接口会有什么问题呢？上面我们说了，李大姨扎辫子快，王大妈穿衣服快，所以李大姨被分配去给布娃娃扎辫子，王大妈被分配去给布娃娃穿衣服。我们沿用老父亲的 Work 接口实现，代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WangMather2</span> <span class="keyword">implements</span> <span class="title">Work</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hairBraiding</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getDressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"王大妈给布娃娃穿衣服"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">packingIntoTheBox</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeTag</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LiAunt2</span> <span class="keyword">implements</span> <span class="title">Work</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hairBraiding</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"李大姨给布娃娃扎辫子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getDressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">packingIntoTheBox</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeTag</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看出问题来了么？李大姨仅仅参与扎辫子工作，王大妈参与了穿衣服工作，但是却都要依旧实现其他 3 个多余的接口。所以在儿子的运营模式下，老父亲的 Work 接口需要重新分配，以工序的角度分配，而不是以完成一个布娃娃的角度分配。总共有 4 个工序：扎辫子、穿衣服、包装入箱、打标签，我们需要定义 4 个接口，让员工去实现各自负责的工序接口。代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Hair</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">hairBraiding</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Dress</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">getDressed</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Box</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">packingIntoTheBox</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Tag</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">makeTag</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 李大姨给布娃娃扎辫子快</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LiAunt3</span> <span class="keyword">implements</span> <span class="title">Hair</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hairBraiding</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"李大姨给布娃娃扎辫子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 王大妈给布娃娃穿衣服快</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WangMather3</span> <span class="keyword">implements</span> <span class="title">Dress</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getDressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"王大妈给布娃娃穿衣服"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 陈大叔包装快</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChenUncle</span> <span class="keyword">implements</span> <span class="title">Box</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">packingIntoTheBox</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"陈大叔给布娃娃装箱"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 黄大姐贴标签快</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HuangSister</span> <span class="keyword">implements</span> <span class="title">Tag</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeTag</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"黄大姐给箱子打标签"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试代码</span></span><br><span class="line">LiAunt3 liAunt3 = <span class="keyword">new</span> LiAunt3();</span><br><span class="line">WangMather3 wangMather3 = <span class="keyword">new</span> WangMather3();</span><br><span class="line">ChenUncle chenUncle = <span class="keyword">new</span> ChenUncle();</span><br><span class="line">HuangSister huangSister = <span class="keyword">new</span> HuangSister();</span><br><span class="line">liAunt3.hairBraiding();</span><br><span class="line">wangMather3.getDressed();</span><br><span class="line">chenUncle.packingIntoTheBox();</span><br><span class="line">huangSister.makeTag();</span><br></pre></td></tr></table></figure>
+<p>这段代码看起来就很清晰了，在儿子的运营模式下，大家都是只做一道工序，这样子实现就非常合理。看了这个过程，你理解了接口隔离原则了么？再看一看上面的定义：客户端不应该依赖它不需要的接口。闭上眼睛，静默 3 秒，感受一下。<br>我们也可以回忆一下在工作中编写的代码，是不是有遵守接口隔离原则？在特定的场景下，如果很多类实现了同一个接口，并且都只实现了接口的极少部分方法，这时候很有可能就是接口隔离性不好，就要去分析能不能把方法拆分到不同的接口。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>接口隔离原则最最最重要一点就是要<strong>根据实际情况，具体业务具体分析</strong>，不能犯了上面说到的错误：在老父亲的运营模式下，按儿子的工序划分接口去实现，那样子会得不偿失。</p>
+<p>参考资料：《大话设计模式》、《Java设计模式》、《设计模式之禅》、《研磨设计模式》、《Head First 设计模式》</p>
+<p>希望文章对您有所帮助，设计模式系列会持续更新，感兴趣的同学可以关注公众号，第一时间获取文章推送阅读，也可以一起交流，交个朋友。</p>
+<p><a href="https://mp.weixin.qq.com/mp/homepage?__biz=MzIxMzgwMTAyMg==&amp;hid=2&amp;sn=c97b64288d92312f57d3c8298f8d8888" target="_blank" rel="noopener">公众号之设计模式系列文章</a></p>
+<center><br><br>LieBrother<br><br><img src="http://www.liebrother.com/upload/df81ac224abe46b38131a0e78f4dcf9c_wechat.jpg" alt="公众号"><br><br></center>
 
           
         
@@ -355,8 +363,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/06/Hive安装配置/" itemprop="url">
-                  Hive安装配置
+                <a class="post-title-link" href="/2019/01/01/dependence-inversion-principle/" itemprop="url">
+                  依赖倒置原则
                 </a>
               
             
@@ -369,38 +377,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-06T19:22:38+08:00" content="2016-04-06">
-              2016-04-06
+            <time itemprop="dateCreated" datetime="2019-01-01T20:32:25+08:00" content="2019-01-01">
+              2019-01-01
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Hive/" itemprop="url" rel="index">
-                    <span itemprop="name">Hive</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/06/Hive安装配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/06/Hive安装配置/" itemprop="commentsCount"></span>
+                <a href="/2019/01/01/dependence-inversion-principle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/01/01//dependence-inversion-principle/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -410,7 +399,7 @@
 
           
           
-             <span id="/2016/04/06/Hive安装配置/" class="leancloud_visitors" data-flag-title="Hive安装配置">
+             <span id="/2019/01/01/dependence-inversion-principle/" class="leancloud_visitors" data-flag-title="依赖倒置原则">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -433,14 +422,57 @@
       
         
           
-            <p>1.下载解压安装包<br>下载链接：<a href="https://1csh1.github.io/file/Hive安装配置/apache-hive-1.2.1-bin.tar.gz">apache-hive-1.2.1-bin.tar.gz</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf apache-hive-1.2.1-bin.tar.gz</span><br></pre></td></tr></table></figure>
-<p>2.启动Hadoop<br>可以参考：<a href="https://1csh1.github.io/2016/03/27/Hadoop2.x%E9%85%8D%E7%BD%AEHA/">Hadoop2.x配置HA</a></p>
-<p>4.在$HIVE_HOME/bin目录下执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./hive</span><br></pre></td></tr></table></figure>
-<p>5.创建表test</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@node1 bin]# ./hive</span><br><span class="line">Logging initialized using configuration in jar:file:/csh/software/apache-hive-1.2.1-bin/lib/hive-common-1.2.1.jar!/hive-log4j.properties</span><br><span class="line">hive&gt; create table test (a int);</span><br><span class="line">OK</span><br><span class="line">Time taken: 41.704 seconds</span><br></pre></td></tr></table></figure>
-<p>6.访问HDFS文件系统可以查看到test文件夹【创建一个表，就会在/user/hive/warehouse文件下创建对应的文件夹】<br><img src="https://1csh1.github.io/img/Hive安装配置/Hive安装配置.png" alt="Hive安装配置"></p>
+            <p><img src="http://www.liebrother.com/upload/e4307f405e974a3a8e580392aebd1a92_0014_01.jpg" alt="雪"> </p>
+<p>2019 新年第一篇。</p>
+<blockquote>
+<p>设计模式六大原则之三：依赖倒置原则。</p>
+</blockquote>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>姓名</strong> ：依赖倒置原则</p>
+<p><strong>英文名</strong> ：Dependence Inversion Principle</p>
+<p><strong>价值观</strong> ：大男子主义的典型代表，什么都得通过老大或者老爸同意。</p>
+<p><strong>伴侣</strong> ：一定是个温柔体贴的女子。</p>
+<p><strong>个人介绍</strong> ：</p>
+<ol>
+<li>High level modules should not depend upon low level modules.Both should depend upon abstractions. 高层模块不应该依赖低层模块，两者都应该依赖其抽象（模块间的依赖通过抽象发生，实现类之间不发生直接的依赖关系，其依赖关系是通过接口或抽象类产生的）</li>
+<li>Abstractions should not depend upon details. 抽象不应该依赖细节（接口或抽象类不依赖于实现类）</li>
+<li>Details should depend upon abstractions. 细节应该依赖抽象（实现类依赖接口或抽象类）</li>
+</ol>
+<p>给大家讲个故事，我胡乱想的，如有雷同，肯定是英雄所见略同。那必须交个朋友。</p>
+<p>一个小村里，有两家饭馆，虽然挂着不同的牌子，挨在一起，但是老板确是表兄弟。这两兄弟抠得很，为了节省成本，密谋了一个想法：在两家饭馆谁家忙的时候，可以让不忙的那家的员工过去支援一下。这样子，本来每家饭馆都需要 2 个洗碗工，总共需要 4 个，他们就只招了 3 个，省了 1 个洗碗工的成本，当然不止洗碗工，还有服务员等等。两兄弟约定了规则：</p>
+<ol>
+<li>A 饭馆需要支援的时候，B 饭馆老板，让 B 饭馆老板选哪个员工去支援，不能直接让 A 饭馆的员工直接找 B 饭馆的员工去帮忙，但可以让 A 饭馆员工找 B饭馆老板告知需要支援。</li>
+<li>虽然老板权利大，但是也不能说 A 饭馆老板直接叫 B 饭馆的员工去帮忙。</li>
+<li>员工没有真实的老板，今天为 A 饭馆工作就是 A 饭馆的员工，没有跟定哪个老板。</li>
+</ol>
+<p>大概通过这个小故事，描述了依赖倒置原则的基本内容。</p>
+<h2 id="代码体现"><a href="#代码体现" class="headerlink" title="代码体现"></a>代码体现</h2><p>下面通过代码来模拟这个故事。</p>
+<h3 id="错误的示范"><a href="#错误的示范" class="headerlink" title="错误的示范"></a>错误的示范</h3><p>这个错误的示范将就看哈，可能有些问题没描述清楚。</p>
+<h4 id="老板和员工抽象"><a href="#老板和员工抽象" class="headerlink" title="老板和员工抽象"></a>老板和员工抽象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Boss</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">support</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">askHelp</span><span class="params">(Boss boss)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Staff</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">askHelp</span><span class="params">(Boss boss)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="老板具体类"><a href="#老板具体类" class="headerlink" title="老板具体类"></a>老板具体类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BossA</span> <span class="keyword">extends</span> <span class="title">Boss</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> StaffA staffA;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BossA</span><span class="params">(StaffA staffA)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.staffA = staffA;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">support</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        staffA.service();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">askHelp</span><span class="params">(Boss boss)</span> </span>&#123;</span><br><span class="line">        boss.support();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BossB</span> <span class="keyword">extends</span> <span class="title">Boss</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> StaffB staffB;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BossB</span><span class="params">(StaffB staffB)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.staffB = staffB;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">support</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        staffB.service();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">askHelp</span><span class="params">(Boss boss)</span> </span>&#123;</span><br><span class="line">        boss.support();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="员工具体类"><a href="#员工具体类" class="headerlink" title="员工具体类"></a>员工具体类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StaffA</span> <span class="keyword">extends</span> <span class="title">Staff</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StaffA</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setName(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">service</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="keyword">this</span>.getName() + <span class="string">"提供服务"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">askHelp</span><span class="params">(Boss boss)</span> </span>&#123;</span><br><span class="line">        boss.support();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StaffB</span> <span class="keyword">extends</span> <span class="title">Staff</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StaffB</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setName(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">service</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="keyword">this</span>.getName() + <span class="string">"提供服务"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">askHelp</span><span class="params">(Boss boss)</span> </span>&#123;</span><br><span class="line">        boss.support();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 初始化老板和员工 */</span></span><br><span class="line">StaffA staffA = <span class="keyword">new</span> StaffA(<span class="string">"A 员工"</span>);</span><br><span class="line">StaffB staffB = <span class="keyword">new</span> StaffB(<span class="string">" B 员工"</span>);</span><br><span class="line">Boss bossA = <span class="keyword">new</span> BossA(staffA);</span><br><span class="line">Boss bossB = <span class="keyword">new</span> BossB(staffB);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** A 老板向 B 老板求支援 */</span></span><br><span class="line">bossA.askHelp(bossB); <span class="comment">// 打印出：B 员工提供服务</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** B 员工向 A 老板求支援 */</span></span><br><span class="line">staffB.askHelp(bossA); <span class="comment">// 打印出：A 员工提供服务</span></span><br></pre></td></tr></table></figure>
+<p>好像看起来实现了要求了，但是其实这段代码没有按照上面的 3 点规则编写，破坏了第 3 点规则，老板们的员工没有用员工的抽象类，破坏了细节依赖抽象这一点。设想一下，假如现在 A 老板把 A 员工辞退了，重新招了个 C 员工，那么怎么实现呢？是不是需要再新增一个 StaffC 类，然后再修改 BossA 类代码，把 StaffA 换成 StaffC。这样超级麻烦，在平时写项目中要时刻考虑这一点：在具体实现类使用其他类，是不是可以用其抽象类？</p>
+<p>代码：</p>
+<p><a href="https://github.com/1CSH1/DesignPatterns/blob/master/src/com/liebrother/designpatterns/dip/DIPErrorTest.java" target="_blank" rel="noopener">DIPErrorTest.java</a></p>
+<h3 id="正确的示范"><a href="#正确的示范" class="headerlink" title="正确的示范"></a>正确的示范</h3><p>看了上面那个憋屈的代码，再来看下面简洁的代码，才会发现依赖倒置原则是多么强大。</p>
+<h4 id="老板和员工抽象类"><a href="#老板和员工抽象类" class="headerlink" title="老板和员工抽象类"></a>老板和员工抽象类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Boss2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Staff2 staff;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Boss2</span><span class="params">(Staff2 staff)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.staff = staff;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">support</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">askHelp</span><span class="params">(Boss2 boss)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStaff</span><span class="params">(Staff2 staff)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.staff = staff;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Staff2 <span class="title">getStaff</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> staff;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Staff2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">askHelp</span><span class="params">(Boss2 boss)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="老板类"><a href="#老板类" class="headerlink" title="老板类"></a>老板类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BossImpl</span> <span class="keyword">extends</span> <span class="title">Boss2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BossImpl</span><span class="params">(Staff2 staff)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(staff);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">support</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.getStaff().service();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">askHelp</span><span class="params">(Boss2 boss)</span> </span>&#123;</span><br><span class="line">        boss.support();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="员工类"><a href="#员工类" class="headerlink" title="员工类"></a>员工类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StaffImpl</span> <span class="keyword">extends</span> <span class="title">Staff2</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">StaffImpl</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setName(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">service</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="keyword">this</span>.getName() + <span class="string">"提供服务"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">askHelp</span><span class="params">(Boss2 boss)</span> </span>&#123;</span><br><span class="line">        boss.support();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="测试类"><a href="#测试类" class="headerlink" title="测试类"></a>测试类</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 正确示范 */</span></span><br><span class="line">Staff2 staffA2 = <span class="keyword">new</span> StaffImpl(<span class="string">"A 员工"</span>);</span><br><span class="line">Staff2 staffB2 = <span class="keyword">new</span> StaffImpl(<span class="string">"B 员工"</span>);</span><br><span class="line">Boss2 bossA2 = <span class="keyword">new</span> BossImpl(staffA2);</span><br><span class="line">Boss2 bossB2 = <span class="keyword">new</span> BossImpl(staffB2);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** A 老板向 B 老板求支援 */</span></span><br><span class="line">bossA2.askHelp(bossB2); <span class="comment">// 打印出：B 员工提供服务</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** B 员工向 A 老板求支援 */</span></span><br><span class="line">staffB2.askHelp(bossA2); <span class="comment">// 打印出：A 员工提供服务</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** A 老板辞退了 A 员工，换成了 C 员工 */</span></span><br><span class="line">Staff2 staffC2 = <span class="keyword">new</span> StaffImpl(<span class="string">"C 员工"</span>);</span><br><span class="line">bossA2.setStaff(staffC2);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** B 员工向 A 老板求支援 */</span></span><br><span class="line">staffB2.askHelp(bossA2); <span class="comment">// 打印出：C 员工提供服务</span></span><br></pre></td></tr></table></figure>
+<p>这代码相比上面错误的示范，简洁了很多，实现的功能却更灵活，这就是依赖倒置原则强大的地方，它可以将类的耦合性降低，提供灵活的处理。</p>
+<p>代码：</p>
+<p><a href="https://github.com/1CSH1/DesignPatterns/blob/master/src/com/liebrother/designpatterns/dip/DIPRightTest.java" target="_blank" rel="noopener">DIPRightTest.java</a></p>
+<h3 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h3><ol>
+<li>变量的表面类型尽量是接口或者是抽象类</li>
+<li>任何类都不应该从具体类派生</li>
+<li>尽量不要覆写基类的方法</li>
+<li>结合里氏替换原则使用<br>（来自《设计模式之禅》）</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总的来说，要实现依赖倒置原则，要有『面向接口编程』这个思维，掌握好这个思维后，就可以很好的运用依赖倒置原则。</p>
+<p>参考资料：《大话设计模式》、《Java设计模式》、《设计模式之禅》、《研磨设计模式》、《Head First 设计模式》</p>
+<p>希望文章对您有所帮助，设计模式系列会持续更新，感兴趣的同学可以关注公众号，第一时间获取文章推送阅读，也可以一起交流，交个朋友。</p>
+<p><a href="https://mp.weixin.qq.com/mp/homepage?__biz=MzIxMzgwMTAyMg==&amp;hid=2&amp;sn=c97b64288d92312f57d3c8298f8d8888" target="_blank" rel="noopener">公众号之设计模式系列文章</a></p>
+<center><br><br><img src="http://www.liebrother.com/upload/df81ac224abe46b38131a0e78f4dcf9c_wechat.jpg" alt="公众号"><br><br></center>
 
           
         
@@ -486,8 +518,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/03/今天你在哪一步？/" itemprop="url">
-                  今天你在哪一步？
+                <a class="post-title-link" href="/2018/12/31/2018-summary/" itemprop="url">
+                  我的 2018
                 </a>
               
             
@@ -500,38 +532,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-03T12:31:37+08:00" content="2016-04-03">
-              2016-04-03
+            <time itemprop="dateCreated" datetime="2018-12-31T15:29:08+08:00" content="2018-12-31">
+              2018-12-31
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/生活人生/" itemprop="url" rel="index">
-                    <span itemprop="name">生活人生</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/03/今天你在哪一步？/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/03/今天你在哪一步？/" itemprop="commentsCount"></span>
+                <a href="/2018/12/31/2018-summary/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/12/31//2018-summary/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -541,7 +554,7 @@
 
           
           
-             <span id="/2016/04/03/今天你在哪一步？/" class="leancloud_visitors" data-flag-title="今天你在哪一步？">
+             <span id="/2018/12/31/2018-summary/" class="leancloud_visitors" data-flag-title="我的 2018">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -564,7 +577,29 @@
       
         
           
-            <center><br><img src="https://1csh1.github.io/img/今天你在哪一步？/今天你在哪一步.jpg" alt="今天你在哪一步"><br></center>
+            <p><img src="http://www.liebrother.com/upload/ba63d845774a4e0598fa17487e063c29_0041_01.jpg" alt="景"> </p>
+<blockquote>
+<p>在前进的路上，别忘了走过的路。</p>
+</blockquote>
+<p>昨晚写了设计模式原则第三篇『依赖倒置原则』，写得比较晚，所以没有发布，想着今天早上来发。早上醒来，看了朋友圈，才发现今天是 2018 最后一天，内心有一股强大的力量促使我暂停发布昨晚的文章，今天做一波总结，写一篇总结文章，给 2018 一个交代，也给 2019 一个期待。生活好像就得有一些仪式感。</p>
+<p>这是我的第一次年度总结，没有时间去准备、去构思，只是心血来潮，只能根据时间线，记录一下这一年发生的人与事，回忆当时那个场景，感受那时的心灵，反思那会的思想。</p>
+<h2 id="多灾多难的开端"><a href="#多灾多难的开端" class="headerlink" title="多灾多难的开端"></a><strong>多灾多难的开端</strong></h2><p>元旦到过年这一个半月没有什么触发内心的，甚至想起写这篇文章的时候，心里就是以过年后的时间线开始，可能是正月发生的事情真的很触动我的心灵。过年走亲戚闲聊都在说今年的经济会走下滑，因为十年一轮回的经济已经从 2008 年后深得人心，心里想着这些是大家都需要经历的事情，没有很特别需要注意的，可接下来发生的事情，让我真的感觉这一年有点悬。</p>
+<p>年后上班，没有啥特别的，还是一个人住一个单间的，在 2 公里远的写字楼上班。记得是上班的第二天，晚上睡觉前好好的，第二天起来发现左膝盖不对劲，动不了，弯曲都很刺痛。这种状况持续了 2 周，期间贴了很多膏药，算恢复得不错。那 2 周停止了任何的运动，包括爬楼梯、打球、骑单车。其实从小就膝盖不怎么好过，经常会无缘无故的酸痛，还记得小时候晚上痛得不行哭起来，长大后基本上就没有出现膝盖酸痛了。经过大概一个月的修养，也不算修养，只是特别注意膝盖的一些运动，恢复得差不多了，也可以正常打球，算是 2018 第一件记忆犹新的事情。</p>
+<p>厄运来临。一个周日早上，在公司加班，大姐突然发了微信过来，其中发了一张车祸的照片，从照片看不清是谁，因为整个人的脸都肿了，没法看清五官。大姐说是二伯出车祸了，很严重。刚看完这一句，眼泪就掉下来了，那种感觉真的是平生第一次感受到，言语无法表达这种感觉。忍着心疼的心情，立马打电话给老爸，他那会正在警察局里面处理这件事，我问他严重么？他回了应该不行了，要有心理准备。这时我已经说不出话来，怕对面父亲听到，只能草草说爸你先去忙。那段时间整个家族心情都很沉重，很多人都睡不着觉，最后二伯还是走了。每当夜里想起这件事还会流眼泪，因为二伯是最疼我的，从小到大，小时候最喜欢去他家，他会带我去他的菜园玩、去抓青蛙，等到我们那边有了游泳池，虽然也要十几公里，但是他还是会骑着电车载我去游泳，游泳回来后就去吃牛肉粿条，整个夏天几乎每周都去。想到这里，我反思了自己，自从毕业工作后，很少很少去拜访叔伯，这让我很触动，不知道大家在外面工作有没有也很少去关心家里的长辈？有的话，希望我们都有所改变，我也准备今年过年每家每户都去拜访，不再让自己遗憾。</p>
+<p>这些事之后，在和家人闲聊中，感慨今年是个多事年。</p>
+<h2 id="跳槽"><a href="#跳槽" class="headerlink" title="跳槽"></a><strong>跳槽</strong></h2><p>这次跳槽，算是一次 follow my heart，毕业之后来到招商银行这边做开发，来之前就听一些师兄指导，要做技术的话，可能不是一个好的选择。年轻气盛的我并不赞同，觉得这取决于个人，而不是环境。还记得当初离开实习的单位，和 HR 交流，说了一句：自己选择的路，跪着也要走完。这一年半不算是跪着走完的，我这么认为，每个人走过的路都是有价值的。在招行领导确实也很器重，让我加入了新的项目组，负责更多新的东西，包括后台框架 Spring Cloud、前端框架 Angular、云平台运维等等。让我触动要离职的主要原因是要进互联网企业。这一年半虽然不长，但是和一些在互联网工作的朋友交流过程中，我发现和他们的差距已经不小了，不管从技能还是其他方面都是。复习了一段时间后，拿到了 offer，并提出了离职。领导找了谈话，从早上 9 点谈到了下午 5 点，期间没喝过一滴水、没上过洗手间、更别说吃饭了。总的来说，心里一直很感激领导以及同事们这一年半的照顾。</p>
+<p>来到了 360金融 这边做风控平台相关的工作，对我来说是一个新的领域，之前在银行接触的是一些账户相关的业务，来这边接触的是风控相关的业务。目前还在熟悉还在加速学习。以后有机会可以给大家分享一些这方面的知识。</p>
+<h2 id="花光所有钱"><a href="#花光所有钱" class="headerlink" title="花光所有钱"></a><strong>花光所有钱</strong></h2><p>第一次感受到花光所有钱的感觉。工作了一年半，攒了十来万，年中的时候全花完。老家宅基地要打桩，总共需要 20 多万，和我哥一起分摊，大概十来万，全都花光光，没有啥特别的感觉，但是就是觉得真的可以一件事就把你的钱全掏空，不管你有多少钱，总有哪些一些事情去匹配到你拥有的那个价位。因为有了这么一件事，所以在后面和朋友或者前辈交流的过程中，偶尔会谈到这个问题，有朋友同时毕业，她所有钱也都花光在家里购置宅基地的这些事情上，前辈交流中，他们也表示很能理解刚毕业前 5 年出现的这种事情，他们说是正常的，特别是咱们这些从农村来到大城市打拼的人，父母辛辛苦苦把咱们养大成人，我们赚到钱也需要在老家的一些基础设施上，也算是让父母能够更好的生活。虽然只是打桩，并没有改变很多，但是会慢慢去改善家里的生活。今年还发现老家因为建设规划多了一条路，现在的房子会被拆掉，这次打桩，也算是为以后的居住做一点点准备。</p>
+<h2 id="租客的无奈"><a href="#租客的无奈" class="headerlink" title="租客的无奈"></a><strong>租客的无奈</strong></h2><p>5 月份换了工作，搬了一次家，农民房，什么家居都得自己安排上，也算是安稳下来；才住了 2 个月，就被房东通知楼房需要改造，限时一个月搬出，挺蛋疼的。这时才感受到租客的无奈，有人戏称，在大城市就是给房东打工，一间不到 30 平方的房，一个月 2200 的房租，还仅仅是农民房，随时都可能被赶走。虽然这些都是不争的事实，以个人之力也无法改变，所以只能积极一些想，让自己强大起来。用 NBA 经常看到的那句话『<strong>那些不能击垮你的，终将使你强大</strong>』。</p>
+<h2 id="领证"><a href="#领证" class="headerlink" title="领证"></a><strong>领证</strong></h2><p>2018.12.12 这个日子应该终生铭记。和女朋友结束了 7 年的异地恋，在这个日子里，我们领了人生一大证：结婚证。程序猿不是应该是单身狗么？哈哈，在做程序员之前谈的，可能当时有远见，要是当时没谈，当上程序员之后，估计现在还是单身。没想到这么快，就已经到了该结婚的年龄，今年身边的朋友、同学等等，很多都结婚了。就像一位好友说的：<strong>成家了，该立业了。</strong> 嗯，有那么一句话：『<strong>能力越大，责任越大</strong>』，现在责任大了，能力也得跟上。加油吧少年。</p>
+<h2 id="分享"><a href="#分享" class="headerlink" title="分享"></a><strong>分享</strong></h2><p>12 月开始重新写公众号、博客，也算是一个想让自己能力提高的方法，反思了过去陆陆续续记录下来的博客，主要原因还是缺乏坚持，经常写一段时间就断一段时间。记得目前印象中坚持最久的一件事是跑步，最长的是连续 55 天跑步。这一次不仅要坚持写，而且要把它当做产品来做，学习如何运营等等。为什么有这个想法呢？原因是今年看了一些产品的书籍，但是没有运用的地方，所以想尝试一下，这才是学习的一个好的方法。最重要的一点就是要分享对大家有用、有意义的东西，这样才能有所成长，不会浪费大家的阅读时间。期待你我共同进步。</p>
+<h2 id="那些琐碎的记录"><a href="#那些琐碎的记录" class="headerlink" title="那些琐碎的记录"></a><strong>那些琐碎的记录</strong></h2><p>看的书籍：</p>
+<p>《你的团队需要一个会讲故事的人》<br>《软技能 代码之外的生存指南》<br>《从点子到产品：产品经理的价值观与方法论》<br>《人人都是产品经理——写给产品新人》<br>《风控：大数据时代下的信贷风险管理和实践》<br>《产品的视角：从热闹到门道》<br>《互联网金融风险控制》<br>《产品经理必懂的技术那点事儿：成为全栈产品经理》<br>《遇见未知的自己》<br>《阿里巴巴Java开发手册》<br>《MySQL技术内幕-InnoDB存储引擎》</p>
+<p>还有一些忘记了，没有养成记录的习惯，也没有总结这些书的一些感悟，所以读过了就过了，接下来也要养成阅读的习惯，给自己一个要求，为读过的每一本书写一篇后感，和大家分享。</p>
+<p>买了十几个极客时间的专栏，真正学习下去的时间屈指可数，得继续补充。</p>
+<p>从 7 月份开始健身，主要目的就是锻炼，让身体更加健康，坚持下来了，基本每周最少去 2 次，继续保持。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><p>第一次写总结，回顾了 2018 这一年，没有很细腻去描述、没有浮夸的语言，只有那真实的内心写照。『<strong>别走得太快，有时候停下来，回想一下经历过的东西，会发现不一样的价值</strong>』这是年初阿里的面试官送的一句话，分享给大家，一起共勉。</p>
+<center><br>LieBrother<br><br><img src="http://www.liebrother.com/upload/df81ac224abe46b38131a0e78f4dcf9c_wechat.jpg" alt="wechatjpg"><br></center>
           
         
       
@@ -609,8 +644,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/02/HBase完全分布式配置/" itemprop="url">
-                  HBase完全分布式配置
+                <a class="post-title-link" href="/2018/12/28/liskov-substitution-principle/" itemprop="url">
+                  里氏替换原则
                 </a>
               
             
@@ -623,38 +658,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-02T22:53:26+08:00" content="2016-04-02">
-              2016-04-02
+            <time itemprop="dateCreated" datetime="2018-12-28T22:57:13+08:00" content="2018-12-28">
+              2018-12-28
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/HBase/" itemprop="url" rel="index">
-                    <span itemprop="name">HBase</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/02/HBase完全分布式配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/02/HBase完全分布式配置/" itemprop="commentsCount"></span>
+                <a href="/2018/12/28/liskov-substitution-principle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/12/28//liskov-substitution-principle/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -664,7 +680,7 @@
 
           
           
-             <span id="/2016/04/02/HBase完全分布式配置/" class="leancloud_visitors" data-flag-title="HBase完全分布式配置">
+             <span id="/2018/12/28/liskov-substitution-principle/" class="leancloud_visitors" data-flag-title="里氏替换原则">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -687,49 +703,54 @@
       
         
           
-            <table>
-<thead>
-<tr>
-<th style="text-align:center">Node Name</th>
-<th style="text-align:center">Master</th>
-<th style="text-align:center">ZooKeeper</th>
-<th style="text-align:center">RegionServer</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">node1</td>
-<td style="text-align:center">yes</td>
-<td style="text-align:center">yes</td>
-<td style="text-align:center">no</td>
-</tr>
-<tr>
-<td style="text-align:center">node2</td>
-<td style="text-align:center">backup</td>
-<td style="text-align:center">yes</td>
-<td style="text-align:center">yes</td>
-</tr>
-<tr>
-<td style="text-align:center">node3</td>
-<td style="text-align:center">no</td>
-<td style="text-align:center">yes</td>
-<td style="text-align:center">yes</td>
-</tr>
-</tbody>
-</table>
-<p>1.配置conf/regionservers</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node2</span><br><span class="line">node3</span><br></pre></td></tr></table></figure>
-<p>2.创建conf/backup-masters</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node2</span><br></pre></td></tr></table></figure>
-<p>3.配置 hbase-site.xml</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://node1:9000/hbase&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.zookeeper.property.dataDir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/csh/hadoop/zookeeper&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;指定HBase的运行模式：false：单机模式或者伪分布模式； true：完全分布式模式&lt;/description&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.master&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;hdfs://node1:60000&lt;/value&gt;</span><br><span class="line">    &lt;description&gt;指定master位置&lt;/description&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;node1,node2,node3&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
-<p>4.将配置文件拷贝到node2、node3中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">scp /csh/software/hbase-1.1.4/conf/* root@node2:/csh/software/hbase-1.1.4/conf/</span><br><span class="line">scp /csh/software/hbase-1.1.4/conf/* root@node3:/csh/software/hbase-1.1.4/conf/</span><br></pre></td></tr></table></figure>
-<p>5.启动HBase（在node1启动）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./start-hbase.sh</span><br></pre></td></tr></table></figure>
-<p>6.jps查看结果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">//node1</span><br><span class="line">4339 Jps</span><br><span class="line">4122 HMaster</span><br><span class="line">4047 HQuorumPeer</span><br><span class="line"></span><br><span class="line">//node2</span><br><span class="line">3313 HQuorumPeer</span><br><span class="line">3810 Jps</span><br><span class="line">3447 HMaster</span><br><span class="line">3374 HRegionServer</span><br><span class="line"></span><br><span class="line">//node3</span><br><span class="line">2981 HQuorumPeer</span><br><span class="line">3048 HRegionServer</span><br><span class="line">3230 Jps</span><br></pre></td></tr></table></figure>
-
+            <p><img src="http://www.liebrother.com/upload/1a0c50c39c034d05bcf77c2b591520d9_0013_01.jpg" alt="景"> </p>
+<blockquote>
+<p>设计模式六大原则之二：里氏替换原则。</p>
+</blockquote>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><strong>姓名</strong> ：里氏替换原则</p>
+<p><strong>英文名</strong> ：Liskov Substitution Principle</p>
+<p><strong>座右铭</strong> ：</p>
+<ol>
+<li><p>If for each object o1 of type S there is an object o2 of type T such that for all programs P defined in terms of T,the behavior of P is unchanged when o1 is substituted for o2 then S is a subtype of T.<br>如果对每一个类型为S的对象o1，都有类型为T的对象o2，使得以T定义的所有程序P在所有的对象o1都代换成o2时，程序P的行为没有发生变化，那么类型S是类型T的子类型。</p>
+</li>
+<li><p>Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it.<br>所有引用基类的地方必须能透明地使用其子类的对象。</p>
+</li>
+</ol>
+<p>这 2 个定义来自《设计模式之禅》，比较干巴巴，不认真思考起来可能不太容易懂。简单来说就是定义了什么是父子。在现实生活中，什么是父子？就是生你的那个男人和你的关系就是父子（父女）。而这里定义的就是假如 A 能胜任 B 干的所有事情，那 B 就是 A 的父亲，也就是儿子要会父亲的所有能活，儿子活得再烂也要有父亲的水平。</p>
+<p><strong>价值观</strong> ：很显然，比较传统，严父出孝子。儿子必须要有父亲的能耐，最好青出于蓝胜于蓝。</p>
+<p><strong>伴侣</strong> ：估计有个贤惠的老婆，才能有这么优秀的儿子。</p>
+<p><strong>个人介绍</strong> ：我比较严厉，也是为了生存没办法，只有一辈一辈地变优秀，一直坚持下去，家族就会越来越好。这样就可以富过三代，你看你们人类不是经常说富不过三代。。。扎心了老铁，老子还是富零代。</p>
+<h3 id="老爹开车，前方注意"><a href="#老爹开车，前方注意" class="headerlink" title="老爹开车，前方注意"></a>老爹开车，前方注意</h3><p>里氏替换原则定义了什么是父子，还有一点要注意的，就是儿子不能在父亲会的技能上搞“创新”。<br>比如父亲会做红烧排骨，儿子在新东方烹饪学校中学到了一招，在红烧排骨里面加糖和醋，变成红烧糖醋排骨，更加美味，看代码，儿子在父亲的基础红烧排骨上加了糖醋，好像没啥问题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Father1</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">braisedRibs</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"红烧排骨"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Son1</span> <span class="keyword">extends</span> <span class="title">Father1</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">braisedRibs</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"红烧糖醋排骨"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行下面代码，会打印：红烧排骨</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Father1 father1 = <span class="keyword">new</span> Father1();</span><br><span class="line">father1.braisedRibs();</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">我们上面说过，所有在使用父亲的地方，都能够替换成儿子，并且效果是一样的，那接下来我们改一下代码。</span><br><span class="line"></span><br><span class="line">``` java</span><br><span class="line">Son1 son1 = <span class="keyword">new</span> Son1();</span><br><span class="line">son1.braisedRibs();</span><br></pre></td></tr></table></figure>
+<p>结果是啥？打印出：红烧糖醋排骨，出乎意料吧。。。这结果完全不一样。想一下上面说的：老爸会的老子也要会，很明显，上面的例子老子不会红烧排骨，只会红烧糖醋排骨，所以这根本不是父子关系。</p>
+<p>那应该怎么实现呢？其实红烧排骨和红烧糖醋排骨这压根就是 2 道菜，你去餐馆吃饭的时候，你点红烧排骨服务员给你送来红烧糖醋排骨，或者你点红烧糖醋排骨服务员给你送来红烧排骨，你这时候不生气，算我输。</p>
+<p>来看看 Son2，Son2 将红烧糖醋改为 braisedSweetAndSourPorkRibs （翻译不好找 Google 算账去哈，反正不是我翻译的）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Son2</span> <span class="keyword">extends</span> <span class="title">Father1</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">braisedSweetAndSourPorkRibs</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"红烧糖醋排骨"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试一下是不是好儿子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Son2 son2 = <span class="keyword">new</span> Son2();</span><br><span class="line">son2.braisedRibs();</span><br><span class="line">son2.braisedSweetAndSourPorkRibs();</span><br></pre></td></tr></table></figure>
+<p>打印出：<br>红烧排骨<br>红烧糖醋排骨</p>
+<p>这才是 Father1 的好儿子嘛，不仅会红烧排骨，还会红烧糖醋排骨。所以说里氏替换原则就是在定义父子关系，大家都遵守这个定义，就会一代比一代好，不遵守大家也看到了，把前辈传下来的都毁于一旦了。</p>
+<p>代码见：<a href="https://github.com/1CSH1/DesignPatterns/blob/master/src/com/liebrother/designpatterns/lsp/LSPTest.java" target="_blank" rel="noopener">LSPTest.java</a></p>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p>下面再贴一下书本上的一些优缺点</p>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><ol>
+<li>代码共享，减少创建类的工作量，每个子类都拥有父类的方法和属性；</li>
+<li>提高代码的重用性；</li>
+<li>子类可以形似父类，但又异于父类，“龙生龙，凤生凤，老鼠生来会打洞”是说子拥有父的“种”，“世界上没有两片完全相同的叶子”是指明子与父的不同；</li>
+<li>提高代码的可扩展性，实现父类的方法就可以“为所欲为”了，君不见很多开源框架的扩展接口都是通过继承父类来完成的；</li>
+<li>提高产品或项目的开放性。</li>
+</ol>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ol>
+<li>继承是侵入性的。只要继承，就必须拥有父类的所有属性和方法；</li>
+<li>降低代码的灵活性。子类必须拥有父类的属性和方法，让子类自由的世界中多了些约束；</li>
+<li>增强了耦合性。当父类的常量、变量和方法被修改时，需要考虑子类的修改，而且在缺乏规范的环境下，这种修改可能带来非常糟糕的结果————大段的代码需要重构。<br>(来自《设计模式之禅》)</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>好了，里氏替换原则的大概原理讲得差不多，大家只要记住是在定义“父子关系”，就像游戏规则一样，定义后让大家遵守，会让大家的程序在后面越来越复杂的时候也能清晰，而不会越来越乱。</p>
+<p>参考资料：《大话设计模式》、《Java设计模式》、《设计模式之禅》、《研磨设计模式》、《Head First 设计模式》</p>
+<p>希望文章对您有所帮助，设计模式系列会持续更新，感兴趣的同学可以关注公众号，第一时间获取文章推送阅读，也可以一起交流，交个朋友。</p>
+<p><a href="https://mp.weixin.qq.com/mp/homepage?__biz=MzIxMzgwMTAyMg==&amp;hid=2&amp;sn=c97b64288d92312f57d3c8298f8d8888" target="_blank" rel="noopener">公众号之设计模式系列文章</a></p>
+<center><br>LieBrother<br><br><img src="http://www.liebrother.com/upload/df81ac224abe46b38131a0e78f4dcf9c_wechat.jpg" alt="wechatjpg"><br></center>
           
         
       
@@ -774,8 +795,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/02/HBase单机模式配置/" itemprop="url">
-                  HBase单机模式配置
+                <a class="post-title-link" href="/2018/12/26/single-responsibility-principle/" itemprop="url">
+                  单一职责原则
                 </a>
               
             
@@ -788,38 +809,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-02T22:43:26+08:00" content="2016-04-02">
-              2016-04-02
+            <time itemprop="dateCreated" datetime="2018-12-26T22:58:12+08:00" content="2018-12-26">
+              2018-12-26
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/HBase/" itemprop="url" rel="index">
-                    <span itemprop="name">HBase</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/02/HBase单机模式配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/02/HBase单机模式配置/" itemprop="commentsCount"></span>
+                <a href="/2018/12/26/single-responsibility-principle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/12/26//single-responsibility-principle/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -829,7 +831,7 @@
 
           
           
-             <span id="/2016/04/02/HBase单机模式配置/" class="leancloud_visitors" data-flag-title="HBase单机模式配置">
+             <span id="/2018/12/26/single-responsibility-principle/" class="leancloud_visitors" data-flag-title="单一职责原则">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -852,15 +854,38 @@
       
         
           
-            <p>1.在hbase-env.sh中修改Java路径</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/csh/link/jdk</span><br><span class="line">export HBASE_PID_DIR=/csh/hadoop/hbase/pids</span><br></pre></td></tr></table></figure>
-<p>2.在hbase-site.xml中修改</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.rootdir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;file:///csh/hadoop/hbase&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;hbase.zookeeper.property.dataDir&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;/csh/hadoop/zookeeper&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
-<p>3.启动HBase</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/start-hbase.sh</span><br></pre></td></tr></table></figure>
-<p>4.连接HBase</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/hbase shell</span><br></pre></td></tr></table></figure>
-
+            <p><img src="http://www.liebrother.com/upload/5774f5e39f334c94bd20b08c2821652f_0012_01.jpg" alt=""> </p>
+<blockquote>
+<p>设计模式六大原则之一：单一职责原则</p>
+</blockquote>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><strong>姓名</strong> ：单一职责原则<br><strong>英文名</strong> ：Single Responsibility Principle<br><strong>座右铭</strong> ：There should never be more than one reason for a class to change. 应当有且仅有一个原因引起类的变更。。。意思就是不管干啥，我都只干一件事，你叫我去买菜，我就只买菜，叫我顺便去倒垃圾就不干了，就这么拽<br><strong>脾气</strong> ：一个字“拽”，两个字“特拽“<br><strong>伴侣</strong> ：老子职责单一，哪来的伴侣？<br><strong>个人介绍</strong> ：在这个人兼多责的社会里，我显得那么的特立独行，殊不知，现在社会上发生的很多事情都是因为没有处理好职责导致的，比如，经常有些父母带着小孩，一边玩手机，导致小孩弄丢、发生事故等等</p>
+<h3 id="单一职责应用范围"><a href="#单一职责应用范围" class="headerlink" title="单一职责应用范围"></a>单一职责应用范围</h3><p>单一职责原则适用的范围有接口、方法、类。按大家的说法，接口和方法必须保证单一职责，类就不必保证，只要符合业务就行。</p>
+<h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><p>设想一下这个场景：假设我们要做一个用户修改名字以及修改密码的功能，可以有多种实现方案，比如下面列举 2 种实现方式<br>代码：<a href="https://github.com/1CSH1/DesignPatterns/blob/master/src/com/liebrother/designpatterns/srp/SrpOfMethod.java" target="_blank" rel="noopener">SrpOfMethod.java</a></p>
+<h4 id="第一种实现方式"><a href="#第一种实现方式" class="headerlink" title="第一种实现方式"></a>第一种实现方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 错误的示范</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">enum</span> OprType &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 更新密码</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    UPDATE_PASSWORD,</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 更新名字</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    UPDATE_NAME;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">UserOpr</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">updateUserInfo</span><span class="params">(User user, OprType oprType)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserOprImpl</span> <span class="keyword">implements</span> <span class="title">UserOpr</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">updateUserInfo</span><span class="params">(User user, OprType oprType)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (oprType == OprType.UPDATE_NAME) &#123;</span><br><span class="line">            <span class="comment">// update name</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (oprType == OprType.UPDATE_PASSWORD) &#123;</span><br><span class="line">            <span class="comment">// update password</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="第二种实现方式"><a href="#第二种实现方式" class="headerlink" title="第二种实现方式"></a>第二种实现方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 正确的示范</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">UserOpr2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">updatePassword</span><span class="params">(User user, String password)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">updateUserInfo</span><span class="params">(User user)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserOprImpl2</span> <span class="keyword">implements</span> <span class="title">UserOpr2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">updatePassword</span><span class="params">(User user, String password)</span> </span>&#123;</span><br><span class="line">        user.setPassword(password);</span><br><span class="line">        <span class="comment">// update password</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">updateUserInfo</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// update user info</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2 种实现有什么区别呢？ 第一种实现通过 OprType 类型的不同来做不同的事情，把修改密码和修改名字耦合在一起，容易引起问题，只要稍不注意，传错枚举值就悲剧了，在代码中也没法很直接看到是做什么操作，也就是这个方法的职责不明确。而第二种实现，把修改密码和修改名字分离开来，也就是把修改密码和修改名字都当做独自的职责处理，这样子就很清晰明了，你调用哪个方法，就很明确的知道这个方法是实现什么逻辑。结论是啥呢？用第二种方式实习才符合单一职责原则。现实中看到很多像第一种实现的代码，而且是枚举有十来个的情况，看代码真费劲。</p>
+<h4 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h4><p>设想一下这个场景，假设我们让小明去倒垃圾，小红去买菜，小红回来后再叫小红去洗碗。下面也举 2 个实现的例子。<br>代码：<a href="https://github.com/1CSH1/DesignPatterns/blob/master/src/com/liebrother/designpatterns/srp/SrpOfInterface.java" target="_blank" rel="noopener">SrpOfInterface.java</a></p>
+<h4 id="第一种实现方式-1"><a href="#第一种实现方式-1" class="headerlink" title="第一种实现方式"></a>第一种实现方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 错误的示范</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Housework</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">shopping</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pourGarbage</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XiaoMing</span> <span class="keyword">implements</span> <span class="title">Housework</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">shopping</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 不购物</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourGarbage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"pourGarbage ..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XiaoHong</span> <span class="keyword">implements</span> <span class="title">Housework</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">shopping</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"shopping ..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pourGarbage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 从不倒垃圾</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>中途回来小红去洗碗，要怎么实现？按这个写法，就在 Housework 接口添加 washingUp() 方法，然后小明和小红依次都实现洗碗这个方法，只是小明不做具体实现代码，这样子是不是觉得很别扭，不符合单一职责原则的，修改一个地方，不影响其他不需要改变的地方，只对需要用到的地方做修改。小明本来就不用洗碗，却要去实现洗碗这个方法。</p>
+<h4 id="第二种实现方式-1"><a href="#第二种实现方式-1" class="headerlink" title="第二种实现方式"></a>第二种实现方式</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 正确的示范</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Shopping</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">doShopping</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">PourGarbage</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">doPourGarbage</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">WashingUp</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">doWashingUp</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XiaoMing2</span> <span class="keyword">implements</span> <span class="title">PourGarbage</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doPourGarbage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"pourGarbage ..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XiaoHong2</span> <span class="keyword">implements</span> <span class="title">Shopping</span>, <span class="title">WashingUp</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doShopping</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"shopping ..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doWashingUp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"washing up ..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，这种实现把不同的家务都当做不同的职责，分离开来，这种实现可以按需实现做家务的类型，小明只需要去倒垃圾，就实现 PourGarbage 接口，小红去购物和洗碗，就实现 Shopping 和 WashingUp 接口，完全不会影响到对方，这才是完美的根据单一职责原则编写出来的代码。</p>
+<h4 id="类"><a href="#类" class="headerlink" title="类"></a>类</h4><p>类这个看了一些资料都说没法硬性要求一定按单一职责原则分，或者说类的职责可大可小，没有很明确的像上面接口那样按照单一职责原则分就很清晰也很有道理。<br>设想一下这个场景：我们要实现一个用户注册、登录、注销操作，可以像如下 2 种实现方式<br>代码：<a href="https://github.com/1CSH1/DesignPatterns/blob/master/src/com/liebrother/designpatterns/srp/SrpOfClass.java" target="_blank" rel="noopener">SrpOfClass.java</a></p>
+<h4 id="第一种实现方式-2"><a href="#第一种实现方式-2" class="headerlink" title="第一种实现方式"></a>第一种实现方式</h4><p>从用户的角度考虑，这些操作都是用户的行为，可以放在一个统一的类 UserBiz</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserBiz</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">register</span><span class="params">(User user)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 注册操作</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">login</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 登录操作</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">logout</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 注销操作</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="第二种实现方式-2"><a href="#第二种实现方式-2" class="headerlink" title="第二种实现方式"></a>第二种实现方式</h4><p>有人又说，不是说单一职责么？从业务操作考虑，需要把注册、登录、注销分开</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserRegisterBiz</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">register</span><span class="params">(User user)</span></span>&#123;</span><br><span class="line">        <span class="comment">// 注册操作</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserLoginBiz</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">login</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 登录操作</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserLogoutBiz</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">logout</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 注销操作</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>感觉像是在抬杠，其实这个没有好坏之分，根据具体业务具体分析，你说你的登录、注册、注销操作代码很多，需要分开，那就分开，无可厚非。</p>
+<h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h3><ol>
+<li>类的复杂性降低，实现什么职责都有清晰明确的定义</li>
+<li>可读性提高，复杂性降低，那当然可读性提高了</li>
+<li>可维护性提高，可读性提高，那当然更容易维护了</li>
+<li>变更引起的风险降低，变更是必不可少的，如果接口的单一职责做得好，一个接口修改只对相应的实现类有影响，对其他的接口无影响，这对系统的扩展性、维护性都有非常大的帮助<br>(来自《设计模式之禅》)</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这个单一职责原则，目的就是提高代码的可维护性、可读性、扩展性，如果为了单一职责而破坏了这 3 个特性，可能会得不偿失。</p>
+<p>参考资料：《大话设计模式》、《Java设计模式》、《设计模式之禅》、《研磨设计模式》、《Head First 设计模式》</p>
+<p>希望文章对您有所帮助，设计模式系列会持续更新，感兴趣的同学可以关注公众号，第一时间获取文章推送阅读，也可以一起交流，交个朋友。</p>
+<p><a href="https://mp.weixin.qq.com/mp/homepage?__biz=MzIxMzgwMTAyMg==&amp;hid=2&amp;sn=c97b64288d92312f57d3c8298f8d8888" target="_blank" rel="noopener">公众号之设计模式系列文章</a></p>
+<center><br>LieBrother<br><br><img src="http://www.liebrother.com/upload/df81ac224abe46b38131a0e78f4dcf9c_wechat.jpg" alt="wechatjpg"><br></center>
           
         
       
@@ -888,7 +913,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/9/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/11/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -929,7 +954,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-count">120</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -946,7 +971,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-count">138</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

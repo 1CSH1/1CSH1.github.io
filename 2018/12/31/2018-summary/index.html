@@ -1,0 +1,876 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="总结,2018," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="在前进的路上，别忘了走过的路。  昨晚写了设计模式原则第三篇『依赖倒置原则』，写得比较晚，所以没有发布，想着今天早上来发。早上醒来，看了朋友圈，才发现今天是 2018 最后一天，内心有一股强大的力量促使我暂停发布昨晚的文章，今天做一波总结，写一篇总结文章，给 2018 一个交代，也给 2019 一个期待。生活好像就得有一些仪式感。 这是我的第一次年度总结，没有时间去准备、去构思，只是心血来潮">
+<meta name="keywords" content="总结,2018">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我的 2018">
+<meta property="og:url" content="https://1csh1.github.io/2018/12/31//2018-summary/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="在前进的路上，别忘了走过的路。  昨晚写了设计模式原则第三篇『依赖倒置原则』，写得比较晚，所以没有发布，想着今天早上来发。早上醒来，看了朋友圈，才发现今天是 2018 最后一天，内心有一股强大的力量促使我暂停发布昨晚的文章，今天做一波总结，写一篇总结文章，给 2018 一个交代，也给 2019 一个期待。生活好像就得有一些仪式感。 这是我的第一次年度总结，没有时间去准备、去构思，只是心血来潮">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.liebrother.com/upload/ba63d845774a4e0598fa17487e063c29_0041_01.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/df81ac224abe46b38131a0e78f4dcf9c_wechat.jpg">
+<meta property="og:updated_time" content="2018-12-31T07:29:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我的 2018">
+<meta name="twitter:description" content="在前进的路上，别忘了走过的路。  昨晚写了设计模式原则第三篇『依赖倒置原则』，写得比较晚，所以没有发布，想着今天早上来发。早上醒来，看了朋友圈，才发现今天是 2018 最后一天，内心有一股强大的力量促使我暂停发布昨晚的文章，今天做一波总结，写一篇总结文章，给 2018 一个交代，也给 2019 一个期待。生活好像就得有一些仪式感。 这是我的第一次年度总结，没有时间去准备、去构思，只是心血来潮">
+<meta name="twitter:image" content="http://www.liebrother.com/upload/ba63d845774a4e0598fa17487e063c29_0041_01.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 我的 2018 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                我的 2018
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-12-31T15:29:08+08:00" content="2018-12-31">
+              2018-12-31
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/12/31/2018-summary/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/12/31//2018-summary/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/12/31/2018-summary/" class="leancloud_visitors" data-flag-title="我的 2018">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://www.liebrother.com/upload/ba63d845774a4e0598fa17487e063c29_0041_01.jpg" alt="景"> </p>
+<blockquote>
+<p>在前进的路上，别忘了走过的路。</p>
+</blockquote>
+<p>昨晚写了设计模式原则第三篇『依赖倒置原则』，写得比较晚，所以没有发布，想着今天早上来发。早上醒来，看了朋友圈，才发现今天是 2018 最后一天，内心有一股强大的力量促使我暂停发布昨晚的文章，今天做一波总结，写一篇总结文章，给 2018 一个交代，也给 2019 一个期待。生活好像就得有一些仪式感。</p>
+<p>这是我的第一次年度总结，没有时间去准备、去构思，只是心血来潮，只能根据时间线，记录一下这一年发生的人与事，回忆当时那个场景，感受那时的心灵，反思那会的思想。</p>
+<h2 id="多灾多难的开端"><a href="#多灾多难的开端" class="headerlink" title="多灾多难的开端"></a><strong>多灾多难的开端</strong></h2><p>元旦到过年这一个半月没有什么触发内心的，甚至想起写这篇文章的时候，心里就是以过年后的时间线开始，可能是正月发生的事情真的很触动我的心灵。过年走亲戚闲聊都在说今年的经济会走下滑，因为十年一轮回的经济已经从 2008 年后深得人心，心里想着这些是大家都需要经历的事情，没有很特别需要注意的，可接下来发生的事情，让我真的感觉这一年有点悬。</p>
+<p>年后上班，没有啥特别的，还是一个人住一个单间的，在 2 公里远的写字楼上班。记得是上班的第二天，晚上睡觉前好好的，第二天起来发现左膝盖不对劲，动不了，弯曲都很刺痛。这种状况持续了 2 周，期间贴了很多膏药，算恢复得不错。那 2 周停止了任何的运动，包括爬楼梯、打球、骑单车。其实从小就膝盖不怎么好过，经常会无缘无故的酸痛，还记得小时候晚上痛得不行哭起来，长大后基本上就没有出现膝盖酸痛了。经过大概一个月的修养，也不算修养，只是特别注意膝盖的一些运动，恢复得差不多了，也可以正常打球，算是 2018 第一件记忆犹新的事情。</p>
+<p>厄运来临。一个周日早上，在公司加班，大姐突然发了微信过来，其中发了一张车祸的照片，从照片看不清是谁，因为整个人的脸都肿了，没法看清五官。大姐说是二伯出车祸了，很严重。刚看完这一句，眼泪就掉下来了，那种感觉真的是平生第一次感受到，言语无法表达这种感觉。忍着心疼的心情，立马打电话给老爸，他那会正在警察局里面处理这件事，我问他严重么？他回了应该不行了，要有心理准备。这时我已经说不出话来，怕对面父亲听到，只能草草说爸你先去忙。那段时间整个家族心情都很沉重，很多人都睡不着觉，最后二伯还是走了。每当夜里想起这件事还会流眼泪，因为二伯是最疼我的，从小到大，小时候最喜欢去他家，他会带我去他的菜园玩、去抓青蛙，等到我们那边有了游泳池，虽然也要十几公里，但是他还是会骑着电车载我去游泳，游泳回来后就去吃牛肉粿条，整个夏天几乎每周都去。想到这里，我反思了自己，自从毕业工作后，很少很少去拜访叔伯，这让我很触动，不知道大家在外面工作有没有也很少去关心家里的长辈？有的话，希望我们都有所改变，我也准备今年过年每家每户都去拜访，不再让自己遗憾。</p>
+<p>这些事之后，在和家人闲聊中，感慨今年是个多事年。</p>
+<h2 id="跳槽"><a href="#跳槽" class="headerlink" title="跳槽"></a><strong>跳槽</strong></h2><p>这次跳槽，算是一次 follow my heart，毕业之后来到招商银行这边做开发，来之前就听一些师兄指导，要做技术的话，可能不是一个好的选择。年轻气盛的我并不赞同，觉得这取决于个人，而不是环境。还记得当初离开实习的单位，和 HR 交流，说了一句：自己选择的路，跪着也要走完。这一年半不算是跪着走完的，我这么认为，每个人走过的路都是有价值的。在招行领导确实也很器重，让我加入了新的项目组，负责更多新的东西，包括后台框架 Spring Cloud、前端框架 Angular、云平台运维等等。让我触动要离职的主要原因是要进互联网企业。这一年半虽然不长，但是和一些在互联网工作的朋友交流过程中，我发现和他们的差距已经不小了，不管从技能还是其他方面都是。复习了一段时间后，拿到了 offer，并提出了离职。领导找了谈话，从早上 9 点谈到了下午 5 点，期间没喝过一滴水、没上过洗手间、更别说吃饭了。总的来说，心里一直很感激领导以及同事们这一年半的照顾。</p>
+<p>来到了 360金融 这边做风控平台相关的工作，对我来说是一个新的领域，之前在银行接触的是一些账户相关的业务，来这边接触的是风控相关的业务。目前还在熟悉还在加速学习。以后有机会可以给大家分享一些这方面的知识。</p>
+<h2 id="花光所有钱"><a href="#花光所有钱" class="headerlink" title="花光所有钱"></a><strong>花光所有钱</strong></h2><p>第一次感受到花光所有钱的感觉。工作了一年半，攒了十来万，年中的时候全花完。老家宅基地要打桩，总共需要 20 多万，和我哥一起分摊，大概十来万，全都花光光，没有啥特别的感觉，但是就是觉得真的可以一件事就把你的钱全掏空，不管你有多少钱，总有哪些一些事情去匹配到你拥有的那个价位。因为有了这么一件事，所以在后面和朋友或者前辈交流的过程中，偶尔会谈到这个问题，有朋友同时毕业，她所有钱也都花光在家里购置宅基地的这些事情上，前辈交流中，他们也表示很能理解刚毕业前 5 年出现的这种事情，他们说是正常的，特别是咱们这些从农村来到大城市打拼的人，父母辛辛苦苦把咱们养大成人，我们赚到钱也需要在老家的一些基础设施上，也算是让父母能够更好的生活。虽然只是打桩，并没有改变很多，但是会慢慢去改善家里的生活。今年还发现老家因为建设规划多了一条路，现在的房子会被拆掉，这次打桩，也算是为以后的居住做一点点准备。</p>
+<h2 id="租客的无奈"><a href="#租客的无奈" class="headerlink" title="租客的无奈"></a><strong>租客的无奈</strong></h2><p>5 月份换了工作，搬了一次家，农民房，什么家居都得自己安排上，也算是安稳下来；才住了 2 个月，就被房东通知楼房需要改造，限时一个月搬出，挺蛋疼的。这时才感受到租客的无奈，有人戏称，在大城市就是给房东打工，一间不到 30 平方的房，一个月 2200 的房租，还仅仅是农民房，随时都可能被赶走。虽然这些都是不争的事实，以个人之力也无法改变，所以只能积极一些想，让自己强大起来。用 NBA 经常看到的那句话『<strong>那些不能击垮你的，终将使你强大</strong>』。</p>
+<h2 id="领证"><a href="#领证" class="headerlink" title="领证"></a><strong>领证</strong></h2><p>2018.12.12 这个日子应该终生铭记。和女朋友结束了 7 年的异地恋，在这个日子里，我们领了人生一大证：结婚证。程序猿不是应该是单身狗么？哈哈，在做程序员之前谈的，可能当时有远见，要是当时没谈，当上程序员之后，估计现在还是单身。没想到这么快，就已经到了该结婚的年龄，今年身边的朋友、同学等等，很多都结婚了。就像一位好友说的：<strong>成家了，该立业了。</strong> 嗯，有那么一句话：『<strong>能力越大，责任越大</strong>』，现在责任大了，能力也得跟上。加油吧少年。</p>
+<h2 id="分享"><a href="#分享" class="headerlink" title="分享"></a><strong>分享</strong></h2><p>12 月开始重新写公众号、博客，也算是一个想让自己能力提高的方法，反思了过去陆陆续续记录下来的博客，主要原因还是缺乏坚持，经常写一段时间就断一段时间。记得目前印象中坚持最久的一件事是跑步，最长的是连续 55 天跑步。这一次不仅要坚持写，而且要把它当做产品来做，学习如何运营等等。为什么有这个想法呢？原因是今年看了一些产品的书籍，但是没有运用的地方，所以想尝试一下，这才是学习的一个好的方法。最重要的一点就是要分享对大家有用、有意义的东西，这样才能有所成长，不会浪费大家的阅读时间。期待你我共同进步。</p>
+<h2 id="那些琐碎的记录"><a href="#那些琐碎的记录" class="headerlink" title="那些琐碎的记录"></a><strong>那些琐碎的记录</strong></h2><p>看的书籍：</p>
+<p>《你的团队需要一个会讲故事的人》<br>《软技能 代码之外的生存指南》<br>《从点子到产品：产品经理的价值观与方法论》<br>《人人都是产品经理——写给产品新人》<br>《风控：大数据时代下的信贷风险管理和实践》<br>《产品的视角：从热闹到门道》<br>《互联网金融风险控制》<br>《产品经理必懂的技术那点事儿：成为全栈产品经理》<br>《遇见未知的自己》<br>《阿里巴巴Java开发手册》<br>《MySQL技术内幕-InnoDB存储引擎》</p>
+<p>还有一些忘记了，没有养成记录的习惯，也没有总结这些书的一些感悟，所以读过了就过了，接下来也要养成阅读的习惯，给自己一个要求，为读过的每一本书写一篇后感，和大家分享。</p>
+<p>买了十几个极客时间的专栏，真正学习下去的时间屈指可数，得继续补充。</p>
+<p>从 7 月份开始健身，主要目的就是锻炼，让身体更加健康，坚持下来了，基本每周最少去 2 次，继续保持。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><p>第一次写总结，回顾了 2018 这一年，没有很细腻去描述、没有浮夸的语言，只有那真实的内心写照。『<strong>别走得太快，有时候停下来，回想一下经历过的东西，会发现不一样的价值</strong>』这是年初阿里的面试官送的一句话，分享给大家，一起共勉。</p>
+<center><br>LieBrother<br><br><img src="http://www.liebrother.com/upload/df81ac224abe46b38131a0e78f4dcf9c_wechat.jpg" alt="wechatjpg"><br></center>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/总结/" rel="tag">#总结</a>
+          
+            <a href="/tags/2018/" rel="tag">#2018</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/28/liskov-substitution-principle/" rel="next" title="里氏替换原则">
+                <i class="fa fa-chevron-left"></i> 里氏替换原则
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/01/dependence-inversion-principle/" rel="prev" title="依赖倒置原则">
+                依赖倒置原则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/12/31//2018-summary/"
+           data-title="我的 2018" data-url="https://1csh1.github.io/2018/12/31/2018-summary/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">120</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">138</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#多灾多难的开端"><span class="nav-number">1.</span> <span class="nav-text">多灾多难的开端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳槽"><span class="nav-number">2.</span> <span class="nav-text">跳槽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#花光所有钱"><span class="nav-number">3.</span> <span class="nav-text">花光所有钱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#租客的无奈"><span class="nav-number">4.</span> <span class="nav-text">租客的无奈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#领证"><span class="nav-number">5.</span> <span class="nav-text">领证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分享"><span class="nav-number">6.</span> <span class="nav-text">分享</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#那些琐碎的记录"><span class="nav-number">7.</span> <span class="nav-text">那些琐碎的记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'content',
+        blogId: '15497-1572145892011-295',
+        name: 'LieBrother',
+        qrcode: 'http://www.liebrother.com/upload/2ead36875d2647ef9f857b904cdbb3e6_.jpg',
+        keyword: 'github',
+    });
+</script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

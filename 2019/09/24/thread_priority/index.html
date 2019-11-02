@@ -1,0 +1,1031 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,Java多线程," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="Java 多线程系列第 6 篇。  这篇我们来看看 Java 线程的优先级。 Java 线程优先级Thread 类中，使用如下属性来代表优先级。 1private int priority; 我们可以通过 setPriority(int newPriority) 来设置新的优先级，通过 getPriority() 来获取线程的优先级。  有些资料通过下面的例子就得出了一个结论：Java 线程">
+<meta name="keywords" content="Java,Java多线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑">
+<meta property="og:url" content="https://1csh1.github.io/2019/09/24//thread_priority/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="Java 多线程系列第 6 篇。  这篇我们来看看 Java 线程的优先级。 Java 线程优先级Thread 类中，使用如下属性来代表优先级。 1private int priority; 我们可以通过 setPriority(int newPriority) 来设置新的优先级，通过 getPriority() 来获取线程的优先级。  有些资料通过下面的例子就得出了一个结论：Java 线程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.liebrother.com/upload/99667eca2d1948979308f1eecb46dfdb_dxc_0006_01.jpg">
+<meta property="og:image" content="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg">
+<meta property="og:updated_time" content="2019-09-24T01:32:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑">
+<meta name="twitter:description" content="Java 多线程系列第 6 篇。  这篇我们来看看 Java 线程的优先级。 Java 线程优先级Thread 类中，使用如下属性来代表优先级。 1private int priority; 我们可以通过 setPriority(int newPriority) 来设置新的优先级，通过 getPriority() 来获取线程的优先级。  有些资料通过下面的例子就得出了一个结论：Java 线程">
+<meta name="twitter:image" content="http://www.liebrother.com/upload/99667eca2d1948979308f1eecb46dfdb_dxc_0006_01.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-09-24T09:32:47+08:00" content="2019-09-24">
+              2019-09-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/09/24/thread_priority/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/09/24//thread_priority/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/09/24/thread_priority/" class="leancloud_visitors" data-flag-title="了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://www.liebrother.com/upload/99667eca2d1948979308f1eecb46dfdb_dxc_0006_01.jpg" alt=""> </p>
+<blockquote>
+<p>Java 多线程系列第 6 篇。</p>
+</blockquote>
+<p>这篇我们来看看 Java 线程的优先级。</p>
+<h2 id="Java-线程优先级"><a href="#Java-线程优先级" class="headerlink" title="Java 线程优先级"></a>Java 线程优先级</h2><p><code>Thread</code> 类中，使用如下属性来代表优先级。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> priority;</span><br></pre></td></tr></table></figure>
+<p>我们可以通过 <code>setPriority(int newPriority)</code> 来设置新的优先级，通过 <code>getPriority()</code> 来获取线程的优先级。 </p>
+<p>有些资料通过下面的例子就得出了一个结论：<del><strong>Java 线程默认优先级是 5</strong></del>。     </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread();</span><br><span class="line">    System.out.println(thread.getPriority());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印结果：5</span></span><br></pre></td></tr></table></figure>
+<p>其实这是大错特错的，只是看到了表面，看看下面的例子，我们把当前线程的优先级改为 4，发现子线程 thread 的优先级也是 4。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Thread.currentThread().setPriority(<span class="number">4</span>);</span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread();</span><br><span class="line">    System.out.println(thread.getPriority());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印结果：4</span></span><br></pre></td></tr></table></figure>
+<p>这啪啪啪打脸了，如果是线程默认优先级是 5，我们新创建的 thread 线程，没设置优先级，理应是 5，但实际是 4。我们看看 <code>Thread</code> 初始化 <code>priority</code> 的源代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Thread parent = currentThread();</span><br><span class="line"><span class="keyword">this</span>.priority = parent.getPriority();</span><br></pre></td></tr></table></figure>
+<p>原来，线程默认的优先级是继承父线程的优先级，上面例子我们把父线程的优先级设置为 4，所以导致子线程的优先级也变成 4。</p>
+<p>严谨一点说，<strong>子线程默认优先级和父线程一样，Java 主线程默认的优先级是 5。</strong></p>
+<p>Java 中定义了 3 种优先级，分别是<code>最低优先级（1）</code>、<code>正常优先级（5）</code>、<code>最高优先级（10）</code>，代码如下所示。Java 优先级范围是 <strong>[1, 10]</strong>，设置其他数字的优先级都会抛出 <code>IllegalArgumentException</code> 异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The minimum priority that a thread can have.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MIN_PRIORITY = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The default priority that is assigned to a thread.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> NORM_PRIORITY = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The maximum priority that a thread can have.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> MAX_PRIORITY = <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+<p>接下来说说线程优先级的作用。先看下面代码，代码逻辑是创建了 3000 个线程，分别是： 1000 个优先级为 1 的线程， 1000 个优先级为 5 的线程，1000 个优先级为 10 的线程。用 <code>minTimes</code> 来记录 1000 个 <code>MIN_PRIORITY</code> 线程运行时时间戳之和，用 <code>normTimes</code> 来记录 1000 个 <code>NORM_PRIORITY</code> 线程运行时时间戳之和，用 <code>maxTimes</code> 来记录 1000 个 <code>MAX_PRIORITY</code> 线程运行时时间戳之和。通过统计每个优先级的运行的时间戳之和，值越小代表的就是越优先执行。我们运行看看。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestPriority</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> AtomicLong minTimes = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">static</span> AtomicLong normTimes = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">static</span> AtomicLong maxTimes = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;MyThread&gt; minThreadList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;MyThread&gt; normThreadList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;MyThread&gt; maxThreadList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1000</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            MyThread myThread = <span class="keyword">new</span> MyThread(<span class="string">"min----"</span> + i);</span><br><span class="line">            myThread.setPriority(Thread.MIN_PRIORITY);</span><br><span class="line">            minThreadList.add(myThread);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            MyThread myThread = <span class="keyword">new</span> MyThread(<span class="string">"norm---"</span> + i);</span><br><span class="line">            myThread.setPriority(Thread.NORM_PRIORITY);</span><br><span class="line">            normThreadList.add(myThread);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            MyThread myThread = <span class="keyword">new</span> MyThread(<span class="string">"max----"</span> + i);</span><br><span class="line">            myThread.setPriority(Thread.MAX_PRIORITY);</span><br><span class="line">            maxThreadList.add(myThread);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            maxThreadList.get(i).start();</span><br><span class="line">            normThreadList.get(i).start();</span><br><span class="line">            minThreadList.get(i).start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">3000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"maxPriority 统计："</span> + maxTimes.get());</span><br><span class="line">        System.out.println(<span class="string">"normPriority 统计："</span> + normTimes.get());</span><br><span class="line">        System.out.println(<span class="string">"minPriority 统计："</span> + minTimes.get());</span><br><span class="line">        System.out.println(<span class="string">"普通优先级与最高优先级相差时间："</span> + (normTimes.get() - maxTimes.get()) + <span class="string">"ms"</span>);</span><br><span class="line">        System.out.println(<span class="string">"最低优先级与普通优先级相差时间："</span> + (minTimes.get() - normTimes.get()) + <span class="string">"ms"</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyThread</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(name);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="keyword">this</span>.getName() + <span class="string">" priority: "</span> + <span class="keyword">this</span>.getPriority());</span><br><span class="line">            <span class="keyword">switch</span> (<span class="keyword">this</span>.getPriority()) &#123;</span><br><span class="line">                <span class="keyword">case</span> Thread.MAX_PRIORITY :</span><br><span class="line">                    maxTimes.getAndAdd(System.currentTimeMillis());</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> Thread.NORM_PRIORITY :</span><br><span class="line">                    normTimes.getAndAdd(System.currentTimeMillis());</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> Thread.MIN_PRIORITY :</span><br><span class="line">                    minTimes.getAndAdd(System.currentTimeMillis());</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行结果如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># 第一部分</span><br><span class="line">max----0 priority: 10</span><br><span class="line">norm---0 priority: 5</span><br><span class="line">max----1 priority: 10</span><br><span class="line">max----2 priority: 10</span><br><span class="line">norm---2 priority: 5</span><br><span class="line">min----4 priority: 1</span><br><span class="line">.......</span><br><span class="line">max----899 priority: 10</span><br><span class="line">min----912 priority: 1</span><br><span class="line">min----847 priority: 5</span><br><span class="line">min----883 priority: 1</span><br><span class="line"></span><br><span class="line"># 第二部分</span><br><span class="line">maxPriority 统计：1568986695523243</span><br><span class="line">normPriority 统计：1568986695526080</span><br><span class="line">minPriority 统计：1568986695545414</span><br><span class="line">普通优先级与最高优先级相差时间：2837ms</span><br><span class="line">最低优先级与普通优先级相差时间：19334ms</span><br></pre></td></tr></table></figure></p>
+<p>我们一起来分析一下结果。先看看第一部分，最开始执行的线程高优先级、普通优先级、低优先级都有，最后执行的线程也都有各个优先级的，这说明了：<strong>优先级高的线程不代表一定比优先级低的线程优先执行</strong>。也可以换另一种说法：<strong>代码执行顺序跟线程的优先级无关</strong>。看看第二部分的结果，我们可以发现最高优先级的 1000 个线程执行时间戳之和最小，而最低优先级的 1000 个线程执行时间戳之和最大，因此可以得知：<strong>一批高优先级的线程会比一批低优先级的线程优先执行</strong>，即<strong>高优先级的线程大概率比低优先的线程优先获得 CPU 资源</strong>。</p>
+<h2 id="各操作系统中真有-10-个线程等级么？"><a href="#各操作系统中真有-10-个线程等级么？" class="headerlink" title="各操作系统中真有 10 个线程等级么？"></a>各操作系统中真有 10 个线程等级么？</h2><p>Java 作为跨平台语言，线程有 10 个等级，但是映射到不同操作系统的线程优先级值不一样。接下来教大家怎么在 <code>OpenJDK</code> 源码中查各个操作系统中线程优先级映射的值。</p>
+<ol>
+<li>看到 <strong>Thread</strong> 源代码，设置线程优先级最终调用了本地方法 <code>setPriority0()</code>；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">setPriority0</span><span class="params">(<span class="keyword">int</span> newPriority)</span></span>;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>接着我们在 <strong>OpenJDK</strong> 的 <code>Thread.c</code> 代码中找到 <code>setPriority0()</code> 对应的方法 <code>JVM_SetThreadPriority</code>；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> JNINativeMethod methods[] = &#123;</span><br><span class="line">    ...</span><br><span class="line">    &#123;<span class="string">"setPriority0"</span>,     <span class="string">"(I)V"</span>,       (<span class="keyword">void</span> *)&amp;JVM_SetThreadPriority&#125;,</span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>我们根据 <code>JVM_SetThreadPriority</code> 找到 <strong>jvm.cpp</strong> 中对应的代码段；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">JVM_ENTRY(<span class="keyword">void</span>, JVM_SetThreadPriority(JNIEnv* env, jobject jthread, jint prio))</span><br><span class="line">  JVMWrapper(<span class="string">"JVM_SetThreadPriority"</span>);</span><br><span class="line">  <span class="comment">// Ensure that the C++ Thread and OSThread structures aren't freed before we operate</span></span><br><span class="line">  <span class="function">MutexLocker <span class="title">ml</span><span class="params">(Threads_lock)</span></span>;</span><br><span class="line">  oop java_thread = JNIHandles::resolve_non_null(jthread);</span><br><span class="line">  java_lang_Thread::set_priority(java_thread, (ThreadPriority)prio);</span><br><span class="line">  JavaThread* thr = java_lang_Thread::thread(java_thread);</span><br><span class="line">  <span class="keyword">if</span> (thr != NULL) &#123;                  <span class="comment">// Thread not yet started; priority pushed down when it is</span></span><br><span class="line">    Thread::set_priority(thr, (ThreadPriority)prio);</span><br><span class="line">  &#125;</span><br><span class="line">JVM_END</span><br></pre></td></tr></table></figure>
+<ol>
+<li>根据第 3 步中的代码，我们可以发现关键是 <code>java_lang_Thread::set_Priority()</code> 这段代码，继续找 <strong>thread.cpp</strong> 代码中的 <code>set_Priority()</code> 方法；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Thread::set_priority(Thread* thread, ThreadPriority priority) &#123;</span><br><span class="line">  trace(<span class="string">"set priority"</span>, thread);</span><br><span class="line">  debug_only(check_for_dangling_thread_pointer(thread);)</span><br><span class="line">  <span class="comment">// Can return an error!</span></span><br><span class="line">  (<span class="keyword">void</span>)os::set_priority(thread, priority);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>发现上面代码最终调用的是 <code>os::set_priority()</code>，接着继续找出 <strong>os.cpp</strong> 的 <code>set_priority()</code> 方法；</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">OSReturn os::set_priority(Thread* thread, ThreadPriority p) &#123;</span><br><span class="line">#ifdef ASSERT</span><br><span class="line">  <span class="keyword">if</span> (!(!thread-&gt;is_Java_thread() ||</span><br><span class="line">         Thread::current() == thread  ||</span><br><span class="line">         Threads_lock-&gt;owned_by_self()</span><br><span class="line">         || thread-&gt;is_Compiler_thread()</span><br><span class="line">        )) &#123;</span><br><span class="line">    <span class="keyword">assert</span>(<span class="keyword">false</span>, <span class="string">"possibility of dangling Thread pointer"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (p &gt;= MinPriority &amp;&amp; p &lt;= MaxPriority) &#123;</span><br><span class="line">    <span class="keyword">int</span> priority = java_to_os_priority[p];</span><br><span class="line">    <span class="keyword">return</span> set_native_priority(thread, priority);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">assert</span>(<span class="keyword">false</span>, <span class="string">"Should not happen"</span>);</span><br><span class="line">    <span class="keyword">return</span> OS_ERR;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>终于发现了最终转换为各操作系统的优先级代码 <code>java_to_os_priority[p]</code>，接下来就是找各个操作系统下的该数组的值。比如下面是 <strong>Linux</strong> 系统的优先级值。</li>
+</ol>
+<pre><code class="java"><span class="keyword">int</span> os::java_to_os_priority[CriticalPriority + <span class="number">1</span>] = {
+  <span class="number">19</span>,              <span class="comment">// 0 Entry should never be used</span>
+
+   <span class="number">4</span>,              <span class="comment">// 1 MinPriority</span>
+   <span class="number">3</span>,              <span class="comment">// 2</span>
+   <span class="number">2</span>,              <span class="comment">// 3</span>
+
+   <span class="number">1</span>,              <span class="comment">// 4</span>
+   <span class="number">0</span>,              <span class="comment">// 5 NormPriority</span>
+  -<span class="number">1</span>,              <span class="comment">// 6</span>
+
+  -<span class="number">2</span>,              <span class="comment">// 7</span>
+  -<span class="number">3</span>,              <span class="comment">// 8</span>
+  -<span class="number">4</span>,              <span class="comment">// 9 NearMaxPriority</span>
+
+  -<span class="number">5</span>,              <span class="comment">// 10 MaxPriority</span>
+
+  -<span class="number">5</span>               <span class="comment">// 11 CriticalPriority</span>
+};
+</code></pre>
+<p>好了，大家应该知道怎么找出 Java 线程优先级 [1,10] 一一对应各个操作系统中的优先级值。下面给大家统计一下。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Java 线程优先级</th>
+<th style="text-align:left">Linux</th>
+<th style="text-align:left">Windows</th>
+<th style="text-align:left">Apple</th>
+<th style="text-align:left">Bsd</th>
+<th style="text-align:left">Solaris</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">THREAD_PRIORITY_LOWEST(-2)</td>
+<td style="text-align:left">27</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">THREAD_PRIORITY_LOWEST(-2)</td>
+<td style="text-align:left">28</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">32</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">THREAD_PRIORITY_BELOW_NORMAL(-1)</td>
+<td style="text-align:left">29</td>
+<td style="text-align:left">6</td>
+<td style="text-align:left">64</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">THREAD_PRIORITY_BELOW_NORMAL(-1)</td>
+<td style="text-align:left">30</td>
+<td style="text-align:left">10</td>
+<td style="text-align:left">96</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">THREAD_PRIORITY_NORMAL(0)</td>
+<td style="text-align:left">31</td>
+<td style="text-align:left">15</td>
+<td style="text-align:left">127</td>
+</tr>
+<tr>
+<td style="text-align:left">6</td>
+<td style="text-align:left">-1</td>
+<td style="text-align:left">THREAD_PRIORITY_NORMAL(0)</td>
+<td style="text-align:left">32</td>
+<td style="text-align:left">18</td>
+<td style="text-align:left">127</td>
+</tr>
+<tr>
+<td style="text-align:left">7</td>
+<td style="text-align:left">-2</td>
+<td style="text-align:left">THREAD_PRIORITY_ABOVE_NORMAL(1)</td>
+<td style="text-align:left">33</td>
+<td style="text-align:left">21</td>
+<td style="text-align:left">127</td>
+</tr>
+<tr>
+<td style="text-align:left">8</td>
+<td style="text-align:left">-3</td>
+<td style="text-align:left">THREAD_PRIORITY_ABOVE_NORMAL(1)</td>
+<td style="text-align:left">34</td>
+<td style="text-align:left">25</td>
+<td style="text-align:left">127</td>
+</tr>
+<tr>
+<td style="text-align:left">9</td>
+<td style="text-align:left">-4</td>
+<td style="text-align:left">THREAD_PRIORITY_HIGHEST(2)</td>
+<td style="text-align:left">35</td>
+<td style="text-align:left">28</td>
+<td style="text-align:left">127</td>
+</tr>
+<tr>
+<td style="text-align:left">10</td>
+<td style="text-align:left">-5</td>
+<td style="text-align:left">THREAD_PRIORITY_HIGHEST(2)</td>
+<td style="text-align:left">36</td>
+<td style="text-align:left">31</td>
+<td style="text-align:left">127</td>
+</tr>
+</tbody>
+</table>
+<p>Windows 系统的在 <strong>OpenJDK</strong> 源码中只找到上面的常量，值是通过微软提供的函数接口文档查到的，链接在这：<a href="https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreadpriority?redirectedfrom=MSDN" target="_blank" rel="noopener">setthreadpriority</a></p>
+<p>我们从这个表格中也可以发现一些问题，即使我们在 Java 代码中设置了比较高的优先级，其实映射到操作系统的线程里面，并不一定比设置了低优先级的线程高，很有可能是相同的优先级。看看 <strong>Solaris 操作系统</strong> 这个极端的例子，优先级 5 到 10 映射的是相同的线程等级。</p>
+<p>回头想想上面的例子为什么 3000 个线程，<code>MAX_PRIORITY</code> 优先级的 1000 个线程会优先执行呢？因为我们的 3 个优先级分别映射到 <strong>Windows</strong> 操作系统线程的 3 个不同的等级，所以才会生效。假设将 1、5、10 改成 5、6、7，运行结果那就不大一样了。</p>
+<p>最后记住：<strong>切莫把线程优先级当做银弹，优先级高的线程不一定比优先级低的线程优先执行</strong>。</p>
+<p>这篇<strong>线程优先级</strong>文章也告段落了，朋友们看完觉得有用麻烦帮点个<code>在看</code>，推荐给身边朋友看看，原创不易。</p>
+<p><code>推荐阅读</code></p>
+<p><a href="https://mp.weixin.qq.com/s/Fh8d9ITNhvwYlfF2kY8P-g" target="_blank" rel="noopener">了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑</a></p>
+<p><a href="https://mp.weixin.qq.com/s/NSlEeXMK22-clfDv44h60w" target="_blank" rel="noopener">线程最最基础的知识</a></p>
+<p><a href="https://mp.weixin.qq.com/s/cIj_uzT6gZjROO44rNFHFQ" target="_blank" rel="noopener">老板叫你别阻塞了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Euc2NKvK_TsqvcT-DWpD5A" target="_blank" rel="noopener">吃个快餐都能学到串行、并行、并发</a></p>
+<p><a href="https://mp.weixin.qq.com/s/yWqFw_S7suYpqszuJFDsGg" target="_blank" rel="noopener">泡一杯茶，学一学同异步</a></p>
+<p><a href="https://mp.weixin.qq.com/s/HJIVxnzyDesYPGGyJsaFyQ" target="_blank" rel="noopener">进程知多少？</a></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag">#Java</a>
+          
+            <a href="/tags/Java多线程/" rel="tag">#Java多线程</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/17/thread_basic/" rel="next" title="线程最最基础的知识">
+                <i class="fa fa-chevron-left"></i> 线程最最基础的知识
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/10/openjdk13_build/" rel="prev" title="原创 | 全网最新最简单的 openjdk13 代码编译">
+                原创 | 全网最新最简单的 openjdk13 代码编译 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/09/24//thread_priority/"
+           data-title="了解Java线程优先级，更要知道对应操作系统的优先级，不然会踩坑" data-url="https://1csh1.github.io/2019/09/24/thread_priority/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">120</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">138</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-线程优先级"><span class="nav-number">1.</span> <span class="nav-text">Java 线程优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各操作系统中真有-10-个线程等级么？"><span class="nav-number">2.</span> <span class="nav-text">各操作系统中真有 10 个线程等级么？</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'content',
+        blogId: '15497-1572145892011-295',
+        name: 'LieBrother',
+        qrcode: 'http://www.liebrother.com/upload/2ead36875d2647ef9f857b904cdbb3e6_.jpg',
+        keyword: 'github',
+    });
+</script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

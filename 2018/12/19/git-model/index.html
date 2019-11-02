@@ -1,0 +1,888 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Git,分支模型," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="今天介绍一下工作中会用到的 Git 分支模型。  先贴上图以表敬意    闲言在学校不管是自己写课程设计还是给老师做项目，有 2 到 3 个人一起协作开发时就会使用 Git ，但是只是简单用了它所提供的代码协作功能，在学校的项目，比如课程设计，开发完老师检查完就没有维护了，给老师做项目也是，基于项目的特征：没有持久性、一次性开发，所以没有应到 Git 分支模型。在企业中，一个应用往往是有比较">
+<meta name="keywords" content="Git,分支模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="成熟的 Git 分支模型">
+<meta property="og:url" content="https://1csh1.github.io/2018/12/19//git-model/index.html">
+<meta property="og:site_name" content="1CSH1">
+<meta property="og:description" content="今天介绍一下工作中会用到的 Git 分支模型。  先贴上图以表敬意    闲言在学校不管是自己写课程设计还是给老师做项目，有 2 到 3 个人一起协作开发时就会使用 Git ，但是只是简单用了它所提供的代码协作功能，在学校的项目，比如课程设计，开发完老师检查完就没有维护了，给老师做项目也是，基于项目的特征：没有持久性、一次性开发，所以没有应到 Git 分支模型。在企业中，一个应用往往是有比较">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img.hacpai.com/bing/20180321.jpg?imageView2/1/w/960/h/520/interlace/1/q/100">
+<meta property="og:image" content="http://www.liebrother.com/upload/ae6b7addc4ee46fe9382b2c1d7d837b4_gitmodel.png">
+<meta property="og:image" content="http://www.liebrother.com/upload/df81ac224abe46b38131a0e78f4dcf9c_wechat.jpg">
+<meta property="og:updated_time" content="2018-12-24T12:48:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="成熟的 Git 分支模型">
+<meta name="twitter:description" content="今天介绍一下工作中会用到的 Git 分支模型。  先贴上图以表敬意    闲言在学校不管是自己写课程设计还是给老师做项目，有 2 到 3 个人一起协作开发时就会使用 Git ，但是只是简单用了它所提供的代码协作功能，在学校的项目，比如课程设计，开发完老师检查完就没有维护了，给老师做项目也是，基于项目的特征：没有持久性、一次性开发，所以没有应到 Git 分支模型。在企业中，一个应用往往是有比较">
+<meta name="twitter:image" content="https://img.hacpai.com/bing/20180321.jpg?imageView2/1/w/960/h/520/interlace/1/q/100">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 成熟的 Git 分支模型 | 1CSH1 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55186219";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">1CSH1</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                成熟的 Git 分支模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-12-19T21:44:25+08:00" content="2018-12-19">
+              2018-12-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/12/19/git-model/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/12/19//git-model/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/12/19/git-model/" class="leancloud_visitors" data-flag-title="成熟的 Git 分支模型">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://img.hacpai.com/bing/20180321.jpg?imageView2/1/w/960/h/520/interlace/1/q/100" alt=""> </p>
+<blockquote>
+<p>今天介绍一下工作中会用到的 Git 分支模型。</p>
+</blockquote>
+<p>先贴上图以表敬意</p>
+<center><br><br><img src="http://www.liebrother.com/upload/ae6b7addc4ee46fe9382b2c1d7d837b4_gitmodel.png" alt="gitmodelpng"><br><br></center>
+
+
+<h3 id="闲言"><a href="#闲言" class="headerlink" title="闲言"></a>闲言</h3><p>在学校不管是自己写课程设计还是给老师做项目，有 2 到 3 个人一起协作开发时就会使用 Git ，但是只是简单用了它所提供的代码协作功能，在学校的项目，比如课程设计，开发完老师检查完就没有维护了，给老师做项目也是，基于项目的特征：没有持久性、一次性开发，所以没有应到 Git 分支模型。在企业中，一个应用往往是有比较长的生命线，由很多个迭代项目开发构成，这时要解决几十甚至几百人的代码协作问题，就需要一套完整的规范的代码开发流程。</p>
+<p>我还记得当初大四的时候，去了一家企业实习，当时小团队只有 3 个开发人员，git 使用没有规范，只有一个 master 主分支，项目也没有管理规范，来一个需求点就做。当时经常出现代码覆盖，各种代码合并，线上代码也不知道是哪个节点的代码。。。到我走的时候，也没使用上这个分支模型。毕业后入职了某银行，不说分支模型了，Git 都没用上，直到今年跳槽到互联网公司才了解到这个分支模型。因此，你工作不一定会真正用到这个分支模型，如果是在互联网企业，很有可能会使用上。</p>
+<p>有些小伙伴看到这张偌大的图觉得有些晕，很认真地说，这是一张大家都在用的图，特别是互联网企业。如果是还没有工作的小伙伴，可能有些陌生，没事，我们来看一下这些内容。</p>
+<h3 id="分支介绍"><a href="#分支介绍" class="headerlink" title="分支介绍"></a>分支介绍</h3><p><strong>master</strong> ：这个分支的代码是发布到生产的代码<br><strong>develop</strong> ：这个分支的代码是预发布到生产的代码<br><strong>release</strong> ：这个分支的代码是新版本发布到生产的代码<br><strong>feature</strong> ：这个分支的代码是新需求开发的代码<br><strong>hotfix</strong> ：这个分支的代码是紧急修复生产 bug 的代码</p>
+<h3 id="场景设想"><a href="#场景设想" class="headerlink" title="场景设想"></a>场景设想</h3><p>下面列举一些可能你在工作中会经常面对的场景</p>
+<ol>
+<li><p>组长分配新需求下来，安排下周上线（假设是 1227 号），你看看当前有没有下周版本的分支？有的话很简单，checkout 下周分支（feature_app1.1.0_1227）来开发就行，没有的话这时需要新建分支，从 develop 分支创建新的 feature 分支（feature_app1.1.0_1227）,然后将对应的 pom.xml 版本号修改成 1.1.0-SNAPSHOT，注意命名，比如这里我用 feature 做前缀，你也可以自己设定一个规则。</p>
+</li>
+<li><p>开发完 feature_app1.1.0_1227 需求，移交了测试，很遗憾，测试出现了 n 个 bug，这时依旧在 feature_app1.1.0_1227 上修复 bug。</p>
+</li>
+<li><p>终于到了发版前一天，测试 MM 说 n 轮测试完了，没问题，拉上线版本，再做一次回归测试。这时，你就需要把 feature_app1.1.0_1227 分支合并到 develop 分支，然后从 develop 分支中创建新的分支 release_app1.1.0_1227，然后修改对应的版本号为 1.1.0-RELEASE。</p>
+</li>
+<li><p>到了发版日早上了，测试 MM 用了 release_app1.1.0_1227 版本测试了一番，又发现了一个 bug。别慌，只要不是生产的 bug，都好解决。这时你要在 release_app1.1.0_1227 修复 bug，切记不能在 feature_app1.1.0_1227 上修改，feature_app1.1.0_1227 分支已经没有多大作用了，只用来看代码提交记录。</p>
+</li>
+<li><p>安安全全的到了晚上，开始发版了，发完版突然发现了有异常，定位问题后发现是有一行代码写错了，跟组长确认后，在 release_app1.1.0_1227 分支上做了修改，重新打包后发版，验证了一段时间，没问题了。。。</p>
+</li>
+<li><p>发版总算完成了，这时，别忘记把 release_app1.1.0_1227 版本合并到 develop 和 master 分支。还有一点很重要的，把 develop 分支代码合并到 1227 以后的版本（如果已经有1227 以后的版本的话）。注意：这个步骤合并代码要谨慎，如果有别人的代码合并冲突比较大，需要找那个开发的同事一起合并代码。总算可以睡个好觉了。。。</p>
+</li>
+<li><p>告别了旧需求，迎来了新需求，接下来的需求开发就按上面的步骤走。。。</p>
+</li>
+<li><p>第二天，突然生产上一直报 NullPointerException，定位发现是一行代码没有判空导致的，三番确认，原来这个数据以前是不为空的，现在确实需要支持有些数据为空的，需要紧急修复这个 bug，和组长确认之后，从 master 分支上拉了一个 hotfix_app1.1.1_1228 分支代码，修复了 NullPointerException，打包后上线，验证没问题后，把 hotfix_app1.1.1_1228 分支合并到 develop 和 master 分支，并把 develop 分支合并到 1227 以后的版本。</p>
+</li>
+</ol>
+<p>好了，一大坨的文字描述了基于分支模型开发的过程。不同公司在应用过程中可能会有些微小的不同，但是整体流程都是差不多的。比如有的公司可能会把 release 合并到 master 后，用 master 代码发布到生产，发版当时有异常，再从 master 分支上拉 hotfix 分支进行修复。上面描述的步骤就不一样了，发版时出现异常，直接在 release 上修复。这些小的差别就不用计较太多啦。</p>
+<p>希望本文能够让你认识到有这么一个标准的 Git 分支模型，在不管工作上还是学习上，在需要分支管理的时候，回忆起有这么一个图，根据你的场景再应用进去，肯定会少走很多弯路。</p>
+<center><br><br><img src="http://www.liebrother.com/upload/df81ac224abe46b38131a0e78f4dcf9c_wechat.jpg" alt="公众号"><br><br></center>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag">#Git</a>
+          
+            <a href="/tags/分支模型/" rel="tag">#分支模型</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/18/memory-alarm/" rel="next" title="记一次内存告警">
+                <i class="fa fa-chevron-left"></i> 记一次内存告警
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/21/mind-map/" rel="prev" title="跳槽 & 思维导图">
+                跳槽 & 思维导图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/12/19//git-model/"
+           data-title="成熟的 Git 分支模型" data-url="https://1csh1.github.io/2018/12/19/git-model/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/default_avatar.jpg"
+               alt="James-CSH" />
+          <p class="site-author-name" itemprop="name">James-CSH</p>
+          <p class="site-description motion-element" itemprop="description">当才华撑不起野心时，应该静下心来学习；当能力驾驭不了目标时，应该沉下心来历练。</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">120</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">138</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        <div class="links-of-blogroll motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#闲言"><span class="nav-number">1.</span> <span class="nav-text">闲言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分支介绍"><span class="nav-number">2.</span> <span class="nav-text">分支介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#场景设想"><span class="nav-number">3.</span> <span class="nav-text">场景设想</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=55186219" charset="UTF-8"></script>
+<script src="https://my.openwrite.cn/js/readmore.js" type="text/javascript"></script>
+<script>
+    const btw = new BTWPlugin();
+    btw.init({
+        id: 'content',
+        blogId: '15497-1572145892011-295',
+        name: 'LieBrother',
+        qrcode: 'http://www.liebrother.com/upload/2ead36875d2647ef9f857b904cdbb3e6_.jpg',
+        keyword: 'github',
+    });
+</script>
+<div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">James-CSH</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+<div>
+<span id="busuanzi_container_site_uv">
+  本站访客数<span id="busuanzi_value_site_uv"></span>人次
+</span>
+&nbsp;|&nbsp;
+<span id="busuanzi_container_site_pv">
+    本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+
+  
+
+
+
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"1CSH1"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("eodGFnKXWTUNhQKhMktCLDNj-gzGzoHsz", "iC7dXG3oqjDHhiy0K3MmaIlE");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+</body>
+</html>

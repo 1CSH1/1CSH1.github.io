@@ -226,8 +226,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/02/21/Thrift 入门介绍/" itemprop="url">
-                  Thrift 入门技术
+                <a class="post-title-link" href="/2019/03/27/memento-pattern/" itemprop="url">
+                  行为型模式：备忘录模式
                 </a>
               
             
@@ -240,38 +240,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-02-21T19:50:00+08:00" content="2017-02-21">
-              2017-02-21
+            <time itemprop="dateCreated" datetime="2019-03-27T08:49:31+08:00" content="2019-03-27">
+              2019-03-27
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Thrift/" itemprop="url" rel="index">
-                    <span itemprop="name">Thrift</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/02/21/Thrift 入门介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/21/Thrift 入门介绍/" itemprop="commentsCount"></span>
+                <a href="/2019/03/27/memento-pattern/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/03/27//memento-pattern/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -281,7 +262,7 @@
 
           
           
-             <span id="/2017/02/21/Thrift 入门介绍/" class="leancloud_visitors" data-flag-title="Thrift 入门技术">
+             <span id="/2019/03/27/memento-pattern/" class="leancloud_visitors" data-flag-title="行为型模式：备忘录模式">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -304,193 +285,422 @@
       
         
           
-            <blockquote>
-<p>摘要：本文讲述Thrift的一些基本知识，以及概念。</p>
-</blockquote>
-<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>&emsp;&emsp;Thrift作为Facebook开源的RPC框架, 通过IDL中间语言, 并借助代码生成引擎生成各种主流语言的rpc框架服务端/客户端代码，主要特点：</p>
-<h2 id="开发速度快："><a href="#开发速度快：" class="headerlink" title="开发速度快："></a>开发速度快：</h2><p>&emsp;&emsp;通过编写RPC接口IDL文件，利用编译生成器自动生成Server端骨架(Skeletons)和客户端Stubs，省去开发者自定义和维护接口编解码、消息传输、服务器多线程模型等基础工作；Server端开发者只需按照服务骨架，写好自己的业务处理程序(Handlers)即可，Client端程序只需创建IDL中定义的服务对象，然后就像调用本地对象的方法一样调用远端服务。</p>
-<h2 id="接口维护简单高效："><a href="#接口维护简单高效：" class="headerlink" title="接口维护简单高效："></a>接口维护简单高效：</h2><p>&emsp;&emsp;通过维护Thrift格式的IDL(Interface Description Language)文件（注意写好注释），即可作为给Clients使用的接口文档使用，也自动生成接口代码，始终保持代码和文档的一致性。且Thrift协议可灵活支持接口的可扩展性。</p>
-<h2 id="学习成本低："><a href="#学习成本低：" class="headerlink" title="学习成本低："></a>学习成本低：</h2><p>&emsp;&emsp;因为其来自Google Protocol Buffers开发团队，所以其IDL文件风格类似Google Protocol Buffers，且更加易读易懂；特别是RPC服务接口的风格就像写一个一般的面向对象的Class一样简单。<br>&emsp;&emsp;初学者只需参照<a href="http://thrift.apache.org/几个小时即可理解和使用Thrift。" target="_blank" rel="noopener">http://thrift.apache.org/几个小时即可理解和使用Thrift。</a></p>
-<h2 id="多语言-跨语言支持："><a href="#多语言-跨语言支持：" class="headerlink" title="多语言/跨语言支持："></a>多语言/跨语言支持：</h2><p>&emsp;&emsp;Thrift支持C++, Java, Python, PHP, Ruby, Erlang, Perl, Haskell, C#, Cocoa, JavaScript, Node.js, Smalltalk, OCaml and Delphi等多种语言，即可生成上述语言的服务器端和客户端程序。<br>对于我们经常使用的Java、PHP、Python、C++支持良好，虽然对iOS环境的Objective-C(Cocoa)支持稍逊，但也完全满足我们的使用要求。</p>
-<h2 id="已验证成熟稳定："><a href="#已验证成熟稳定：" class="headerlink" title="已验证成熟稳定："></a>已验证成熟稳定：</h2><p>&emsp;&emsp;Thrift在很多开源项目中已经被验证是稳定和高效的，例如Cassandra、Evernode等；在Facebook、Baidu等后台产品中也有使用。</p>
-<h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="Thrift-软件栈"><a href="#Thrift-软件栈" class="headerlink" title="Thrift 软件栈"></a>Thrift 软件栈</h2><p>&emsp;&emsp; Thrift对软件栈的定义非常的清晰, 使得各个组件能够松散的耦合, 针对不同的应用场景, 选择不同是方式去搭建服务.<br>&emsp;&emsp; Transport: 传输层，定义数据传输方式，可以为TCP/IP传输，内存共享或者文件共享等<br>&emsp;&emsp; Protocol: 协议层, 定义数据传输格式，可以为二进制或者XML等<br>&emsp;&emsp; Processor: 处理层, 这部分由定义的idl来生成, 封装了协议输入输出流, 并委托给用户实现的handler进行处理.<br>&emsp;&emsp; Server: 服务层, 整合上述组件, 提供网络模型(单线程/多线程/事件驱动), 最终形成真正的服务.</p>
-<h2 id="Thrift-对语言的支持"><a href="#Thrift-对语言的支持" class="headerlink" title="Thrift 对语言的支持"></a>Thrift 对语言的支持</h2><p>&emsp;&emsp;Thrift和Google Protobuf相比, 都提供了可扩展序列化机制, 不但兼容性好而且压缩率高. 两者在这块各有长短, 性能上PB稍有优势. 但在语言的支持度上, Protobuf只支持c++/java/python这三种主流的语言, Thrift则几乎覆盖了大部分的语言, 从这点上来说, Thrift的优势非常的明显.</p>
-<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><p>&emsp;&emsp;Thrift可以让你选择客户端与服务端之间传输通信协议的类别，在传输协议上总体上划分为文本(text)和二进制(binary)传输协议, 为节约带宽，提供传输效率，一般情况下使用二进制类型的传输协议为多数，但有时会还是会使用基于文本类型的协议，这需要根据项目/产品中的实际需求：<br>&emsp;&emsp; TBinaryProtocol – 二进制编码格式进行数据传输。<br>&emsp;&emsp; TCompactProtocol – 这种协议非常有效的，使用Variable-Length Quantity (VLQ) 编码对数据进行压缩。<br>&emsp;&emsp; TJSONProtocol – 使用JSON的数据编码协议进行数据传输。<br>&emsp;&emsp; TSimpleJSONProtocol – 这种节约只提供JSON只写的协议，适用于通过脚本语言解析<br>&emsp;&emsp; TDebugProtocol – 在开发的过程中帮助开发人员调试用的，以文本的形式展现方便阅读。</p>
-<h2 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h2><p>&emsp;&emsp; TSocket- 使用堵塞式I/O进行传输，也是最常见的模式。<br>&emsp;&emsp; TFramedTransport- 使用非阻塞方式，按块的大小，进行传输，类似于Java中的NIO。<br>&emsp;&emsp; TFileTransport- 顾名思义按照文件的方式进程传输，虽然这种方式不提供Java的实现，但是实现起来非常简单。<br>&emsp;&emsp; TMemoryTransport- 使用内存I/O，就好比Java中的ByteArrayOutputStream实现。<br>&emsp;&emsp; TZlibTransport- 使用执行zlib压缩，不提供Java的实现。</p>
-<h2 id="服务端类型"><a href="#服务端类型" class="headerlink" title="服务端类型"></a>服务端类型</h2><p>&emsp;&emsp; TSimpleServer -  单线程服务器端使用标准的堵塞式I/O。<br>&emsp;&emsp; TThreadPoolServer -  多线程服务器端使用标准的堵塞式I/O。<br>&emsp;&emsp; TNonblockingServer – 多线程服务器端使用非堵塞式I/O，并且实现了Java中的NIO通道。</p>
-<h1 id="Thrift-架构"><a href="#Thrift-架构" class="headerlink" title="Thrift 架构"></a>Thrift 架构</h1><center><br><img src="https://1csh1.github.io/img/Thrift入门介绍/Thrift架构图.jpg" alt="Thrift架构图"><br></center>
-
-<p>&emsp;&emsp;如图所示，图中黄色部分是用户实现的业务逻辑，褐色部分是根据 Thrift 定义的服务接口描述文件生成的客户端和服务器端代码框架，红色部分是根据 Thrift 文件生成代码实现数据的读写操作。红色部分以下是 Thrift 的传输体系、协议以及底层 I/O 通信，使用 Thrift 可以很方便的定义一个服务并且选择不同的传输协议和传输层而不用重新生成代码。<br>&emsp;&emsp;Thrift 服务器包含用于绑定协议和传输层的基础架构，它提供阻塞、非阻塞、单线程和多线程的模式运行在服务器上，可以配合服务器 / 容器一起运行，可以和现有的 J2EE 服务器 /Web 容器无缝的结合。</p>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="http://www.jianshu.com/p/bfd514fd0d6d" target="_blank" rel="noopener">Thrift RPC实战(一) 初次体验Thrift</a><br><a href="https://www.ibm.com/developerworks/cn/java/j-lo-apachethrift/" target="_blank" rel="noopener">Apache Thrift - 可伸缩的跨语言服务开发框架</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/20/Java的静态代理和动态代理/" itemprop="url">
-                  Java的静态代理和动态代理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-02-20T22:00:24+08:00" content="2017-02-20">
-              2017-02-20
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/02/20/Java的静态代理和动态代理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/20/Java的静态代理和动态代理/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2017/02/20/Java的静态代理和动态代理/" class="leancloud_visitors" data-flag-title="Java的静态代理和动态代理">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>摘要：本文讲述Java中的静态代理和动态代理，动态代理的2种实现：Java自带的动态代理实现以及Cglib的动态代理实现。</p>
-</blockquote>
-<h1 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h1><blockquote>
-<p>由程序员创建或工具生成代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就确定了。</p>
-</blockquote>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">//User实体类</span><br><span class="line">public class User &#123;</span><br><span class="line">	</span><br><span class="line">	private int id;</span><br><span class="line">	private String name;</span><br><span class="line">	private int age;</span><br><span class="line">	</span><br><span class="line">	public int getId() &#123;</span><br><span class="line">		return id;</span><br><span class="line">	&#125;</span><br><span class="line">	public void setId(int id) &#123;</span><br><span class="line">		this.id = id;</span><br><span class="line">	&#125;</span><br><span class="line">	public String getName() &#123;</span><br><span class="line">		return name;</span><br><span class="line">	&#125;</span><br><span class="line">	public void setName(String name) &#123;</span><br><span class="line">		this.name = name;</span><br><span class="line">	&#125;</span><br><span class="line">	public int getAge() &#123;</span><br><span class="line">		return age;</span><br><span class="line">	&#125;</span><br><span class="line">	public void setAge(int age) &#123;</span><br><span class="line">		this.age = age;</span><br><span class="line">	&#125;</span><br><span class="line">	@Override</span><br><span class="line">	public String toString() &#123;</span><br><span class="line">		return &quot;User [id=&quot; + id + &quot;, name=&quot; + name + &quot;, age=&quot; + age + &quot;]&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//用户操作接口</span><br><span class="line">public interface UserService &#123;</span><br><span class="line"></span><br><span class="line">	void add(User user);</span><br><span class="line">	// 。。。</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//接口真实实现</span><br><span class="line">public class UserServiceImpl implements UserService &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void add(User user) &#123;</span><br><span class="line">		System.out.println(&quot;UserServiceImpl : add user&quot; + user.toString() );</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//代理类</span><br><span class="line">public class ProxyUserService implements UserService &#123;</span><br><span class="line">	</span><br><span class="line">	private UserService userService;</span><br><span class="line"></span><br><span class="line">	public ProxyUserService(UserService userService) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.userService = userService;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public void add(User user) &#123;</span><br><span class="line">		System.out.println(&quot;Static Before add&quot;);</span><br><span class="line">		userService.add(user);</span><br><span class="line">		System.out.println(&quot;Static After add&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//代理工厂类</span><br><span class="line">public class ProxyStaticFactory &#123;</span><br><span class="line"></span><br><span class="line">	public static UserService getInstance() &#123;</span><br><span class="line">		return new ProxyUserService(new UserServiceImpl());</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//测试</span><br><span class="line">public class TestStaticProxy &#123;</span><br><span class="line"></span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		UserService userService = ProxyStaticFactory.getInstance();</span><br><span class="line">		User user = new User();</span><br><span class="line">		user.setId(12);</span><br><span class="line">		user.setName(&quot;哈哈&quot;);</span><br><span class="line">		user.setAge(23);</span><br><span class="line">		userService.add(user);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            <p><img src="http://www.liebrother.com/upload/fa36badd7fe34172bf4ab98a9e5b8f94_0035_01.jpg" alt="海"> </p>
 <blockquote>
-<p>结果：<br>Static Before add<br>UserServiceImpl : add userUser [id=12, name=哈哈, age=23]<br>Static After add</p>
+<p>十一大行为型模式之九：备忘录模式。</p>
 </blockquote>
-<h2 id="静态代理类优缺点"><a href="#静态代理类优缺点" class="headerlink" title="静态代理类优缺点"></a>静态代理类优缺点</h2><h3 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h3><p>业务类只需要关注业务逻辑本身，保证了业务类的重用性。这是代理的共有优点。 </p>
-<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><p>1）代理对象的一个接口只服务于一种类型的对象，如果要代理的方法很多，势必要为每一种方法都进行代理，静态代理在程序规模稍大时就无法胜任了。<br>2）如果接口增加一个方法，除了所有实现类需要实现这个方法外，所有代理类也需要实现此方法。增加了代码维护的复杂度。 </p>
-<h1 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h1><blockquote>
-<p>动态代理类的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件。代理类和委托类的关系是在程序运行时确定。 </p>
-</blockquote>
-<h2 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//代理类</span><br><span class="line">public class UserServiceInvocationHandler implements InvocationHandler &#123;</span><br><span class="line"></span><br><span class="line">	private Object delegate;</span><br><span class="line">	</span><br><span class="line">	public UserServiceInvocationHandler(Object delegate) &#123;</span><br><span class="line">		super();</span><br><span class="line">		this.delegate = delegate;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;</span><br><span class="line">		System.out.println(&quot;Dynamic Before add&quot;);</span><br><span class="line">		Object object = method.invoke(delegate, args);</span><br><span class="line">		System.out.println(&quot;Dynamic After add&quot;);</span><br><span class="line">		return object;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//动态代理工厂类</span><br><span class="line">public class ProxyDynamicFactory &#123;</span><br><span class="line"></span><br><span class="line">	public static UserService getInstance() &#123;</span><br><span class="line">		UserService userService = new UserServiceImpl();</span><br><span class="line">		UserServiceInvocationHandler handler = new UserServiceInvocationHandler(userService);</span><br><span class="line">		return (UserService) Proxy.newProxyInstance(userService.getClass().getClassLoader(), userService.getClass().getInterfaces(), handler);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//测试</span><br><span class="line">public class TestDynamicProxy &#123;</span><br><span class="line">	</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		UserService userService = ProxyDynamicFactory.getInstance();</span><br><span class="line">		User user = new User();</span><br><span class="line">		user.setId(12);</span><br><span class="line">		user.setName(&quot;哈哈&quot;);</span><br><span class="line">		user.setAge(23);</span><br><span class="line">		userService.add(user);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="创建动态代理过程："><a href="#创建动态代理过程：" class="headerlink" title="创建动态代理过程："></a>创建动态代理过程：</h2><p>一个典型的动态代理创建对象过程可分为以下四个步骤：</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>姓名</strong> ：备忘录模式<br><strong>英文名</strong> ：Memento Pattern<br><strong>价值观</strong> ：凡事要有备份<br><strong>个人介绍</strong> ：<br>Without violating encapsulation,capture and externalize an object’s internal state so that the object can be restored to this state later.<br>在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。这样以后就可将该对象恢复到原先保存的状态。<br>（来自《设计模式之禅》）</p>
+<h2 id="你要的故事"><a href="#你要的故事" class="headerlink" title="你要的故事"></a>你要的故事</h2><p>点开看这篇文章的各位，都是。。。程序界的大佬。作为程序猿，免不了『上线』这件小事。每逢上线必祭天。。。上线这件事我们很多人都操作过，每家公司有不同的上线流程以及上线的技术能力。按照发布的平台的完善程度大概分为 3 种。</p>
+<ol>
+<li>发布平台牛逼的公司：只需要按下『一键部署』按钮，就搞定上线，按下『回滚』按钮，就搞定回滚上一个版本。</li>
+<li>发布平台稍差点的公司：可能就得多个步骤操作了，<code>上线</code>：备份并关闭应用、部署并启动新应用；<code>回滚</code>：关闭新应用、恢复旧应用并启动。</li>
+<li>没有发布平台的公司：那就全程手工操作，<code>上线</code>：关闭旧应用、复制旧应用到备份空间、复制新应用到部署环境、启动新应用；<code>回滚</code>：关闭新应用、删除新应用、从备份空间复制旧应用到部署环境、启动旧应用。</li>
+</ol>
+<p>其实通过发布平台完善程度可以侧面反映企业的技术成熟程度。怎么说呢？发布系统的操作难易程度在我们作为程序猿心中，都有一个可接受的范围。假设刚开始是单体应用，一个 tomcat 和一个 war 就搞定，你需要发布平台么？并不需要，咱 <code>ctrl+C</code>、<code>ctrl+V</code>、<code>shutdown</code>、<code>startup</code> 就行，还弄什么发布平台。当系统有多套服务时，每次上线都需要部署 10 个机器的应用，这时你能忍么？要是还是手工操作，那发布一次系统得花费好长时间，要是再搞不好，回滚一次，一晚上都没了；这时就会逼迫开发出一个简易的发布平台，把对多台机器的操作步骤放到发布平台上。当系统是以微服务的架构发展时，每个服务都有上百个实例，那这时就不能简单的把操作步骤搬到发布平台了，还得简化步骤，最终变成上面说的 <code>一键部署</code> 和<code>一键回滚</code>。</p>
+<p>上面的 3 种我都亲身经历过。。。在刚出来实习时候，就经历了第 3 种情况，因为是单体应用，一个应用搞定所有东西，手动部署已满足要求。到了银行工作，接触到了云平台，那时就只需要一个按钮就唰唰唰的部署了，也是上面说的第 1 种。而现在，正在经历第 2 种发布平台，只是简单的把操作步骤搬到了系统上，目前的情况是机器越来越多，操作步骤没删减的话，每次发布会花费很多时间，这也会去促进开发出更方便使用的发布平台。</p>
+<p>回到今天的主题，今天讲的是备忘录模式，从字面上理解，就是讲备份东西，有了备份就可以恢复。上面讲了一大堆发布的东西，也是咱们工作中接触蛮多的事情，发布的最核心就是要支持<code>部署新应用</code>以及<code>回滚老应用</code>，<strong>回滚特别重要，它能够保证在新应用出现异常的情况下，马上恢复到旧应用可用的状态，减少异常的影响面</strong>。发布这东东也很符合备忘录模式，下面通过模拟发布步骤代码来讲备忘录模式。这里讲的不是上面说的第 1 种，这里围绕着第 3 种发布步骤写，不管哪种发布平台，它们的底层都是一样的。</p>
+<p>先定义应用实例这个类，应用一般会有应用名、版本号信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 应用实例</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String content;</span><br><span class="line">    <span class="keyword">private</span> String version;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">App</span><span class="params">(String content, String version)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.content = content;</span><br><span class="line">        <span class="keyword">this</span>.version = version;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getContent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> content;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContent</span><span class="params">(String content)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.content = content;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getVersion</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> version;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setVersion</span><span class="params">(String version)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.version = version;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"App&#123;"</span> +</span><br><span class="line">                <span class="string">"content='"</span> + content + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", version='"</span> + version + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定义 <code>AppBackup</code> 来充当备忘录角色，它有一个属性就是 <code>App</code>，也就是备份的应用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 应用备份（充当备忘录角色）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppBackup</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> App app;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AppBackup</span><span class="params">(App app)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.app = app;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> App <span class="title">getApp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> app;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setApp</span><span class="params">(App app)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.app = app;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了备忘录，也需要一个空间来存放备忘录，并对外提供备忘录。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 备份空间</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Space</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> AppBackup appBackup;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AppBackup <span class="title">getAppBackup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> appBackup;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAppBackup</span><span class="params">(AppBackup appBackup)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.appBackup = appBackup;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有了这些备份机制，还需要有一个程序猿来部署，这位同学需要掌握发布步骤的所有过程，部署新应用以及回滚旧应用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 部署应用的同学</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Deployer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 要部署的应用</span></span><br><span class="line">    <span class="keyword">private</span> App app;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> App <span class="title">getApp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> app;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置部署应用</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setApp</span><span class="params">(App app)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.app = app;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建应用的备份</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> AppBackup <span class="title">createAppBackup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AppBackup(app);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从备忘录恢复应用</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAppBackup</span><span class="params">(AppBackup appBackup)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.app = appBackup.getApp();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 显示应用的信息</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showApp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="keyword">this</span>.app.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 暂停应用</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stopApp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"暂停应用："</span> + <span class="keyword">this</span>.app.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 启动应用</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startApp</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"启动应用："</span> + <span class="keyword">this</span>.app.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再献上测试代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MementoTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Deployer deployer = <span class="keyword">new</span> Deployer();</span><br><span class="line">        deployer.setApp(<span class="keyword">new</span> App(<span class="string">"apply-system"</span>, <span class="string">"1.0.0"</span>));</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"1. 暂停旧应用"</span>);</span><br><span class="line">        deployer.stopApp();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"2. 备份旧应用"</span>);</span><br><span class="line">        Space space = <span class="keyword">new</span> Space();</span><br><span class="line">        space.setAppBackup(deployer.createAppBackup());</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"3. 拷贝新应用到服务器"</span>);</span><br><span class="line">        deployer.setApp(<span class="keyword">new</span> App(<span class="string">"apply-system"</span>, <span class="string">"2.0.0"</span>));</span><br><span class="line">        deployer.showApp();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"4. 启动新应用"</span>);</span><br><span class="line">        deployer.startApp();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"5. 有异常，暂停新应用"</span>);</span><br><span class="line">        deployer.stopApp();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"6. 回滚旧应用，拷贝备份的旧应用到服务器"</span>);</span><br><span class="line">        deployer.setAppBackup(space.getAppBackup());</span><br><span class="line">        deployer.showApp();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"7. 启动备份的旧应用"</span>);</span><br><span class="line">        deployer.startApp();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">打印结果：</span><br><span class="line"><span class="number">1</span>. 暂停旧应用</span><br><span class="line">暂停应用：App&#123;content=<span class="string">'apply-system'</span>, version=<span class="string">'1.0.0'</span>&#125;</span><br><span class="line"><span class="number">2</span>. 备份旧应用</span><br><span class="line"><span class="number">3</span>. 拷贝新应用到服务器</span><br><span class="line">App&#123;content=<span class="string">'apply-system'</span>, version=<span class="string">'2.0.0'</span>&#125;</span><br><span class="line"><span class="number">4</span>. 启动新应用</span><br><span class="line">启动应用：App&#123;content=<span class="string">'apply-system'</span>, version=<span class="string">'2.0.0'</span>&#125;</span><br><span class="line"><span class="number">5</span>. 有异常，暂停新应用</span><br><span class="line">暂停应用：App&#123;content=<span class="string">'apply-system'</span>, version=<span class="string">'2.0.0'</span>&#125;</span><br><span class="line"><span class="number">6</span>. 回滚旧应用，拷贝备份的旧应用到服务器</span><br><span class="line">App&#123;content=<span class="string">'apply-system'</span>, version=<span class="string">'1.0.0'</span>&#125;</span><br><span class="line"><span class="number">7</span>. 启动备份的旧应用</span><br><span class="line">启动应用：App&#123;content=<span class="string">'apply-system'</span>, version=<span class="string">'1.0.0'</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>备忘录模式代码实现搞定。有同学会不会觉得挺麻烦的，为什么要有<code>AppBackup</code>？我们看看个人介绍，在对象之外保存状态，AppBackup 就是对象之外的对象，用来保存旧应用。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>备忘录模式定义了一个备份机制。在很多场景都有类似备忘录模式的实现，比如数据库的事务的回滚机制。在平常业务开发中并没有经常使用这个设计模式，但是我们有使用它的思想，比如我们用数据库或者其他中间件做备份数据，其中备份思想是一致的。</p>
+<p><strong>推荐阅读</strong></p>
+<p><a href="https://mp.weixin.qq.com/s/idqYPpzR8kbG4gz11EnY1Q" target="_blank" rel="noopener">行为型模式：状态模式</a></p>
+<p><a href="https://mp.weixin.qq.com/s/1DqPjUZNT5UuRrZwl5QjqQ" target="_blank" rel="noopener">行为型模式：观察者模式</a></p>
+<p><a href="https://mp.weixin.qq.com/s/ItQUqfzzXw4387PVK0ib_g" target="_blank" rel="noopener">行为型模式：迭代器模式</a></p>
+<p>设计模式系列文章持续更新中，欢迎关注公众号，一起交流学习。</p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/03/25/reflection/" itemprop="url">
+                  复盘一次生产问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-03-25T09:22:04+08:00" content="2019-03-25">
+              2019-03-25
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/03/25/reflection/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/03/25//reflection/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/03/25/reflection/" class="leancloud_visitors" data-flag-title="复盘一次生产问题">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://www.liebrother.com/upload/ffffaf460e7a4b67a62473a08d6f75f0_0053_01.jpg" alt="夜空"> </p>
+<p>有整整 10 天木有更文了，这段时间确实比较忙。</p>
+<p>有加我微信的朋友知道我上周末出去春游了，部门组织去了趟外伶仃岛，环境挺不错的，这段时间去的人也比较少，值得去玩。</p>
+<p>今天讲讲上周末一次生产问题的复盘。</p>
+<h2 id="1-事情经过"><a href="#1-事情经过" class="headerlink" title="1 事情经过"></a>1 事情经过</h2><p>周日中午从外伶仃岛回来就直奔公司，因为生产出了些问题。问题是这样的：HBase 的一些节点挂了，导致一些数据丢失。丢失数据的客户来授信或者借款，都会卡件。在确定数据短时间没法恢复时，就决定从系统的层面去解决这个问题。这时我咨询了 2 位老员工，这些数据虽然是规则的入参数据，但是规则可能没用这些数据去做决策，能否先跟规则的同事确认这些数据是否有使用，如果没有，就可以先暂停这些数据的获取，减少影响面，再来细致的分析数据。得到的回复都是这些数据很早前就上线了，肯定有在用。这时只能分析系统数据，恰巧丢失的数据是原始数据，不是加工数据，原始数据不做规则入参，所以就简单的修改了获取数据源的代码。</p>
+<p>在测试同事进行简单回归测试时，发现了一个奇怪的现象，旧数据被覆盖，检查了各种 SQL 配置，没有发现问题，因为以前也有很多模型和规则入参都是这样配置的，接着就陷入历史问题的 debug 中，还是没有发现问题所在，到了晚上快 11 点，有同事联系了规则同事，才发现卡件的数据他们并没有在借款的规则中使用，也就是可以通过关闭获取数据源来解决借款卡件问题，作罢，先解决数据卡件问题，后面再细致分析历史问题，搞完回到家 1 点半。</p>
+<h2 id="2-复盘"><a href="#2-复盘" class="headerlink" title="2 复盘"></a>2 复盘</h2><p>这周也是持续在跟进这个生产历史问题，最终发现是系统框架的 Bug，在数据处理的时候，私有的数据被公共的数据覆盖导致的。这段时间也一直在思考这次生产问题，从马后炮来说，其实可以很快就把卡件问题解决，但是其中却经历了整整 10 个小时的折腾，肯定是有原因的，通过这篇文章复盘一下。</p>
+<h3 id="2-1-惯性思维"><a href="#2-1-惯性思维" class="headerlink" title="2.1 惯性思维"></a>2.1 惯性思维</h3><p>从维基百科上看这个定义：<code>惯性思维（Inertial thinking）</code>指人习惯性地因循以前的思路思考问题，仿佛物体运动的惯性。惯性思维常会造成思考事情时有些盲点，且缺少创新或改变的可能性。</p>
+<p>上面的过程发现了 2 处惯性思维。</p>
+<ol>
+<li>一处是同事们因为经历了整个系统的开发过程，所以直接否定了确认规则是否有在使用丢失的数据的方案；而我因为没有经历前程的开发，算是一个旁观者去看待这个问题，所以才有这个想法先确定数据有没在使用。这里的惯性思维是：<strong>因为数据很早前就上线了，当时就在使用，所以现在数据还在使用</strong>。</li>
+<li>另外一处则是我对待生产出现的历史问题，一直在通过检查业务代码和 SQL 配置去尝试解决这个问题，因为以前也是这样使用的，以前没出现问题。这里的惯性思维是：<strong>以前这样使用没问题，这一次有问题应该是业务代码或者 SQL 配置有问题</strong>。</li>
+</ol>
+<p>这里都是因为以前做过某些事情是没错的，导致<code>在遇到相同问题的时候会去把以前没错的做法当成是正确答案</code>，而其实没错不等于正确，<code>以前没错的做法只是参考答案，不是正确答案</code>，这里就涉及到思维问题，如果当成参考答案，那么思维是发散的，这个参考答案觉得不对则可以再找其他参考答案或者去发现其他解决方案；如果当成正确答案，那么思维是僵化的，会把这个正确答案一直往里套，就会走不出来。</p>
+<p>理解了上面这点，那有什么可以去摆脱惯性思维呢？下面这两点不确定是不是对的，但是是我通过思考，决定接下来要尝试去执行的。</p>
+<ol>
+<li><code>告诉自己，这是惯性思维</code>。《正念的奇迹》书中讲过洗碗、吃橘子的案例，都是去感受洗碗、去感受吃橘子的感觉。有健身的朋友也会知道，健身肌肉酸痛的时候，去感受那个感觉。让自己去清晰的正面对待惯性思维，而不是去埋怨自己怎么又陷入惯性思维，正面对待它，然后告诉自己，这是惯性思维，这个参考答案是错的，找另一个答案。</li>
+<li><code>空杯状态</code>。如果没有好的参考答案，放空自己，根据眼前看到的事情，按正常的解决思路去解决。</li>
+</ol>
+<h3 id="2-2-明确轻重缓急"><a href="#2-2-明确轻重缓急" class="headerlink" title="2.2 明确轻重缓急"></a>2.2 明确轻重缓急</h3><p>当时最紧要的事情是解决生产卡件的问题。在解决的过程中，却发现了一个历史遗留的 Bug，这时卡件的问题代码已经验证通过了，应该直接就上生产，解决当前的燃眉之急，再解决历史遗留的 Bug。现实是一直去把心思放到历史遗留的 Bug 中，导致延迟了很久才把 hotfix 上线。</p>
+<p>明确轻重缓急很重要，不仅在特殊紧急的情况，在平时工作中也是一样重要，每天要做的事情很多，要学会先做什么，后做什么。解决这个问题，可以采用<code>四象限工作法</code>，什么是四象限工作法？看下图。</p>
+<p><img src="http://www.liebrother.com/upload/87297ad089c941e2826039fae3812682_.jpg" alt="四象限工作法"><br><span style="font-size:0.8em;">（注：这里的象限划分和数学上的有些差别，数学上三、四象限和图上是相反的，这里是按照事情的重要紧急程度排序）</span></p>
+<p>每件工作用 2 个维度去衡量，分别是<code>重要性</code>和<code>紧急度</code>。按照这 2 个维度进行分析后落位到各个象限，然后根据象限的顺序去执行，比如上面遇到的卡件以及历史 Bug 问题，卡件这个是放在一象限，历史 Bug 是放在二象限，所以应该分开解决，解决好了卡件问题之后，再去解决历史 Bug。当时有这个意识的话，在验证卡件 hotfix 代码没问题后，就可以直接上线了，后续再分析历史 Bug。</p>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3 总结"></a>3 总结</h2><p>经过这次事情，让自己静下心来思考，思考哪些地方做错了，思考犯错的本质，思考如何去避免再犯同样的错，思考怎么去用实际的行动改进。犯错不可怕，可怕的是一错再错。嗯，这一刻，我又成长了。希望我的复盘也能给你一些启示。</p>
+<p>推荐阅读：</p>
+<p><a href="https://mp.weixin.qq.com/s/1DqPjUZNT5UuRrZwl5QjqQ" target="_blank" rel="noopener">行为型模式：观察者模式</a></p>
+<p><a href="https://mp.weixin.qq.com/s/ItQUqfzzXw4387PVK0ib_g" target="_blank" rel="noopener">行为型模式：迭代器模式</a></p>
+<p><a href="https://mp.weixin.qq.com/s/jaejRfi4zAtnMEL8Bf0avg" target="_blank" rel="noopener">行为型模式：策略模式</a></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/03/14/state-pattern/" itemprop="url">
+                  行为型模式：状态模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-03-14T07:10:59+08:00" content="2019-03-14">
+              2019-03-14
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/03/14/state-pattern/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/03/14//state-pattern/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/03/14/state-pattern/" class="leancloud_visitors" data-flag-title="行为型模式：状态模式">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://www.liebrother.com/upload/8ff9f607e5fe4c8c8be16615a0313abe_0037_01.jpg" alt="景色"> </p>
 <blockquote>
-<p>1、通过实现InvocationHandler接口创建自己的调用处理器 IvocationHandler handler = new InvocationHandlerImpl(…);<br>2、通过为Proxy类指定ClassLoader对象和一组interface创建动态代理类<br>Class clazz = Proxy.getProxyClass(classLoader,new Class[]{…});<br>3、通过反射机制获取动态代理类的构造函数，其参数类型是调用处理器接口类型<br>Constructor constructor = clazz.getConstructor(new Class[]{InvocationHandler.class});<br>4、通过构造函数创建代理类实例，此时需将调用处理器对象作为参数被传入<br>Interface Proxy = (Interface)constructor.newInstance(new Object[] (handler));<br>为了简化对象创建过程，Proxy类中的newInstance方法封装了2~4，只需两步即可完成代理对象的创建。<br>生成的ProxySubject继承Proxy类实现Subject接口，实现的Subject的方法实际调用处理器的invoke方法，而invoke方法利用反射调用的是被代理对象的的方法（Object result=method.invoke(proxied,args)）</p>
+<p>十一大行为型模式之八：状态模式。</p>
 </blockquote>
-<h2 id="动态代理的优点和缺点"><a href="#动态代理的优点和缺点" class="headerlink" title="动态代理的优点和缺点"></a>动态代理的优点和缺点</h2><h3 id="优点：-1"><a href="#优点：-1" class="headerlink" title="优点："></a>优点：</h3><p>动态代理与静态代理相比较，最大的好处是接口中声明的所有方法都被转移到调用处理器一个集中的方法中处理（InvocationHandler.invoke）。这样，在接口方法数量比较多的时候，我们可以进行灵活处理，而不需要像静态代理那样每一个方法进行中转。在本示例中看不出来，因为invoke方法体内嵌入了具体的外围业务（记录任务处理前后时间并计算时间差），实际中可以类似Spring AOP那样配置外围业务。 </p>
-<h3 id="缺点：-1"><a href="#缺点：-1" class="headerlink" title="缺点："></a>缺点：</h3><p>诚然，Proxy 已经设计得非常优美，但是还是有一点点小小的遗憾之处，那就是它始终无法摆脱仅支持 interface 代理的桎梏，因为它的设计注定了这个遗憾。回想一下那些动态生成的代理类的继承关系图，它们已经注定有一个共同的父类叫 Proxy。Java 的继承机制注定了这些动态代理类们无法实现对 class 的动态代理，原因是多继承在 Java 中本质上就行不通。<br>有很多条理由，人们可以否定对 class 代理的必要性，但是同样有一些理由，相信支持 class 动态代理会更美好。接口和类的划分，本就不是很明显，只是到了 Java 中才变得如此的细化。如果只从方法的声明及是否被定义来考量，有一种两者的混合体，它的名字叫抽象类。实现对抽象类的动态代理，相信也有其内在的价值。此外，还有一些历史遗留的类，它们将因为没有实现任何接口而从此与动态代理永世无缘。如此种种，不得不说是一个小小的遗憾。 </p>
-<h1 id="CGLib的动态代理"><a href="#CGLib的动态代理" class="headerlink" title="CGLib的动态代理"></a>CGLib的动态代理</h1><blockquote>
-<p>JDK实现动态代理需要实现类通过接口定义业务方法，对于没有接口的类，如何实现动态代理呢，这就需要CGLib了。CGLib采用了非常底层的字节码技术，其原理是通过字节码技术为一个类创建子类，并在子类中采用方法拦截的技术拦截所有父类方法的调用，顺势织入横切逻辑</p>
-</blockquote>
-<h2 id="例子-2"><a href="#例子-2" class="headerlink" title="例子"></a>例子</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//pom.xml</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;cglib&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;cglib&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;3.2.4&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//代理类</span><br><span class="line">public class UserServiceCglibMethodInterceptor implements MethodInterceptor &#123;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public Object intercept(Object object, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable &#123;</span><br><span class="line">		System.out.println(&quot;Cglib Before add&quot;);</span><br><span class="line">		Object result = methodProxy.invokeSuper(object, objects);</span><br><span class="line">		System.out.println(&quot;Cglib After add&quot;);</span><br><span class="line">		return result;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//代理工厂</span><br><span class="line">public class ProxyCglibFactory &#123;</span><br><span class="line"></span><br><span class="line">	public static UserService getInstance() &#123;</span><br><span class="line">		Enhancer enhancer = new Enhancer();  </span><br><span class="line">		enhancer.setSuperclass(UserServiceImpl.class);  </span><br><span class="line">		enhancer.setCallback(new UserServiceCglibMethodInterceptor());  </span><br><span class="line">		return (UserServiceImpl)enhancer.create();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//测试</span><br><span class="line">public class TestCglibProxy &#123;</span><br><span class="line"></span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		UserService userService = ProxyCglibFactory.getInstance();</span><br><span class="line">		User user = new User();</span><br><span class="line">		user.setId(12);</span><br><span class="line">		user.setName(&quot;哈哈&quot;);</span><br><span class="line">		user.setAge(23);</span><br><span class="line">		userService.add(user);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>姓名</strong> ：状态模式<br><strong>英文名</strong> ：State Pattern<br><strong>价值观</strong> ：有啥事让状态我来维护<br><strong>个人介绍</strong> ：<br>Allow an object to alter its behavior when its internal state changes.The object will appear to change its class.<br>当一个对象内在状态改变时允许其改变行为，这个对象看起来像改变了其类。<br>（来自《设计模式之禅》）</p>
+<h2 id="你要的故事"><a href="#你要的故事" class="headerlink" title="你要的故事"></a>你要的故事</h2><p>现在有好多个人贷款软件，比如：支付宝、360借条(打广告。。。)等等。贷款会有一个用户状态流程，游客-&gt;注册用户-&gt;授信用户-&gt;借款用户(这里简化了状态，只用 4 个)。每个状态拥有的权限不一样，如下图所示。</p>
+<p><img src="http://www.liebrother.com/upload/1ce238b0c01a463380b4367d6467c28f_003702.jpg" alt="状态"> </p>
+<p>从上图可以看到，一个用户有 3 种行为，分别是注册、授信、借款。当注册成功后，用户的状态就从『游客』改变为『注册用户』；当授信成功后，用户的状态就从『注册用户』改变为『授信用户』；当借款成功后，用户的状态就从『授信用户』改变为『借款用户』。现在我们就来实现用户注册、授信、借款的过程，因为每个状态的权限不一样，所以这里需要根据用户的状态来限制用户行为。</p>
+<p>很快，我们就完成下面的代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String state;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(String state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"none"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"游客。注册中。。。"</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"register"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"注册用户。不需要再注册。"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"apply"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"授信用户。不需要再注册。"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"draw"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"借款用户。不需要再注册。"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"none"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"游客。不能申请授信。"</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"register"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"注册用户。授信申请中。。。"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"apply"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"授信用户。不需要再授信。"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"draw"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"借款用户。不需要再授信。"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(<span class="keyword">double</span> money)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"none"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"游客。申请借款【"</span> + money + <span class="string">"】元。不能申请借款。"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"register"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"注册用户。申请借款【"</span> + money + <span class="string">"】元。还没授信，不能借款。"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"apply"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"授信用户。申请借款【"</span> + money + <span class="string">"】元。申请借款中。。。"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"draw"</span>.equals(state)) &#123;</span><br><span class="line">            System.out.println(<span class="string">"授信用户。申请借款【"</span> + money + <span class="string">"】元。申请借款中。。。"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoStateTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        User user = <span class="keyword">new</span> User();</span><br><span class="line">        user.setState(<span class="string">"register"</span>);</span><br><span class="line">        user.draw(<span class="number">1000</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">打印结果：</span><br><span class="line">注册用户。申请借款【<span class="number">1000.0</span>】元。还没授信，不能借款。</span><br></pre></td></tr></table></figure>
+<p>上面代码实现了用户 register (注册)，apply (授信)，draw (借款) 这 3 种行为，每个行为都会根据状态 state 来做权限控制。看起来有点繁琐，扩展性不高，假设新增了一个状态，那么注册、授信、借款这 3 种行为的代码都要修改。下面通过<code>状态模式</code>来解决这个问题。</p>
+<p>我们把<code>状态</code>给抽出来，作为一个接口，因为在每种状态中都可能有注册、授信、借款行为，所以把这 3 个行为作为<code>状态</code>接口的方法，让每个状态子类都实现相应的行为控制。如下代码所示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">State</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">register</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">draw</span><span class="params">(<span class="keyword">double</span> money)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 游客</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NoneState</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"游客。注册中。。。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"游客。不能申请授信。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(<span class="keyword">double</span> money)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"游客。申请借款【"</span> + money + <span class="string">"】元。不能申请借款。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 注册状态</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RegisterState</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"注册用户。不需要再注册。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"注册用户。授信申请中。。。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(<span class="keyword">double</span> money)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"注册用户。申请借款【"</span> + money + <span class="string">"】元。还没授信，不能借款。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 授信状态</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApplyState</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"授信用户。不需要再注册。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"授信用户。不需要再授信。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(<span class="keyword">double</span> money)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"授信用户。申请借款【"</span> + money + <span class="string">"】元。申请借款中。。。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 借款状态</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DrawState</span> <span class="keyword">implements</span> <span class="title">State</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"借款用户。不需要再注册。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"借款用户。不需要再授信。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(<span class="keyword">double</span> money)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"申请借款【"</span> + money + <span class="string">"】元。申请借款中。。。"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User1</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> State state;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> State <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(State state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state.register();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state.apply();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">(<span class="keyword">double</span> money)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state.draw(money);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StateTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        User1 user1 = <span class="keyword">new</span> User1();</span><br><span class="line">        user1.setState(<span class="keyword">new</span> RegisterState());</span><br><span class="line">        user1.apply();</span><br><span class="line">        user1.draw(<span class="number">1000</span>);</span><br><span class="line">        user1.setState(<span class="keyword">new</span> ApplyState());</span><br><span class="line">        user1.draw(<span class="number">2000</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">打印结果：</span><br><span class="line">注册用户。授信申请中。。。</span><br><span class="line">注册用户。申请借款【<span class="number">1000.0</span>】元。还没授信，不能借款。</span><br><span class="line">授信用户。申请借款【<span class="number">2000.0</span>】元。申请借款中。。。</span><br></pre></td></tr></table></figure>
+<p>看上面代码，我们抽象了 <code>State</code> 接口，4 种状态分别用 <code>NoneState</code> (游客)、<code>RegisterState</code> (注册)、<code>ApplyState</code> (授信)、<code>DrawState</code> (借款) 表示。而每个状态都有 3 种行为，它们各自对这些行为进行权限控制。这样子实现可以让权限逻辑分离开，分散到每个状态里面去，如果以后要业务扩展，要新增状态，那就很方便了，只需要再实现一个状态类就可以，不会影响到其他代码。这也是为什么《阿里巴巴 Java 开发手册》里面讲的，当超过 3 层的 <code>if-else</code> 的逻辑判断代码，推荐用状态模式来重构代码。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>状态模式</code> 很好的减低了代码的复杂性，从而提高了系统的可维护性。在业务开发中可以尝试使用，比如在迭代开发中，业务逻辑越来越复杂，从而不得不使用很多 <code>if-else</code> 语句来实现时，就可以考虑一下是不是可以用 <code>状态模式</code> 来重构，特别是一些有状态流程转换方面的业务。看到这篇文章，想想工作中是不是有些复杂的代码可以重构，赶紧行动起来。</p>
+<p>推荐阅读：</p>
+<p><a href="https://mp.weixin.qq.com/s/1DqPjUZNT5UuRrZwl5QjqQ" target="_blank" rel="noopener">行为型模式：观察者模式</a><br><a href="https://mp.weixin.qq.com/s/ItQUqfzzXw4387PVK0ib_g" target="_blank" rel="noopener">行为型模式：迭代器模式</a><br><a href="https://mp.weixin.qq.com/s/jaejRfi4zAtnMEL8Bf0avg" target="_blank" rel="noopener">行为型模式：策略模式</a></p>
+<p>设计模式系列文章持续更新中，欢迎关注公众号 <strong>LieBrother</strong>，一起交流学习。</p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/03/11/observer-pattern/" itemprop="url">
+                  行为型模式：观察者模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-03-11T22:20:05+08:00" content="2019-03-11">
+              2019-03-11
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/03/11/observer-pattern/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/03/11//observer-pattern/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/03/11/observer-pattern/" class="leancloud_visitors" data-flag-title="行为型模式：观察者模式">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://www.liebrother.com/upload/71f24b4564f44f288bcc17af4ecfd6f0_0036_01.jpg" alt="灯塔"></p>
 <blockquote>
-<p>结果：<br>Cglib Before add<br>UserServiceImpl : add userUser [id=12, name=哈哈, age=23]<br>Cglib After add</p>
+<p>十一大行为型模式之七：观察者模式。</p>
 </blockquote>
-<h2 id="代理对象的生成过程由Enhancer类实现，大概步骤如下："><a href="#代理对象的生成过程由Enhancer类实现，大概步骤如下：" class="headerlink" title="代理对象的生成过程由Enhancer类实现，大概步骤如下："></a>代理对象的生成过程由Enhancer类实现，大概步骤如下：</h2><blockquote>
-<p>1、生成代理类Class的二进制字节码；<br>2、通过Class.forName加载二进制字节码，生成Class对象；<br>3、通过反射机制获取实例构造，并初始化代理类对象</p>
-</blockquote>
-<h1 id="Java自带的动态代理和CGlib的动态代理实现的区别"><a href="#Java自带的动态代理和CGlib的动态代理实现的区别" class="headerlink" title="Java自带的动态代理和CGlib的动态代理实现的区别"></a>Java自带的动态代理和CGlib的动态代理实现的区别</h1><blockquote>
-<p>1、jdk动态代理生成的代理类和委托类实现了相同的接口；<br>2、cglib动态代理中生成的字节码更加复杂，生成的代理类是委托类的子类，且不能处理被final关键字修饰的方法；<br>3、jdk采用反射机制调用委托类的方法，cglib采用类似索引的方式直接调用委托类方法；</p>
-</blockquote>
-<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="http://www.cnblogs.com/chinajava/p/5880887.html" target="_blank" rel="noopener">说说cglib动态代理 </a><br><a href="http://www.cnblogs.com/mengdd/archive/2013/01/30/2883468.html" target="_blank" rel="noopener">Java 代理模式（一） 静态代理</a><br><a href="http://blog.csdn.net/hejingyuan6/article/details/36203505" target="_blank" rel="noopener">JAVA学习篇–静态代理VS动态代理 </a><br><a href="http://layznet.iteye.com/blog/1182924" target="_blank" rel="noopener">java静态代理和动态代理 </a><br><a href="http://www.ibm.com/developerworks/cn/java/j-lo-proxy1/index.html" target="_blank" rel="noopener">Java 动态代理机制分析及扩展，第 1 部分</a><br><a href="http://rejoy.iteye.com/blog/1627405" target="_blank" rel="noopener">JDK动态代理实现原理</a><br><a href="http://www.cnblogs.com/flyoung2008/archive/2013/08/11/3251148.html" target="_blank" rel="noopener">彻底理解JAVA动态代理</a></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>姓名</strong> ：观察者模式<br><strong>英文名</strong> ：Observer Pattern<br><strong>价值观</strong> ：盯着你怎么着<br><strong>个人介绍</strong> ：<br>Define a one-to-many dependency between objects so that when one object changes state,all its dependents are notified and updated automatically.<br>定义对象间一种一对多的依赖关系，使得每当一个对象改变状态，则所有依赖于它的对象都会得到通知并被自动更新。<br>（来自《设计模式之禅》）</p>
+<h2 id="你要的故事"><a href="#你要的故事" class="headerlink" title="你要的故事"></a>你要的故事</h2><p>想来想去，就拿我们现在生活中最常体会到的事情来讲观察者模式–朋友圈。小明、小红、小东 3 人是好朋友，最近他们的父母都给安排了手机，刚用上手机那是相当的兴奋呀。他们立马从 QQ 转投到微信的怀抱，对微信的朋友圈玩的不亦乐乎，什么事情都往上面发。突然有一天，小明和小红因为一些小事争执闹别扭了，原因就是他们对一道数学题有不同的见解。就跟我们小时候和朋友玩得好好的，突然因为一点小事就闹翻了。小红比较孩子气，立马就屏蔽了小明的朋友圈，不想再看到有关小明相关的信息。故事就是这么一回事，关注点就在这<code>朋友圈</code>上。朋友圈就是运用观察者模式的一个很好的样例。为什么这么说？我们发朋友圈的时候，那些没有屏蔽我们朋友圈的好友，会收到信息推送。也就是没有屏蔽我们朋友圈的好友其实是订阅了我们朋友圈，好友相当于观察者，我们是被观察的对象。符合观察者模式这个关系。</p>
+<p>我们通过代码来描述小明、小红、小东他们在朋友圈玩的场景。利用观察者模式，需要观察对象和被观察对象，所以我们先定义 2 个接口，分别是 <code>Observable</code> (可被观察接口) 和 <code>Observer</code> (观察者接口)。</p>
+<p>实现 <code>Observable</code> 接口的对象说明是可被订阅观察的，所以它需要 <code>addObserver()</code> 新增订阅者方法和 <code>removeObserver()</code> 移除订阅者方法，另外还有一个是必须的，就是通知各个订阅者消息的方法 <code>notifyObservers()</code>。那 <code>Observable</code> 接口代码如下所示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Observable</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">addObserver</span><span class="params">(Observer observer)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer observer)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">notifyObservers</span><span class="params">(String message)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实现 <code>Observer</code> 接口的对象说明是可以去订阅观察的，也就是说可以接收被订阅的对象发出来的消息，那就需要一个接收消息的方法 <code>update()</code>。代码如下所示。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">(String name, String message)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>为了让大家不混淆，先把观察者和被观察者分离开</strong>，其实在这个例子中，观察者和被观察者是同一个对象 <code>User</code> 的。这里就分开，分成 <code>User</code> 和 <code>Friend</code>，后面会给出正确的代码，稍安勿躁哈。这里 <code>User</code> 作为被观察者，实现了 <code>Observable</code> 接口，而 <code>Friend</code> 作为观察者，实现了 <code>Observer</code> 接口。代码如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">implements</span> <span class="title">Observable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;Observer&gt; friends;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.friends = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMessage</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.notifyObservers(message);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addObserver</span><span class="params">(Observer observer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.friends.add(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer observer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.friends.remove(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyObservers</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.friends.forEach(friend -&gt; &#123;</span><br><span class="line">            friend.update(<span class="keyword">this</span>.name, message);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Friend</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Friend</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(String name, String message)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"【"</span> + <span class="keyword">this</span>.name + <span class="string">"】看到【"</span> + name + <span class="string">"】发的朋友圈："</span> + message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObserverTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        User xiaoMing = <span class="keyword">new</span> User(<span class="string">"小明"</span>);</span><br><span class="line">        Friend xiaoHong = <span class="keyword">new</span> Friend(<span class="string">"小红"</span>);</span><br><span class="line">        Friend xiaoDong = <span class="keyword">new</span> Friend(<span class="string">"小东"</span>);</span><br><span class="line">        xiaoMing.addObserver(xiaoHong);</span><br><span class="line">        xiaoMing.addObserver(xiaoDong);</span><br><span class="line">        xiaoMing.sendMessage(<span class="string">"今天真开心"</span>);</span><br><span class="line">        <span class="comment">// 小红和小明闹别扭了，小红取消订阅小明的朋友圈</span></span><br><span class="line">        xiaoMing.removeObserver(xiaoHong);</span><br><span class="line">        xiaoMing.sendMessage(<span class="string">"希望明天也像今天一样开心"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">打印结果：</span><br><span class="line">【小红】看到【小明】发的朋友圈：今天真开心</span><br><span class="line">【小东】看到【小明】发的朋友圈：今天真开心</span><br><span class="line">【小东】看到【小明】发的朋友圈：希望明天也像今天一样开心</span><br></pre></td></tr></table></figure>
+<p>看到代码执行结果，小红和小东都订阅了小明的朋友圈，小明发了朋友圈：今天真开心。他们俩都收到了，因为小红和小明闹别扭，小红取消订阅小明的朋友圈，所以小明后来发的朋友圈，小红没收到。</p>
+<p>上面代码其实是不对的，不应该用 <code>User</code> 和 <code>Friend</code> 2 个类来定义。如果小明订阅小红和小东的朋友圈呢？这样实现比较麻烦，主要是为了分清 <code>观察者</code> 和 <code>被观察者</code> 这 2 个概念，通过上面的例子应该分清楚了 2 个概念了，那就可以来看正确的代码，小明、小红、小东他们其实都是观察者和被观察者，所以我们用 <code>User2</code> 来定义他们就可以，<code>User2</code> 实现了 <code>Observable</code> 和 <code>Observer</code> 接口。代码如下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User2</span> <span class="keyword">implements</span> <span class="title">Observable</span>, <span class="title">Observer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> List&lt;Observer&gt; friends;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">User2</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.friends = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addObserver</span><span class="params">(Observer observer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.friends.add(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer observer)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.friends.remove(observer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notifyObservers</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.friends.forEach(friend -&gt; &#123;</span><br><span class="line">            friend.update(<span class="keyword">this</span>.name, message);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(String name, String message)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"【"</span> + <span class="keyword">this</span>.name + <span class="string">"】看到【"</span> + name + <span class="string">"】发的朋友圈："</span> + message);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendMessage</span><span class="params">(String message)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.notifyObservers(message);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ObserverTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        User2 xiaoMing2 = <span class="keyword">new</span> User2(<span class="string">"小明"</span>);</span><br><span class="line">        User2 xiaoHong2 = <span class="keyword">new</span> User2(<span class="string">"小红"</span>);</span><br><span class="line">        User2 xiaoDong2 = <span class="keyword">new</span> User2(<span class="string">"小东"</span>);</span><br><span class="line">        xiaoMing2.addObserver(xiaoHong2);</span><br><span class="line">        xiaoMing2.addObserver(xiaoDong2);</span><br><span class="line">        xiaoMing2.sendMessage(<span class="string">"今天真开心"</span>);</span><br><span class="line">        xiaoMing2.removeObserver(xiaoHong2);</span><br><span class="line">        xiaoMing2.sendMessage(<span class="string">"希望明天也像今天一样开心"</span>);</span><br><span class="line"></span><br><span class="line">        xiaoHong2.addObserver(xiaoMing2);</span><br><span class="line">        xiaoHong2.addObserver(xiaoDong2);</span><br><span class="line">        xiaoHong2.sendMessage(<span class="string">"今天和小明吵架了，屏蔽他的朋友圈"</span>);</span><br><span class="line"></span><br><span class="line">        xiaoDong2.addObserver(xiaoMing2);</span><br><span class="line">        xiaoDong2.addObserver(xiaoHong2);</span><br><span class="line">        xiaoDong2.sendMessage(<span class="string">"小明和小红吵架了，夹在中间好尴尬"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">打印结果:</span><br><span class="line">【小红】看到【小明】发的朋友圈：今天真开心</span><br><span class="line">【小东】看到【小明】发的朋友圈：今天真开心</span><br><span class="line">【小东】看到【小明】发的朋友圈：希望明天也像今天一样开心</span><br><span class="line">【小明】看到【小红】发的朋友圈：今天和小明吵架了，屏蔽他的朋友圈</span><br><span class="line">【小东】看到【小红】发的朋友圈：今天和小明吵架了，屏蔽他的朋友圈</span><br><span class="line">【小明】看到【小东】发的朋友圈：小明和小红吵架了，夹在中间好尴尬</span><br><span class="line">【小红】看到【小东】发的朋友圈：小明和小红吵架了，夹在中间好尴尬</span><br></pre></td></tr></table></figure>
+<p>从代码中，我们看到小明、小红、小东 3 个人互相订阅朋友圈，当然中途小红屏蔽了小明的朋友圈。这就是 <code>观察者</code> 和 <code>被观察者</code> 刚好是同一个对象的实现。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>观察者模式</code> 是一个比较特殊的设计模式，它定义了触发机制，观察者只要订阅了被观察者，就可以第一时间得到被观察者传递的信息。在工作中，使用观察者模式的场景也比较多，比如消息队列消费，Android 开发中的事件触发机制等等。好，观察者模式就到这。</p>
+<p>推荐阅读：</p>
+<p><a href="https://mp.weixin.qq.com/s/ItQUqfzzXw4387PVK0ib_g" target="_blank" rel="noopener">行为型模式：迭代器模式</a></p>
+<p><a href="https://mp.weixin.qq.com/s/jaejRfi4zAtnMEL8Bf0avg" target="_blank" rel="noopener">行为型模式：策略模式</a></p>
+<p><a href="https://mp.weixin.qq.com/s/xr_jwktNoW8nrFK5cthFkQ" target="_blank" rel="noopener">行为型模式：责任链模式</a></p>
+<p>设计模式系列文章持续更新中，欢迎关注公众号 <strong>LieBrother</strong>，一起交流学习。</p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
 
           
         
@@ -536,8 +746,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/02/19/生活如此/" itemprop="url">
-                  生活如此
+                <a class="post-title-link" href="/2019/03/02/book-zhouhongyi/" itemprop="url">
+                  读书 | 颠覆者：周鸿祎自传
                 </a>
               
             
@@ -550,38 +760,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-02-19T22:00:00+08:00" content="2017-02-19">
-              2017-02-19
+            <time itemprop="dateCreated" datetime="2019-03-02T23:08:24+08:00" content="2019-03-02">
+              2019-03-02
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/生活人生/" itemprop="url" rel="index">
-                    <span itemprop="name">生活人生</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/02/19/生活如此/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/生活如此/" itemprop="commentsCount"></span>
+                <a href="/2019/03/02/book-zhouhongyi/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/03/02//book-zhouhongyi/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -591,7 +782,7 @@
 
           
           
-             <span id="/2017/02/19/生活如此/" class="leancloud_visitors" data-flag-title="生活如此">
+             <span id="/2019/03/02/book-zhouhongyi/" class="leancloud_visitors" data-flag-title="读书 | 颠覆者：周鸿祎自传">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -614,274 +805,29 @@
       
         
           
-            <p>&emsp;&emsp;文章把它命名为《生活如此》，一是真的不知道要起什么名字；二是最近这段时间确实发生了一些东西，想记录下这些事情，把它变成可追寻的记忆。<br>&emsp;&emsp;文章就随性而写，想到什么就写什么。其实我经常有这个担忧，生怕自己写的东西有人不喜欢，以至于不敢把自己的见解发表出来，所以之前写的东西基本都是技术类的，把自己学习到的网上众多网友认可的知识传播分享，这种大家都认可的技术类博客可能就不会引起歧义。我发现这种想法不仅仅发生在写博客这件事上，而且充斥着我生活的点滴，比如：遇到问题自己没有花上一段可观的时间前不会去问别人，生怕别人会鄙视我这个问题，甚至鄙视我的能力，也许别人只需要2分钟就可以让我了解得很深透；在生活上，特别是和别人合租，总是怕去打扰到别人，走路走得小心翼翼，电脑不敢开扬声器，尽管不喜欢挂着耳机，等等很多方面。一直在思考这个问题，到底是什么原因？不自信？思虑太多？优柔寡断？现在也只能抛出这个问题，因为还停留在思考的阶段，还没有去发现真正的问题原因。现在唯一能做的就是改变，尝试去改变这些种种做法。<br>&emsp;&emsp;女朋友上班午餐都是和同事一起煮饭吃，这周四同事买到的空心菜可能残留了农药，吃完到了晚上集体都呕吐、反胃、不舒服，才意识到食物中毒了。当时女朋友跟我说后，我的反应是：需要赶紧去医院，去检查是什么东西导致食物中毒，如果是一些毒性比较大的农药残留，可能会危及生命。因为和女朋友一直是异地恋，她在老家那，所以我没能去带她去医院。跟女朋友说了需要去医院的时候，她觉得不用去医院，觉得麻烦，但是我一再跟她解释，需要分轻重，如果是普通感冒，去周围邻近的诊所没关系，但是食物中毒可大可小，况且现在还不知道是什么农药还是其他东西导致食物中毒的，讲了一大堆我的想法后，最终她爸爸还是带她去了附近的诊所，诊所的医生也只是说轻微食物中毒，拿了一些药片，但是终究还是不知道什么导致食物中毒。女朋友吃完药后第二天还是没有好转，我再次说要去医院看，她还是没去，第二天下午去另一个私人诊所看了。我当时问她身边的同事没有一个人去医院看么？她说是的。后来我也只能祈祷吃了医生的药片能好，重新恢复健康。其实从这件事情，我发现这种不是说去不去医院看病的问题了，可以上升到思想的层面，怎么说呢，就是<strong>思想决定行为</strong>。从我的角度上说：我有觉得生病了，需要去分清轻重，诊所毕竟只能解决小问题，不知道深浅的病需要去医院看，医院有条件可以查清楚病因，但是诊所只有通过生病的一些病征去判断，这是我的想法，我从农村到城市，慢慢习惯城市的生活，所以我会觉得根据病况判断需不需要去医院。从老家的人的角度上说：他们已经在农村生活了几十年的，所以他们的想法就是去诊所看病，直到如果真的诊所解决不了才去医院，其实这其中如果是一些大的病，就会被耽误了。从城市人的角度上说：从小生活在城市上的人们，也许从小到大不管生什么病，他们都往医院去，也许他们的思想是不管什么病都去医院。当然这些都是我个人的臆想，很多东西上升到思想层面就很难改变了。<br>&emsp;&emsp;周五晚上不想去参加公司篮球俱乐部的打篮球活动，也不想那么早回家，所以就约了辉哥一起吃个晚饭。期间聊到了很多东西，主要有对IT职业的一些讨论，他最近有打算要跳槽，也面试过一家服装类的企业的IT部门，我们讨论了跳槽的一些准备，我们都是去年7月份毕业，到现在过了7个月，不过辉哥是从大三暑假就开始在这里实习，其实他已经工作了一年半了，也是一个跳槽的阶段吧，到了一家公司工作，如果不是互联网大企业的话，工作了一年半，基本已经掌握了这家公司的开发技术了，再往后大多数是接触到或者能够成长的可能是业务方面。不过跳槽是一门艺术，在我看来，跳槽需要做很多准备，特别是当你的工作经验不能给你很大加成的时候，你更需要去准备充分，可能需要去看在工作上没深入用的技术点，但是不管你的工作经验有多好或者多差，你一定得在跳槽前去做深入的总结，总结你工作这段时间的经历，工作上也好、生活上也罢、甚至思想上，这各方面都是有成长也有收获的，再好的项目经验，不会把它的牛逼表达出来，也没有用。当然我现在的想法可能是一个刚工作半年的工作者的想法，可能还没有完全摆脱学生时的思维，也不能叫摆脱，叫还没有在学生的思维上成长很多吧。<br>&emsp;&emsp;周六那天中午和同事一起聚餐，第一次吃上久闻大名的“八合里”牛肉火锅，作为一个地道的潮汕人，觉得“八合里”确实挺地道的，特别是芥蓝牛河，不过在老家的话炒芥蓝牛河会将牛肉和河粉分开炒，炒牛肉会有些酱，然后将牛肉和酱一起淋在河粉上，那样会觉得更好吃一些。吃完午饭和同事一起去逛月亮湾公园，聊了很多关于童年的趣事，在一个小湖栈道上看到湖边的一个小小的乌龟在那里觅食，想起如果是小时候的我们，那肯定会跳到湖边去抓这只小乌龟。附上这小乌龟的美照（考验你的眼力的时候到了）</p>
-<p><center><br><img src="https://1csh1.github.io/img/生活如此/tortoise1.jpg" alt="小乌龟"><br><img src="https://1csh1.github.io/img/生活如此/tortoise2.jpg" alt="小乌龟"><br></center><br>&emsp;&emsp;晚上艺的2个朋友来做客，在大学的时候有次去找艺的时候，见过他们2人，所以也算认识，他们也是IT行业的，是做嵌入式方面的，德兄是在TPLink，桶兄忘记是哪家公司的了，和他们聊了工作方面的情况，因为大家都是IT行业的，所以共同话题还是很多的。艺也发了微信过来，介绍了一篇文章<a href="http://mp.weixin.qq.com/s?__biz=MjM5OTA1MDUyMA==&amp;mid=2655437863&amp;idx=1&amp;sn=67ff6deffc656cc1335b428434fed5ba&amp;chksm=bd7308508a04814685c2a1e67bd4a86e502edc38dc9eda7ebe3d93d8fdf0997dcc7dd45f6047&amp;mpshare=1&amp;scene=1&amp;srcid=0218wMh273u9vk4PMh6C09w7#rd" target="_blank" rel="noopener">技术人员的发展之路</a>，说了他最近对未来有些恐惧，我们聊了一些关于成长，如何变得更好，我谈到了我的想法：接下来会去适度去接外包项目来做，这个想法起源于我跟辉哥的一次交谈。年前最后一个周末我去了坪洲找了辉哥，我就把那段时间一直困惑我的一个问题抛出来和辉哥讨论，问题是这样的：在工作之余，有空闲的时间你会做什么？A是学习一些感兴趣的新的技术，可能在未来某一天跳槽有用；B是用现有掌握的技术去接外包项目。我为什么会有这个疑问呢？从我的经历方面促使我会有这个问题困扰，我回顾了大学4年，这4年什么时间段是我收获最大的？是大二到大三那段不知道要学习什么突然在网上找到马士兵的Java视频，了解到有一套深入学习JavaWeb方面的教程，然后马不停蹄地学习，然后参加工作室参与项目开发，到后面接手老师的一个果实溯源的项目，一步一步通过项目把学习的东西给应用并更好地掌握，这几个环节最深刻是做项目，也给我带来收获最大。到后来就没有这样的一个经历了，去参加实习，到现在正式工作，虽然空闲时间还是会去学习感兴趣的东西，但是我发现学完就忘，是因为没有一个应用场景，没有一个项目去促使你牢固地掌握学习的知识。通过这件事促使我思考了这个问题，我在这个问题上迷茫了。当我问辉哥的时候，他给了一个非常肯定的答案，B。他给的解释是：A中的学习新技术的目的是什么？让你找到更好的工作还是其他，但是你希望它最终变为收入，俗一点说就是钱。但是我们知道学习开发技术，需要项目驱动学习，如果只是单纯学习，那么久会出现学完就忘，如果你有项目可以去驱动你学习，那选A无疑，但是如果没有，那么为啥不把你现在所掌握的技术变现呢？也就是说接外包去赚外快。接外包其实不简单，当你接到一个项目，需要涉及你不会的技术的时候，这个时候就是项目驱动你学习新技术了，或者说学习你不会的技术，这也是一个成长。从这次交谈之后，我发现也许真的得去尝试B这个做法。我跟艺谈了这个想法之后，他也很触动，我觉得<strong>现在的迷茫都只是为了看到未来的光明</strong>。<br>&emsp;&emsp;晚上和大只聊天聊到了3:40才睡觉，聊了从小在各自的家庭中因为贫穷被亲人看不起，聊了老家中一些让人理解不了的做事风格，聊了各自对家乡的风俗地抵制，聊了各自工作的职业规划。。。<br>&emsp;&emsp;以前我总觉得博客是用来写技术的，但是我现在不觉得，它可以用来分享技术，也可以用来分享生活，分享一切的一切。</p>
+            <p><img src="http://www.liebrother.com/upload/45e82eb483424be39872b4f2c3b8a3ce_.jpg" alt="周鸿祎自传"> </p>
+<blockquote>
+<p>文末送书福利：《颠覆者：周鸿祎自传》</p>
+</blockquote>
+<p>作为老周旗下的产品线，公司里随处可见的就数这本书了。春节长假时间抽空读了这本书，分享一下这本书的大概内容以及我的一些感受。</p>
+<h2 id="从小与众不同"><a href="#从小与众不同" class="headerlink" title="从小与众不同"></a>从小与众不同</h2><p>书里的老周很小的时候就展现了与众不同的地方，他用非主流称自己。喜欢在教室捣乱，捣乱的前提是老师教的他都会了，在校园打架伸张正义，套着学渣的皮却是学霸的料。这种人应该是最招同学“讨厌”的，真学渣跟他玩疯确看他成绩前茅，真学霸看他一副学渣样自己成绩确比不上他。虽然喜欢捣乱，但是阅读确是他喜欢并一直坚持的事。老周当初刚接触计算机，为了看到更多计算机方面的书籍，不惜代价把自己喜欢的邮票给了同学；因为同学家有杂志，所以经常去同学家串门看杂志等等。<strong>回想我们自己年少，是不是少了一点求知欲？</strong></p>
+<h2 id="计算机梦"><a href="#计算机梦" class="headerlink" title="计算机梦"></a>计算机梦</h2><p>在这问个问题：有多少人在高考前知道自己想读什么专业或者自己对某个领域很有兴趣么？这个问题一直触发我去思考教育的本质。我们大多数人寒窗苦读 12 年，却在填志愿的时候懵逼了，包括我在内。我现在还非常感激当初把我带入计算机坑的人。而老周在很早就决定入坑计算机，即使在没有其他录取书的前提下收到华南理工的食品工程专业录取书也依旧坚持要学计算机。而最终真的如他所愿入学了西安交通大学计算机专业。<strong>有了兴趣，有了方向，只管干就是了。</strong></p>
+<h2 id="多姿多彩的大学"><a href="#多姿多彩的大学" class="headerlink" title="多姿多彩的大学"></a>多姿多彩的大学</h2><p>进入大学，老周依旧跟学渣一般捣乱。脑袋灵活的老周也开始了自己的商业王国，用高中高考参考书去学校摆摊卖旧书，编写算命小程序去给人算命。技术上，老周沉迷于上机，经常去蹲点看有没有人上机课没去上，有的话他就跑进去上机，有一次还攻破了西安交大的计算机中心。大三开始就去外面接项目做，为了增加收入和想去验证自己在真实世界面的能力。应该有不少同学在大学的时候兼职过，那时的你是不是只是为了增加收入？还是有想过去看看自己的实力？到了研究生，老周开始了第一个真正意义上的创业：研发反病毒卡，当然还是经常晚上蹭学校的电脑，反映出当时计算机对一个学生来说是个奢侈的东西，后面还因为这时被警察抓了，怀疑学校的一些电脑零件是被老周一起研发的几位小伙伴偷的，在公安局被审问折磨了 2 天 2 夜。虽然最后这个反病毒卡创业失败，但老周这个过程是非常主动积极，尝试去做很多事，比如销售，找客户等等，他认为这些尝试都是必要的，不拘泥于技术。现在很多人工作都会把自己的工作和别人的工作分得很清楚，只做自己份内的事，这没有什么不好，我觉得这种做法会把自己圈在一个围栏里，这个围栏要变大很难，甚至在慢慢变小，把心放宽，接受更多不同的信息，去做不同的事，像乔布斯说的：<strong>你们现在同样不可能从现在这个点上连出通向未来的那一条线。只有当你回头看时，才会发现这些过去的点其实已经画出了那条线。所以，要相信每一个点迟早都会连接到一起</strong>。这个的前提是你要主动去对接触更多的点，才能在以后连成线。在工作中主动去承担更多的责任，<strong>责任越大，能力越大</strong>。</p>
+<h2 id="从打工做起"><a href="#从打工做起" class="headerlink" title="从打工做起"></a>从打工做起</h2><p>老周经历了 2 次创业失败后决定去打工，入职了北大方正。入职之初依旧因为易闯祸的性格，被别人误认为是个不好好做事、想一步登天的狂妄分子。后面老周决定去公司最艰苦的地方工作：新疆。这一次老周是认真的。而做的第一件事就让同事们转变了对他的态度，那就是帮建设银行的一套软件做一个菜单系统，而这个界面实现技术刚好是他研究生毕业设计时用过的。我们可以借鉴老周的做法，当然不是刻意去展现自己，而是真的发现公司哪些地方不足，然后用自己学过的知识去解决它。这个说起来简单，做起来难，很多人只做到了第一步：发现问题。而最重要的是第二步：解决问题。<strong>企业要的是一个会解决问题的人，而不是会发现问题的人</strong>。在北大方正的仕途可以说是一帆风顺，但是最终因为意识到方正还沉迷于照排、出版印刷系统的开发，做着很多曲高和寡的东西，有些和市场脱节，老周选择辞掉这份稳定的工作。不过这时候的老周，已经从单纯的程序员转变为优秀的管理者。</p>
+<h2 id="创业心永不变"><a href="#创业心永不变" class="headerlink" title="创业心永不变"></a>创业心永不变</h2><p>创业依旧是老周想干的事。开始做的产品是 3721，实现在地址栏中直接输入中文就可以用，不用输入英文。这个产品让老周经历了很多事情，比如第一次去融资、和职业经理人冲突、跟同行业的企业竞争、跟政府机构对抗、和百度对簿公堂，到最终卖给了雅虎。我认为走过这个过程的老周，已经是一个很了不起的创业家。卖给了雅虎后，老周担任了雅虎中国区的总经理，但是没有公司控制权，所以让老周处于比较危险的位置。进入雅虎之后，老周干得并不顺心，因为中国本土文化和美国公司文化的冲突很大，老周是属于那种直来直去的办事风格，但是雅虎却是那种规规矩矩做事的风格。在老周的带领下，雅虎开始发力搜索，做邮件系统，一度做得不错。可是老周的野心却频频招到雅虎总部的冷落，最终受不了的老周，辞职雅虎。只有自己创办企业才能满足老周的野心，他是一个不愿意受束缚的人。</p>
+<h2 id="奇虎"><a href="#奇虎" class="headerlink" title="奇虎"></a>奇虎</h2><p>因为中国有“骑虎难下”这个成语，老周希望网民上了这个网站就再也难以下去。这就是奇虎的来源。奇虎刚开始是做社区搜索，也就是在百度已经占据了网页搜索的制高点时，老周选择社区搜索避免直接和百度竞争。刚开始做的并没有收到预期的效果，恰巧到了 2006 年，流氓软件开始在网络上肆意横行，严重干扰了网民的上网体验，而网民中大多数把“流氓软件”的罪名强加在老周头上。为什么会赖在老周头上？因为 3721 的插件模式是老周发明的，这种插件模式很不尊重用户，老周也公开承认过，网民们并不买账。从这时起，老周走上了杀毒的这条道路，起初是为了把流氓软件干掉。360安全卫士上市后，用户增长得很快，竞争对手也激烈反弹，有很不错的效果。有个小冲突，老周把以前自己开发的 3721 插件 (雅虎上网助手) 给纳入了流氓软件范围，引来了和雅虎的口水战，虽然是负面的消息，但是却给360安全卫士一次曝光的机会，在这个过程中360安全装机量高涨。最重要的一件事是，360安全卫士走向免费这个路线，它颠覆了传统的杀毒软件行业，最终成为用户量最多的杀毒软件。从走上杀毒取得了一些成功，到后面360慢慢扩展商业布局，比如360安全浏览器、360安全网址等等，这一切看是偶然，其实是抓住了行业的趋势，老周很早就看到了免费趋势。</p>
+<h2 id="3Q-大战"><a href="#3Q-大战" class="headerlink" title="3Q 大战"></a>3Q 大战</h2><p>2010 年春节的时候，腾讯QQ医生开始在 PC 端进行强制捆绑，因为腾讯拥有 QQ 这个庞大的用户群，只要一推广就很容易覆盖到所有的网民。QQ医生第一次推广没有达到预期效果，因为产品还不够成熟，但是已经给老周敲了个很大的警钟。而腾讯第二次进攻已经改名为“QQ电脑管家”，并具备了云查杀木马、系统漏洞补休、安全防护等等，这次直接对抗 360。360 通过分析 QQ 软件，发现它对用户的电脑有扫描硬盘的行为，但是没有告知用户，所以老周召集程序员开发了 360隐私保护器，功能是帮助用户监控电脑中的软件在系统后台的所有行为，发布之后，会将名字为 QQ.exe 的文件都表示为窥视隐私的软件。腾讯也发起联合声明进行声讨，这场大战就正式开始了。后面 360 又开发了一款“360扣扣保镖”软件，可以过滤 QQ 广告、清理 QQ 垃圾，发布之后核弹引爆了，接着被举报到公安局，老周差点被抓，没被抓是因为上班前收到电话直接跑到了香港去了。腾讯作为回应，发布了著名的“艰难决定”–腾讯QQ与360安全卫士互不兼容。最后只能靠政府介入，让腾讯和360放弃争执。现在 2019 年，经历过 3Q 大战的腾讯变得更加强壮，而 360 依靠着安全正快速往生态发展。现在的互联网也是阿里、腾讯 2 家独大，包揽了中国互联网的大多数用户，任何一家创业公司都害怕与他们竞争，如果有直接竞争，要么是卖身，要么像 360 一样拼死对抗，只是现在越来越少能像 360 那样与它们抗衡的企业了。</p>
+<h2 id="敲钟"><a href="#敲钟" class="headerlink" title="敲钟"></a>敲钟</h2><p>360 上市其实和 3Q 大战是并行走的，经历过 3Q 大战，经历了承销商替换的过程，以及时间紧急，但是最终还是成功在纽交所上市。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>平时我们只看到了牛人光彩的一面，却不知他是经历了什么才能到达今天的成就。看了这个自传，也算了更加深入的了解老周以及 360。<strong>以后我也要多花点时间看更多的人物自传，去了解每个人不同的一面</strong>。</p>
+<h2 id="重点来啦"><a href="#重点来啦" class="headerlink" title="重点来啦"></a>重点来啦</h2><p>福利福利，公众号第一次送书活动开启。<br>今天第一次给大家分享读书的感受，以后也会将我读过的觉得不错的书推荐给大家，希望大家一起来读好书。说不如做，自费送大家 1 本《颠覆者：周鸿祎自传》，包邮。号主也是个打工仔，没啥钱，等有机会升职加薪了送大家更多的福利。<strong>送书活动会在以后分享的读书感受中持续</strong>。</p>
+<p>抽奖规则：</p>
+<ol>
+<li>抽奖活动：需要关注公众号 <strong>LieBrother</strong>，在公众号后台回复【周鸿祎自传】，即可收到抽奖图片。(没有关注公众号的同学中奖无效)</li>
+<li>活动截止时间：<strong>3 月 9 号 22:00</strong> 。</li>
+<li>中奖的同学记得微信加我好友领取奖品，一周内有效。微信号：<strong>CSHJustDo</strong></li>
+</ol>
+<p><img src="http://www.liebrother.com/upload/df81ac224abe46b38131a0e78f4dcf9c_wechat.jpg" alt="公众号"></p>
 
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/24/搭建RabbitMQ集群/" itemprop="url">
-                  搭建RabbitMQ集群
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-01-24T21:32:00+08:00" content="2017-01-24">
-              2017-01-24
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/RabbitMQ/" itemprop="url" rel="index">
-                    <span itemprop="name">RabbitMQ</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/01/24/搭建RabbitMQ集群/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/搭建RabbitMQ集群/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2017/01/24/搭建RabbitMQ集群/" class="leancloud_visitors" data-flag-title="搭建RabbitMQ集群">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="闲话"><a href="#闲话" class="headerlink" title="闲话"></a>闲话</h3><p>&emsp;&emsp;本文讲述搭建RabbitMQ集群，文中总共用了3个节点node6,node7,node8。</p>
-<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>将node6,node7,node8的.erlang.cookie文件内容设置为一样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//在node6节点上</span><br><span class="line">cat /var/lib/rabbitmq/.erlang.cookie</span><br><span class="line">//将内容复制到node7,node8节点上，可能需要修改文件的权限</span><br><span class="line"></span><br><span class="line">//结果：比如我自己的机器上的.erlang.cookie文件内容</span><br><span class="line">rabbit6  ETIEGPLEHVXLJDVZGLMF</span><br><span class="line">rabbit7  ETIEGPLEHVXLJDVZGLMF</span><br><span class="line">rabbit8  ETIEGPLEHVXLJDVZGLMF</span><br></pre></td></tr></table></figure></p>
-<h3 id="启动RabbitMQ"><a href="#启动RabbitMQ" class="headerlink" title="启动RabbitMQ"></a>启动RabbitMQ</h3><p>在node6上运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=rabbit6 \rabbitmq-server -detached</span><br></pre></td></tr></table></figure></p>
-<p>在node7上运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=rabbit7 \rabbitmq-server -detached</span><br></pre></td></tr></table></figure></p>
-<p>在node8上运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=rabbit8 \rabbitmq-server -detached</span><br></pre></td></tr></table></figure></p>
-<h3 id="将node7节点加入到集群中"><a href="#将node7节点加入到集群中" class="headerlink" title="将node7节点加入到集群中"></a>将node7节点加入到集群中</h3><p>在node7机器上运行如下命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//停止rabbit7节点上的RabbitMQ应用程序</span><br><span class="line">rabbitmqctl -n rabbit7@csh07 stop_app</span><br><span class="line"></span><br><span class="line">//重设rabbit7节点的元数据和状态为清空</span><br><span class="line">rabbitmqctl -n rabbit7@csh07 reset</span><br><span class="line"></span><br><span class="line">//将rabbit7加入到rabbit6集群中</span><br><span class="line">rabbitmqctl -n rabbit7@csh07 join_cluster rabbit6@csh06 \ rabbit7@csh07</span><br><span class="line"></span><br><span class="line">//重新启动rabbit7节点的应用程序</span><br><span class="line">rabbitmqctl -n rabbit7@csh07 start_app</span><br></pre></td></tr></table></figure></p>
-<h3 id="将node8节点加入到集群中"><a href="#将node8节点加入到集群中" class="headerlink" title="将node8节点加入到集群中"></a>将node8节点加入到集群中</h3><p>在node8机器上运行如下命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl -n rabbit8@csh08 stop_app</span><br><span class="line">rabbitmqctl -n rabbit8@csh08 reset</span><br><span class="line">rabbitmqctl -n rabbit8@csh08 join_cluster rabbit6@csh06</span><br><span class="line">rabbitmqctl -n rabbit8@csh08 start_app</span><br></pre></td></tr></table></figure></p>
-<h3 id="查看集群状态"><a href="#查看集群状态" class="headerlink" title="查看集群状态"></a>查看集群状态</h3><p>命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl cluster_status</span><br></pre></td></tr></table></figure></p>
-<p>结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@csh08 ~]# rabbitmqctl -n rabbit8@csh08 cluster_status</span><br><span class="line">Cluster status of node &apos;rabbit8@csh08&apos; ...</span><br><span class="line">[&#123;nodes,[&#123;disc,[&apos;rabbit7@csh07&apos;,&apos;rabbit6@csh06&apos;]&#125;,</span><br><span class="line">         &#123;ram,[&apos;rabbit8@csh08&apos;]&#125;]&#125;,</span><br><span class="line"> &#123;running_nodes,[&apos;rabbit6@csh06&apos;,&apos;rabbit7@csh07&apos;,</span><br><span class="line">                 &apos;rabbit8@csh08&apos;]&#125;,</span><br><span class="line"> &#123;cluster_name,&lt;&lt;&quot;rabbit6@csh06.itc.cmbchina.cn&quot;&gt;&gt;&#125;,</span><br><span class="line"> &#123;partitions,[]&#125;,</span><br><span class="line"> &#123;alarms,[&#123;&apos;rabbit6@csh06&apos;,[]&#125;,</span><br><span class="line">          &#123;&apos;rabbit7@csh07&apos;,[]&#125;,</span><br><span class="line">          &#123;&apos;rabbit8@csh08&apos;,[]&#125;]&#125;]</span><br></pre></td></tr></table></figure></p>
-<h3 id="将节点从集群中移除"><a href="#将节点从集群中移除" class="headerlink" title="将节点从集群中移除"></a>将节点从集群中移除</h3><p>命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl -n rabbit8@csh08 stop_app</span><br><span class="line">rabbitmqctl -n rabbit8@csh08 reset</span><br><span class="line">rabbitmqctl -n rabbit8@csh08 start_app</span><br></pre></td></tr></table></figure></p>
-<h3 id="可能遇到问题"><a href="#可能遇到问题" class="headerlink" title="可能遇到问题"></a>可能遇到问题</h3><p>在添加节点node7到node6上时，遇到连接不上node6节点机器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@csh07 ~]# rabbitmqctl -n rabbit7@csh07 join_cluster rabbit6@csh06</span><br><span class="line">Clustering node &apos;rabbit7@csh07&apos; with &apos;rabbit6@csh06&apos; ...</span><br><span class="line">Error: unable to connect to nodes [&apos;rabbit6@csh06&apos;]: nodedown</span><br><span class="line"></span><br><span class="line">DIAGNOSTICS</span><br><span class="line">===========</span><br><span class="line"></span><br><span class="line">attempted to contact: [&apos;rabbit6@csh06&apos;]</span><br><span class="line"></span><br><span class="line">rabbit6@csh06:</span><br><span class="line">  * unable to connect to epmd (port 4369) on csh06: nxdomain (non-existing domain)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">current node details:</span><br><span class="line">- node name: &apos;rabbitmq-cli-45@csh07&apos;</span><br><span class="line">- home dir: /var/lib/rabbitmq</span><br><span class="line">- cookie hash: a5xQrcy5rMqVgP/ZCwWUPA==</span><br></pre></td></tr></table></figure></p>
-<p>解决：<br>在所有机器上的/etc/hosts文件加上如下配置，主要是添加csh06,csh07,csh08映射<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">192.168.1.6 node6 csh06</span><br><span class="line">192.168.1.7 node7 csh07</span><br><span class="line">192.168.1.8 node8 csh08</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/24/用Haproxy来做RabbitMQ集群的负载均衡/" itemprop="url">
-                  用Haproxy来做RabbitMQ集群的负载均衡
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-01-24T21:32:00+08:00" content="2017-01-24">
-              2017-01-24
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/RabbitMQ/" itemprop="url" rel="index">
-                    <span itemprop="name">RabbitMQ</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/01/24/用Haproxy来做RabbitMQ集群的负载均衡/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/用Haproxy来做RabbitMQ集群的负载均衡/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2017/01/24/用Haproxy来做RabbitMQ集群的负载均衡/" class="leancloud_visitors" data-flag-title="用Haproxy来做RabbitMQ集群的负载均衡">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="闲话"><a href="#闲话" class="headerlink" title="闲话"></a>闲话</h3><p>&emsp;&emsp;本文讲述在RabbitMQ集群的基础下，用Haproxy来做负载均衡，node6,node7,node8这3台机器已经组成一个RabbitMQ集群了,在node9机器上配置Haproxy来做负载均衡。</p>
-<h3 id="配置HAProxy"><a href="#配置HAProxy" class="headerlink" title="配置HAProxy"></a>配置HAProxy</h3><h4 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h4><p><a href="http://download.csdn.net/detail/u011642663/9743582" target="_blank" rel="noopener">haproxy-1.7.1.tar.gz</a></p>
-<h4 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xzvf haproxy-1.7.1.tar.gz</span><br></pre></td></tr></table></figure>
-<h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd haproxy-1.7.1</span><br><span class="line">make TARGET=generic</span><br></pre></td></tr></table></figure>
-<p>编译完目录下有haproxy可执行文件<br>将haproxy复制到/usr/local/sbin<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp haproxy /usr/local/sbin</span><br></pre></td></tr></table></figure></p>
-<h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">vi config_file</span><br><span class="line">//输入以下配置</span><br><span class="line">listen rabbitmq_cluster</span><br><span class="line">    bind node9:5670</span><br><span class="line">	mode tcp </span><br><span class="line">	timeout client 3h</span><br><span class="line">	timeout server 3h</span><br><span class="line">	timeout connect 3h</span><br><span class="line">	balance roundrobin</span><br><span class="line">	server rabbit6 node6:5672 check inter 5000 rise 2 fall 3</span><br><span class="line">	server rabbit7 node7:5672 check inter 5000 rise 2 fall 3</span><br><span class="line">	server rabbit8 node8:5672 check inter 5000 rise 2 fall 3</span><br><span class="line">	</span><br><span class="line">listen private_monitoring </span><br><span class="line">    bind node9:8100</span><br><span class="line">	mode http</span><br><span class="line">	option httplog</span><br><span class="line">	timeout client 3h</span><br><span class="line">    timeout server 3h</span><br><span class="line">    timeout connect 3h</span><br><span class="line">	stats enable</span><br><span class="line">	stats uri /stats</span><br><span class="line">	stats refresh 5s</span><br></pre></td></tr></table></figure>
-<h4 id="启动Haproxy"><a href="#启动Haproxy" class="headerlink" title="启动Haproxy"></a>启动Haproxy</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">haproxy -f config_file</span><br></pre></td></tr></table></figure>
-<h4 id="Haproxy自带的配置文件"><a href="#Haproxy自带的配置文件" class="headerlink" title="Haproxy自带的配置文件"></a>Haproxy自带的配置文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">haproxy-1.7.1/doc/configuration.txt</span><br></pre></td></tr></table></figure>
           
         
       
@@ -909,7 +855,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -950,7 +896,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-count">120</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -967,7 +913,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-count">138</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

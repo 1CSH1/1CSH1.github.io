@@ -226,8 +226,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/08/01/angular-comment-recursive-event/" itemprop="url">
-                  Angular 实现类似博客获取回复评论的数据
+                <a class="post-title-link" href="/2019/09/17/thread_basic/" itemprop="url">
+                  线程最最基础的知识
                 </a>
               
             
@@ -240,50 +240,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-08-01T22:30:00+08:00" content="2017-08-01">
-              2017-08-01
+            <time itemprop="dateCreated" datetime="2019-09-17T23:03:45+08:00" content="2019-09-17">
+              2019-09-17
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/" itemprop="url" rel="index">
-                    <span itemprop="name">Angular</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
-                    <span itemprop="name">James-Blog</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/08/01/angular-comment-recursive-event/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/01/angular-comment-recursive-event/" itemprop="commentsCount"></span>
+                <a href="/2019/09/17/thread_basic/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/09/17//thread_basic/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -293,7 +262,7 @@
 
           
           
-             <span id="/2017/08/01/angular-comment-recursive-event/" class="leancloud_visitors" data-flag-title="Angular 实现类似博客获取回复评论的数据">
+             <span id="/2019/09/17/thread_basic/" class="leancloud_visitors" data-flag-title="线程最最基础的知识">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -316,32 +285,217 @@
       
         
           
-            <blockquote>
-<p>摘要：本文继上一篇文章 <a href="https://1csh1.github.io/2017/07/31/angular-comment-recursive-display/">Angular 实现类似博客评论的递归显示</a> 讲述的内容，上篇文章里面只是说明了如何实现评论梯形显示，在博客评论中我们经常看到可以回复某一条评论，本文讲述如何实现点击某一条评论的回复按钮后，获取该条评论的内容并显示在输入框中。类似 CSDN 博客评论一样，点击回复后输入框自动添加了 [reply]u011642663[/reply]</p>
+            <p><img src="http://www.liebrother.com/upload/69152be5467f4bd6b6bb3739f82304f3_dxc_0005_00.jpg" alt=""> </p>
+<blockquote>
+<p>Java 多线程系列文章第 5 篇。</p>
 </blockquote>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>依据上一篇文章中的评论梯形显示，我们还需要实现点击回复后，屏幕自动到达输入框位置，并且获取了点击回复的评论的信息。首先分解一下这个功能点，在项目中我们也会经常分解功能点，这个功能点有 2 个小点：一是在每条评论中加上 [回复] 按钮，点击回复后跳到输入框位置；二是点击回复后，获取到点击回复的那条评论的信息。下面我们一一解决。</p>
-<h3 id="跳转到输入框"><a href="#跳转到输入框" class="headerlink" title="跳转到输入框"></a>跳转到输入框</h3><p>我们接触前段第一个语言便是 HTML，我们知道 HTML 中有一个 # 定位，下面代码简单解释一下。<br>假设这个 HTML 代码文件是 index.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;a href=&quot;index.html#pointer&quot;&gt;Click me to pointer&lt;/a&gt;</span><br><span class="line">    &lt;div id=&quot;pointer&quot;&gt;</span><br><span class="line">      &lt;h1&gt;哈哈哈哈&lt;/h1&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
-<p>上面代码只要点击 Click me to pointer 这个链接，页面就会跳到 id=”pointer” 这个 div 的位置。所以我们在实现这个点击回复跳转到输入框中就可以使用这个方法。<br>我们在 comment-component.html 中将评论输入框加入 id=”comment”，接下来就是路径拼接的问题了，我们可以通过 Angular 的 Router 的 url 来获取本页面的路径，然后在这个路径后面加入 #comment 就可以实现跳转了，下面是实现这个跳转功能的代码</p>
-<h4 id="添加-id-”comment”"><a href="#添加-id-”comment”" class="headerlink" title="添加 id=”comment”"></a>添加 id=”comment”</h4><p>comment-component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Comment --&gt;</span><br><span class="line">&lt;div class=&quot;container font-small&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line"></span><br><span class="line">      &lt;comment-view [comments]=&quot;comments&quot; (contentEvent)=&quot;getReplyComment($event)&quot; &gt;&lt;/comment-view&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div class=&quot;well&quot; id=&quot;comment&quot;&gt;</span><br><span class="line">        &lt;h4&gt;&#123;&#123; &apos;comment.leaveComment&apos; | translate &#125;&#125;&lt;/h4&gt;</span><br><span class="line">        &lt;form role=&quot;form&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">            &lt;input type=&quot;hidden&quot; [(ngModel)]=&quot;id&quot; name=&quot;id&quot;&gt;</span><br><span class="line">            &lt;textarea [(ngModel)]=&quot;content&quot; name=&quot;content&quot; class=&quot;form-control&quot; rows=&quot;5&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<h4 id="添加通过路由获取当前页面-URL"><a href="#添加通过路由获取当前页面-URL" class="headerlink" title="添加通过路由获取当前页面 URL"></a>添加通过路由获取当前页面 URL</h4><p>comment-view.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment-view&apos;,</span><br><span class="line">  templateUrl: &apos;./comment-view.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment-view.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentViewComponent implements OnInit &#123;</span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line"></span><br><span class="line">  // 用于跳转到回复输入框的url拼接</span><br><span class="line">  public url: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  constructor(private router: Router,</span><br><span class="line">              private activateRoute: ActivatedRoute ) &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">    this.url = this.router.url;</span><br><span class="line">    this.url = this.url.split(&quot;#&quot;)[0];</span><br><span class="line">    this.url = this.url + &quot;#comment&quot;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="添加链接-href-”“"><a href="#添加链接-href-”“" class="headerlink" title="添加链接 href=”“"></a>添加链接 href=”“</h4><p>comment-view.component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;div *ngFor=&quot;let comment of comments&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;media&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;pull-left&quot;&gt;</span><br><span class="line">      &lt;span class=&quot;media-object&quot;&gt;&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;media-body&quot;&gt;</span><br><span class="line">      &lt;h4 class=&quot;media-heading&quot;&gt;&#123;&#123; comment.username &#125;&#125;</span><br><span class="line">        &lt;small class=&quot;pull-right&quot;&gt;&#123;&#123; comment.time &#125;&#125;&amp;nbsp;|&amp;nbsp;&lt;a href=&quot;&#123;&#123;url&#125;&#125;&quot; (click)=&quot;reply(comment)&quot; &gt;&#123;&#123; &apos;comment.reply&apos; | translate &#125;&#125;&lt;/a&gt;&lt;/small&gt;</span><br><span class="line">      &lt;/h4&gt;</span><br><span class="line">       &#123;&#123; comment.content &#125;&#125;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;comment-view *ngIf=&quot;comment.cComments != null&quot; [comments]=&quot;comment.cComments&quot; (contentEvent)=&quot;transferToParent($event)&quot;&gt;&lt;/comment-view&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<p>这就实现了页面跳转的功能点，接下来实现获取回复的评论的信息。</p>
-<h3 id="获取回复的评论信息"><a href="#获取回复的评论信息" class="headerlink" title="获取回复的评论信息"></a>获取回复的评论信息</h3><p>有人会说获取回复的评论信息，这不简单么？加个 click 事件不就行了。还记得上一篇文章咱们是如何实现梯形展示评论的么？咱们是通过递归来实现的，怎么添加 click 事件让一个不知道嵌了多少层的组件能够把评论信息传给父组件？首先不具体想怎么实现，我们这个思路是不是对的：把子组件的信息传给父组件？答案是肯定的，我们就是要把不管嵌了多少层的子组件的信息传给 comment.component.ts 这个评论模块的主组件。<br>Angular 提供了 @Output 来实现子组件向父组件传递信息，我们在 comment-view.component.ts 模块中添加 @Output 向每个调用它的父组件传信息，我们是嵌套的，这样一层一层传出来，直到传给 comment-component.ts 组件。我们看代码怎么实现。</p>
-<h4 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h4><p>comment-view.component.ts</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment-view&apos;,</span><br><span class="line">  templateUrl: &apos;./comment-view.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment-view.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentViewComponent implements OnInit &#123;</span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line">  // 点击回复时返回数据</span><br><span class="line">  @Output()</span><br><span class="line">  public contentEvent: EventEmitter&lt;Comment&gt; = new EventEmitter&lt;Comment&gt;();</span><br><span class="line">  // 用于跳转到回复输入框的url拼接</span><br><span class="line">  public url: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  constructor(private router: Router,</span><br><span class="line">              private activateRoute: ActivatedRoute ) &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">    this.url = this.router.url;</span><br><span class="line">    this.url = this.url.split(&quot;#&quot;)[0];</span><br><span class="line">    this.url = this.url + &quot;#comment&quot;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  reply(comment: Comment) &#123;</span><br><span class="line">    this.contentEvent.emit(comment);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  transferToParent(event) &#123;</span><br><span class="line">    this.contentEvent.emit(event);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>comment-view.component.html</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;div *ngFor=&quot;let comment of comments&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;media&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;pull-left&quot;&gt;</span><br><span class="line">      &lt;span class=&quot;media-object&quot;&gt;&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;media-body&quot;&gt;</span><br><span class="line">      &lt;h4 class=&quot;media-heading&quot;&gt;&#123;&#123; comment.username &#125;&#125;</span><br><span class="line">        &lt;small class=&quot;pull-right&quot;&gt;&#123;&#123; comment.time &#125;&#125;&amp;nbsp;|&amp;nbsp;&lt;a href=&quot;&#123;&#123;url&#125;&#125;&quot; (click)=&quot;reply(comment)&quot; &gt;&#123;&#123; &apos;comment.reply&apos; | translate &#125;&#125;&lt;/a&gt;&lt;/small&gt;</span><br><span class="line">      &lt;/h4&gt;</span><br><span class="line">       &#123;&#123; comment.content &#125;&#125;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;comment-view *ngIf=&quot;comment.cComments != null&quot; [comments]=&quot;comment.cComments&quot; (contentEvent)=&quot;transferToParent($event)&quot;&gt;&lt;/comment-view&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<p>comment.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment&apos;,</span><br><span class="line">  templateUrl: &apos;./comment.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentComponent implements OnInit &#123;</span><br><span class="line"></span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line"></span><br><span class="line">  // 要回复的评论</span><br><span class="line">  public replyComment: Comment = new Comment();</span><br><span class="line"></span><br><span class="line">  public id: number = 0;</span><br><span class="line">  public content: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  getReplyComment(event) &#123;</span><br><span class="line">    this.replyComment = event;</span><br><span class="line">    this.id = this.replyComment.id;</span><br><span class="line">    this.content = &quot;[reply]&quot; + this.replyComment.username + &quot;[reply]\n&quot;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>comment.component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Comment --&gt;</span><br><span class="line">&lt;div class=&quot;container font-small&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line"></span><br><span class="line">      &lt;comment-view [comments]=&quot;comments&quot; (contentEvent)=&quot;getReplyComment($event)&quot; &gt;&lt;/comment-view&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div class=&quot;well&quot; id=&quot;comment&quot;&gt;</span><br><span class="line">        &lt;h4&gt;&#123;&#123; &apos;comment.leaveComment&apos; | translate &#125;&#125;&lt;/h4&gt;</span><br><span class="line">        &lt;form role=&quot;form&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">            &lt;input type=&quot;hidden&quot; [(ngModel)]=&quot;id&quot; name=&quot;id&quot;&gt;</span><br><span class="line">            &lt;textarea [(ngModel)]=&quot;content&quot; name=&quot;content&quot; class=&quot;form-control&quot; rows=&quot;5&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<p>解释一下代码逻辑：<br>我们在 comment-view.component.ts 添加以下几点：</p>
+<h2 id="什么是线程"><a href="#什么是线程" class="headerlink" title="什么是线程"></a>什么是线程</h2><p>试想一下没有线程的程序是怎么样的？百度网盘在上传文件时就无法下载文件了，得等文件上传完成后才能下载文件。这个我们现在看起来很反人性，因为我们习惯了一个程序同时可以进行运行多个功能，而这些都是线程的功劳。</p>
+<p>之前的文章 <a href="http://www.baidu.com" target="_blank" rel="noopener">进程知多少</a> 中讲到，为了实现多个程序并行执行，引入了进程概念。现在引入线程是为了让一个程序能够并发执行。</p>
+<h2 id="线程的组成"><a href="#线程的组成" class="headerlink" title="线程的组成"></a>线程的组成</h2><p><strong>线程ID</strong>：线程标识符。</p>
+<p><strong>当前指令指针（PC）</strong>：指向要执行的指令。</p>
+<p><strong>寄存器集合</strong>：存储单元寄存器的集合。</p>
+<p><strong>堆栈</strong>：暂时存放数据和地址，一般用来保护断点和现场。</p>
+<h2 id="线程与进程区别"><a href="#线程与进程区别" class="headerlink" title="线程与进程区别"></a>线程与进程区别</h2><p>线程和进程之间的区别，我觉得可以用这个例子来看出两者的不同，进程就是一栋房子，房子住着 3 个人，线程就是住在房子里的人。进程是一个独立的个体，有自己的资源，线程是在进程里的，多个线程共享着进程的资源。</p>
+<h2 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h2><p>我们看到 Java 源代码里面，线程状态的枚举有如下 6 个。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public enum State &#123;</span><br><span class="line"></span><br><span class="line"> //新建状态</span><br><span class="line"> NEW,</span><br><span class="line"></span><br><span class="line"> //运行状态</span><br><span class="line"> RUNNABLE,</span><br><span class="line"></span><br><span class="line"> //阻塞状态</span><br><span class="line"> BLOCKED,</span><br><span class="line"></span><br><span class="line"> //等待状态</span><br><span class="line"> WAITING,</span><br><span class="line"></span><br><span class="line"> //等待状态（区别在于这个有等待的时间）</span><br><span class="line"> TIMED_WAITING,</span><br><span class="line"></span><br><span class="line"> //终止状态</span><br><span class="line"> TERMINATED;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面给这 6 个状态一一做下解释。</p>
+<p><strong>NEW</strong>：新建状态。在创建完 Thread ，还没执行 start() 之前，线程的状态一直是 NEW。可以说这个时候还没有真正的一个线程映射着，只是一个对象。</p>
+<p><strong>RUNNABLE</strong>：运行状态。线程对象调用 start() 之后，就进入 RUNNABLE 状态，该状态说明在 JVM 中有一个真实的线程存在。</p>
+<p><strong>BLOCKED</strong>：阻塞状态。线程在等待锁的释放，也就是等待获取 monitor 锁。</p>
+<p><strong>WAITING</strong>：等待状态。线程在这个状态的时候，不会被分配 CPU，而且需要被显示地唤醒，否则会一直等待下去。</p>
+<p><strong>TIMED_WAITING</strong>：超时等待状态。这个状态的线程也一样不会被分配 CPU，但是它不会无限等待下去，有时间限制，时间一到就停止等待。</p>
+<p><strong>TERMINATED</strong>：终止状态。线程执行完成结束，但不代表这个对象已经没有了，对象可能还是存在的，只是线程不存在了。</p>
+<p>线程既然有这么多个状态，那肯定就有状态机，也就是在什么情况下 A 状态会变成 B 状态。下面就来简单描述一下。</p>
+<p>结合下图，我们 new 出线程类的时候，就是 <code>NEW</code> 状态，调用 <strong>start()</strong> 方法，就进入了 <code>RUNNABLE</code> 状态，这时如果触发等待，则进入了 <code>WAITING</code> 状态，如果触发超时等待，则进入 <code>TIMED_WAITING</code> 状态，当访问需要同步的资源时，则只有一个线程能访问，其他线程就进入 <code>BLOCKED</code> 状态，当线程执行完后，进入 <code>TERMINATED</code> 状态。</p>
+<p><img src="http://www.liebrother.com/upload/887bee2bae0b40a5b1fc3e4ff751ef39_dxc_0005_03.jpg" alt="图片来源于网路，侵删"> </p>
+<p>其实在 JVM 中，线程是有 9 个状态，如下所示，有兴趣的同学可以深入了解一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">javaClasses.hpp</span><br><span class="line">enum ThreadStatus &#123;</span><br><span class="line">    NEW = 0,</span><br><span class="line">    RUNNABLE = JVMTI_THREAD_STATE_ALIVE + // runnable / running</span><br><span class="line">                               JVMTI_THREAD_STATE_RUNNABLE,</span><br><span class="line">    SLEEPING = JVMTI_THREAD_STATE_ALIVE + // Thread.sleep()</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING +</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING_WITH_TIMEOUT +</span><br><span class="line">                               JVMTI_THREAD_STATE_SLEEPING,</span><br><span class="line">    IN_OBJECT_WAIT = JVMTI_THREAD_STATE_ALIVE + // Object.wait()</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING +</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING_INDEFINITELY +</span><br><span class="line">                               JVMTI_THREAD_STATE_IN_OBJECT_WAIT,</span><br><span class="line">    IN_OBJECT_WAIT_TIMED = JVMTI_THREAD_STATE_ALIVE + // Object.wait(long)</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING +</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING_WITH_TIMEOUT +</span><br><span class="line">                               JVMTI_THREAD_STATE_IN_OBJECT_WAIT,</span><br><span class="line">    PARKED = JVMTI_THREAD_STATE_ALIVE + // LockSupport.park()</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING +</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING_INDEFINITELY +</span><br><span class="line">                               JVMTI_THREAD_STATE_PARKED,</span><br><span class="line">    PARKED_TIMED = JVMTI_THREAD_STATE_ALIVE + // LockSupport.park(long)</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING +</span><br><span class="line">                               JVMTI_THREAD_STATE_WAITING_WITH_TIMEOUT +</span><br><span class="line">                               JVMTI_THREAD_STATE_PARKED,</span><br><span class="line">    BLOCKED_ON_MONITOR_ENTER = JVMTI_THREAD_STATE_ALIVE + // (re-)entering a synchronization block</span><br><span class="line">                               JVMTI_THREAD_STATE_BLOCKED_ON_MONITOR_ENTER,</span><br><span class="line">    TERMINATED = JVMTI_THREAD_STATE_TERMINATED</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="Java-线程实现"><a href="#Java-线程实现" class="headerlink" title="Java 线程实现"></a>Java 线程实现</h2><p>下面讲一讲在 Java 中如何创建一个线程。众所周知，实现 Java 线程有 2 种方式：继承 Thread 类和实现 Runnable 接口。</p>
+<h3 id="继承-Thread-类"><a href="#继承-Thread-类" class="headerlink" title="继承 Thread 类"></a>继承 Thread 类</h3><p>继承 Thread 类，重写 <code>run()</code> 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class MyThread extends Thread &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;MyThread&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实现-Runnable-接口"><a href="#实现-Runnable-接口" class="headerlink" title="实现 Runnable 接口"></a>实现 Runnable 接口</h3><p>实现 Runnable 接口，实现 <code>run()</code> 方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class MyRunnable implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;MyRunnable&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这 2 种线程的启动方式也不一样。<code>MyThread</code> 是一个线程类，所以可以直接 <code>new</code> 出一个对象出来，接着调用 <code>start()</code> 方法来启动线程；而 <code>MyRunnable</code> 只是一个普通的类，需要 <code>new</code> 出线程基类 <code>Thread</code> 对象，将 <code>MyRunnable</code> 对象传进去。</p>
+<p>下面是启动线程的方式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ThreadImpl &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        Thread myRunnable = new Thread(new MyRunnable());</span><br><span class="line">        System.out.println(&quot;main Thread begin&quot;);</span><br><span class="line">        myThread.start();</span><br><span class="line">        myRunnable.start();</span><br><span class="line">        System.out.println(&quot;main Thread end&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打印结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main Thread begin</span><br><span class="line">main Thread end</span><br><span class="line">MyThread</span><br><span class="line">MyRunnable</span><br></pre></td></tr></table></figure>
+<p>看这结果，不像咱们之前的串行执行依次打印，主线程不会等待子线程执行完。</p>
+<p><strong>敲重点</strong>：不能直接调用 <code>run()</code>，直接调用 <code>run()</code> 不会创建线程，而是主线程直接执行 <code>run()</code> 的内容，相当于执行普通函数。这时就是串行执行的。看下面代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class ThreadImpl &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        Thread myRunnable = new Thread(new MyRunnable());</span><br><span class="line">        System.out.println(&quot;main Thread begin&quot;);</span><br><span class="line">        myThread.run();</span><br><span class="line">        myRunnable.run();</span><br><span class="line">        System.out.println(&quot;main Thread end&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打印结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main Thread begin</span><br><span class="line">MyThread</span><br><span class="line">MyRunnable</span><br><span class="line">main Thread end</span><br></pre></td></tr></table></figure></p>
+<p>从结果看出只是串行的，但看不出没有线程，我们看下面例子来验证直接调用 <code>run()</code> 方法没有创建新的线程，使用 <strong>VisualVM</strong> 工具来观察线程情况。</p>
+<p>我们对代码做一下修改，加上 <code>Thread.sleep(1000000)</code> 让它睡眠一段时间，这样方便用工具查看线程情况。</p>
+<p>调用 <code>run()</code> 的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">public class ThreadImpl &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        myThread.setName(&quot;MyThread&quot;);</span><br><span class="line">        Thread myRunnable = new Thread(new MyRunnable());</span><br><span class="line">        myRunnable.setName(&quot;MyRunnable&quot;);</span><br><span class="line">        System.out.println(&quot;main Thread begin&quot;);</span><br><span class="line">        myThread.run();</span><br><span class="line">        myRunnable.run();</span><br><span class="line">        System.out.println(&quot;main Thread end&quot;);</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1000000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyThread extends Thread &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;MyThread&quot;);</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1000000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MyRunnable implements Runnable &#123;</span><br><span class="line"></span><br><span class="line">    public void run() &#123;</span><br><span class="line">        System.out.println(&quot;MyRunnable&quot;);</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1000000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">main Thread begin</span><br><span class="line">MyThread</span><br></pre></td></tr></table></figure>
+<p><img src="http://www.liebrother.com/upload/68ae1f24617f4cde8bf1f3382db17e42_dxc_0005_01.jpg" alt=""> </p>
+<p>只打印出 2 句日志，观察线程时也只看到 <code>main</code> 线程，没有看到 <code>MyThread</code> 和 <code>MyRunnable</code> 线程，印证了上面咱们说的：<strong>直接调用 <code>run()</code> 方法，没有创建线程</strong>。</p>
+<p>下面我们来看看有<br>调用 <code>start()</code> 的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class ThreadImpl &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        MyThread myThread = new MyThread();</span><br><span class="line">        myThread.setName(&quot;MyThread&quot;);</span><br><span class="line">        Thread myRunnable = new Thread(new MyRunnable());</span><br><span class="line">        myRunnable.setName(&quot;MyRunnable&quot;);</span><br><span class="line">        System.out.println(&quot;main Thread begin&quot;);</span><br><span class="line">        myThread.start();</span><br><span class="line">        myRunnable.start();</span><br><span class="line">        System.out.println(&quot;main Thread end&quot;);</span><br><span class="line">        try &#123;</span><br><span class="line">            Thread.sleep(1000000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main Thread begin</span><br><span class="line">main Thread end</span><br><span class="line">MyThread</span><br><span class="line">MyRunnable</span><br></pre></td></tr></table></figure>
+<p><img src="http://www.liebrother.com/upload/90963a7629a946fa8a262aa9e9d94b35_dxc_0005_02.jpg" alt=""> </p>
+<p>所有日志都打印出来了，并且通过 <strong>VisualVM</strong> 工具可以看到 <code>MyThread</code> 和 <code>MyRunnable</code> 线程。看到了这个结果，切记创建线程要调用 <code>start()</code> 方法。</p>
+<p>今天就先讲到这，继续关注后面的内容。</p>
+<p><code>推荐阅读</code></p>
+<p><a href="https://mp.weixin.qq.com/s/NSlEeXMK22-clfDv44h60w" target="_blank" rel="noopener">线程最最基础的知识</a></p>
+<p><a href="https://mp.weixin.qq.com/s/cIj_uzT6gZjROO44rNFHFQ" target="_blank" rel="noopener">老板叫你别阻塞了</a></p>
+<p><a href="https://mp.weixin.qq.com/s/Euc2NKvK_TsqvcT-DWpD5A" target="_blank" rel="noopener">吃个快餐都能学到串行、并行、并发</a></p>
+<p><a href="https://mp.weixin.qq.com/s/yWqFw_S7suYpqszuJFDsGg" target="_blank" rel="noopener">泡一杯茶，学一学同异步</a></p>
+<p><a href="https://mp.weixin.qq.com/s/HJIVxnzyDesYPGGyJsaFyQ" target="_blank" rel="noopener">进程知多少？</a></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/09/10/book_the_richest_man_in_babylon/" itemprop="url">
+                  读书 | 巴比伦最富有的人（内含思维导图）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-09-10T08:04:31+08:00" content="2019-09-10">
+              2019-09-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/09/10/book_the_richest_man_in_babylon/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/09/10//book_the_richest_man_in_babylon/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2019/09/10/book_the_richest_man_in_babylon/" class="leancloud_visitors" data-flag-title="读书 | 巴比伦最富有的人（内含思维导图）">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://www.liebrother.com/upload/4d7ab0a81b04457c91ab482e179cbaf3_book_0001_02.jpg" alt=""> </p>
+<p>《巴比伦最富有的人》这本书是在看《富爸爸与穷爸爸》这本书时，作者推荐的一本书，之前有个习惯就是看一本书，把书中推荐的书籍列成待读清单，也算是对广大书籍做一个筛选，遗憾的是之前记录下来后就没去看，近来重新捡起读书这项小事（<strong>很小的事却很难坚持</strong>）。</p>
+<p>最近可以坚持下来是因为做了公众号，接触了身边公众号的朋友，都非常优秀，也明白一个道理：<strong>要输出（写文章），就需要有很多输入（学习），可能输入 100，只能输出 20，要提高输出，先扩大输入</strong>。自己也下意识地扩大了输入范围，从看技术博客、技术书、公众号文章，扩展到看各种类型的书、看电影、思考周围发生的各种事情，甚至把吃饭当做一种体验，不再只喜欢吃熟悉的东西，而是尝试吃各种没吃过的食物，下没下过的馆子。扯远了，回到《巴比伦最富有的人》这本书。</p>
+<p>这本书第一章就给我一个很大的思想冲击，就是 <strong>2 个人物，他们很有想法，也很努力的干活，但是却不富有</strong>。一个叫班瑟，他一直不辞劳苦地制造巴比伦最好的车，所有的心思都用在了这件事上，他成功了，造出了巴比伦最好的车；一个叫库比，他想成为出色的乐师，所以一直努力地练习演奏，最终也做到了。他们有非常好的想法，或者说是梦想，也很努力地去做，也最终实现了梦想，但却得不到财富。原因在于这里面的出发点跟财富无关，<strong>做最好的车 != 获得财富，成为最出色的乐师 != 获得财富</strong>。如果想要有财富，那需要像做最好的车、当出色的乐师一样去寻找怎么做，寻找怎么获得财富。</p>
+<p>接下来的文章就是通过一个一个的小故事去讲述怎么获取财富。班瑟、库比和其他没有获得财富的人去请教了巴比伦最富有的人：阿卡德。下面给大家列举一下文中的一些要点：<strong>7 个获取财富的诀窍</strong> 和 <strong>5 个黄金法则</strong>。更多的故事情节，大家可以去看看全书，很推荐的一本书。</p>
+<p>阿卡德给穷人讲了 <strong>7 个获得财富的诀窍</strong>：</p>
 <ol>
-<li>定义了@Output() contentEvent</li>
-<li>添加了reply(comment: Comment) 事件在点击回复的时候触发的，触发的时候 contentEvent 将 comment 传到父模块</li>
-<li>添加 transferToParent(event) 是接受子组件传来的 event, 并且继续将 event 传到父组件</li>
+<li><p><strong>让你的钱袋鼓起来。</strong><br>先为自己存钱，比如把每个月工资的十分之一存起来。</p>
+</li>
+<li><p><strong>控制你的开支。</strong><br>如果你是月光族，那么第一项存十分之一的钱就会让你去考虑怎么控制开支，怎么才能把不必要的开支项目去掉；如果你不是月光族，那么第一项存十分之一的钱是不是很容易达到，如果很容易，那能不能存更多的钱，反正就是学会节支，先让自己有存款。</p>
+</li>
+<li><p><strong>让你的金子增值。</strong><br>经过一段时间的存钱，你应该积累了一些钱，这时你会去考虑怎么让它能带来更多的钱，比如会去衡量是放在家里好、还是放在银行好、还是投理财产品好？等等。</p>
+</li>
+<li><p><strong>避免失去你的财富。</strong><br>想让钱生钱的想法是好的，但是却有很多陷阱，这时就要学会避免失去这些钱。最好的方法是：<strong>请教那些投资获利有丰富经验的人</strong></p>
+</li>
+<li><p><strong>使你的房子成为一项有益的投资。</strong><br>积攒了一些钱之后，需要投资自己的房子，房子会带来很多好处，给自己的家庭带来安全感，满足自己更多的欲望。</p>
+</li>
+<li><p><strong>确保未来的收入。</strong><br>有了一些财富之后，要为以后的日子做准备，为老人和家人做好一些准备，比如给老人买一些健康保险等等。</p>
+</li>
+<li><p><strong>增强你自己的赚钱能力。</strong><br>继续增强赚钱的能力。这一点可能会戳中不少人的心，因为当你有了财富之后，可能会觉得这些钱这辈子够用了，要享受当前拥有的，然后渐渐失去了赚钱的动力，也就会丧失赚钱的能力。要增强赚钱的欲望，欲望必须具体而强烈；提高自己的能力，不断学习，增加自己的智慧。</p>
+</li>
 </ol>
-<p>在 comment.component.ts 中定义了 getReplyComment(event) 方法，该方法接收子组件传递来的评论信息，并将信息显示在页面上。大功告成。。。</p>
-<h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="https://1csh1.github.io/img/angular-comment-recursive-event/angular-comment-recursive-event.png" alt="angular-comment-recursive-event.png"></p>
-<h3 id="demo-代码"><a href="#demo-代码" class="headerlink" title="demo 代码"></a>demo 代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/e025e62e17461a6937e9b6d3e0865e1ae7c2e4d4" target="_blank" rel="noopener">James-Blog</a></p>
+<p>阿卡德给儿子的 <strong>5 个黄金法则</strong>：</p>
+<ul>
+<li><p>法则一：<strong>一个人只要坚持从他的收入中拿出至少十分之一用来为他的将来和他的家人创造财富，金子就会源源不断、越来越多地流入他的手中</strong>。</p>
+</li>
+<li><p>法则二：<strong>金子会为那些懂得如何使用它们的人忠实而勤恳地工作，像田地里的牲口一样为主人带来更多的财富</strong>。</p>
+</li>
+<li><p>法则三：<strong>那些在投资的时候谨慎行事、懂得向行家求教的人才能牢牢地保护好自己的金子</strong>。</p>
+</li>
+<li><p>法则四：<strong>那些对自己不了解的生意投资，或者不听从行家建议的人将失去他们的金子</strong>。</p>
+</li>
+<li><p>法则五：<strong>不现实地投资、听信骗子的花言巧语，以及轻信自己无知幻想的人都会在投资中失去自己的金子</strong>。</p>
+</li>
+</ul>
+<p>我把每章的重点知识都记录在思维导图，是故事型的书籍，所以只是记录了一些要点，喜欢的可以在<code>公众号后台回复『巴比伦最富有的人』获取到思维导图原件</code>。</p>
+<p><img src="http://www.liebrother.com/upload/00ccfbf812c3442180a8bc4b8521cbef_book_0001_01.jpg" alt="巴比伦最富有的人"> </p>
+<p>最后，希望每个朋友都能成为<strong>有钱银</strong>！</p>
+<p><code>推荐阅读</code></p>
+<p><a href="https://mp.weixin.qq.com/s/Euc2NKvK_TsqvcT-DWpD5A" target="_blank" rel="noopener">吃个快餐都能学到串行、并行、并发</a></p>
+<p><a href="https://mp.weixin.qq.com/s/yWqFw_S7suYpqszuJFDsGg" target="_blank" rel="noopener">泡一杯茶，学一学同异步</a></p>
+<p><a href="https://mp.weixin.qq.com/s/HJIVxnzyDesYPGGyJsaFyQ" target="_blank" rel="noopener">进程知多少？</a></p>
+<p><a href="https://mp.weixin.qq.com/s/WiPwb7AyVlxyr1_kYXt96w" target="_blank" rel="noopener">设计模式看了又忘，忘了又看？</a></p>
+<p><strong>后台回复『设计模式』可以获取《一故事一设计模式》电子书</strong></p>
+<p><code>觉得文章有用帮忙转发&amp;点赞，多谢朋友们！</code></p>
+<p><img src="http://www.liebrother.com/upload/c50a23a8826d45a7b66b3be24c89205e_.jpg" alt="LieBrother"></p>
 
           
         
@@ -387,8 +541,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/07/31/angular-comment-recursive-display/" itemprop="url">
-                  Angular 实现类似博客评论的递归显示
+                <a class="post-title-link" href="/2019/09/01/movie_the_bucket_list/" itemprop="url">
+                  『电影』遗愿清单
                 </a>
               
             
@@ -401,50 +555,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-07-31T22:30:00+08:00" content="2017-07-31">
-              2017-07-31
+            <time itemprop="dateCreated" datetime="2019-09-01T21:58:19+08:00" content="2019-09-01">
+              2019-09-01
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/" itemprop="url" rel="index">
-                    <span itemprop="name">Angular</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
-                    <span itemprop="name">James-Blog</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/07/31/angular-comment-recursive-display/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/31/angular-comment-recursive-display/" itemprop="commentsCount"></span>
+                <a href="/2019/09/01/movie_the_bucket_list/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/09/01//movie_the_bucket_list/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -454,7 +577,7 @@
 
           
           
-             <span id="/2017/07/31/angular-comment-recursive-display/" class="leancloud_visitors" data-flag-title="Angular 实现类似博客评论的递归显示">
+             <span id="/2019/09/01/movie_the_bucket_list/" class="leancloud_visitors" data-flag-title="『电影』遗愿清单">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -477,27 +600,31 @@
       
         
           
-            <blockquote>
-<p>摘要：本文讲述用 Angular4 来实现一般博客中经常看到的递归评论模块</p>
-</blockquote>
-<p>我们在一些技术博客中会经常看到很多递归评论，也即是我们可以回复博友的评论，且界面很美观，有梯度的显示格式，日前在空余时间写类似的 demo，所以记录下来，可以给需要的人一些借鉴的作用。<br>好了，废话少说，直奔主题。。。</p>
-<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>我们在写后台程序的时候，经常会遇到生成类似树的这种数据结构，我们直觉就是使用递归的方法来实现，起初我也是这么想的，就是写一个 Angular4 的递归方法，组成一个字符串，然后在界面显示，类似下面代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &quot;comment&quot;,</span><br><span class="line">  template: &apos;&#123;&#123; comments &#125;&#125;&apos;</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentComponent &#123;</span><br><span class="line"></span><br><span class="line">  public comments: string = &quot;&quot;;</span><br><span class="line"></span><br><span class="line">  generateComment(Comment comment) &#123;</span><br><span class="line">    this.comments = this.comments + &quot;&lt;div&gt;&quot; + comment.content + &quot;&lt;/div&gt;&quot;;</span><br><span class="line">    if (comment.pComment != null) &#123;</span><br><span class="line">      generateComment(comment.pComment);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>很天真的以为可以了，结果一试，标签不会被解析，才想起已经过了解析标签的过程了。。。</p>
-<p>后来想着，现在的前端框架都是以组件化自称， Angular4 也不例外，那么一个 Component 可以嵌入任何 Component，那肯定可以嵌入自己，也就有了类似递归的概念了，想到这立马试试。。。</p>
-<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>思路是这样子，我定义了数据的格式，是每个评论下面有一个子评论数组，而不是每个评论有一个父评论，数据格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&quot;comments&quot;: </span><br><span class="line">     [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;id&quot;: 1,</span><br><span class="line">          &quot;username&quot;: &quot;James1&quot;,</span><br><span class="line">          &quot;time&quot;: &quot;2017-07-09 21:02:21&quot;,</span><br><span class="line">          &quot;content&quot;: &quot;哈哈哈1&lt;h1&gt;哈哈哈&lt;/h1&gt;&quot;,</span><br><span class="line">          &quot;status&quot;: 1,</span><br><span class="line">          &quot;email&quot;: &quot;1xxxx@xx.com&quot;,</span><br><span class="line">          &quot;cComments&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">              &quot;id&quot;: 2,</span><br><span class="line">              &quot;username&quot;: &quot;James2&quot;,</span><br><span class="line">              &quot;time&quot;: &quot;2017-07-09 21:02:22&quot;,</span><br><span class="line">              &quot;content&quot;: &quot;哈哈哈2&quot;,</span><br><span class="line">              &quot;status&quot;: 1,</span><br><span class="line">              &quot;email&quot;: &quot;2xxxx@xx.com&quot;,</span><br><span class="line">              &quot;cComments&quot;: null</span><br><span class="line">            &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">     ]</span><br></pre></td></tr></table></figure>
-<p>CommentComponent 组件实现了评论模块，但是递归评论并不在这个组件实现，而是在子组件 CommentViewComponent 实现，因为 CommentComponent 还包括一个一个输入评论的文本框。 </p>
-<p>评论总模块 ComponentComponent 代码：</p>
-<p>comment.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment&apos;,</span><br><span class="line">  templateUrl: &apos;./comment.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentComponent implements OnInit &#123;</span><br><span class="line"></span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>comment.component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;container font-small&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line"></span><br><span class="line">      &lt;comment-view [comments]=&quot;comments&quot;&gt;&lt;/comment-view&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div class=&quot;well&quot; id=&quot;comment&quot;&gt;</span><br><span class="line">        &lt;h4&gt;&#123;&#123; &apos;comment.leaveComment&apos; | translate &#125;&#125;&lt;/h4&gt;</span><br><span class="line">        &lt;form role=&quot;form&quot;&gt;</span><br><span class="line">          &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">            &lt;input type=&quot;hidden&quot; [(ngModel)]=&quot;id&quot; name=&quot;id&quot;&gt;</span><br><span class="line">            &lt;textarea [(ngModel)]=&quot;content&quot; name=&quot;content&quot; class=&quot;form-control&quot; rows=&quot;5&quot;&gt;&lt;/textarea&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">          &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">        &lt;/form&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<p>comment.component.css<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.media &#123;</span><br><span class="line">  font-size: 14px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.media-object &#123;</span><br><span class="line">  padding-left: 10px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>子模块 ComponentViewComponent 代码：</p>
-<p>component-view.component.ts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;comment-view&apos;,</span><br><span class="line">  templateUrl: &apos;./comment-view.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./comment-view.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class CommentViewComponent implements OnInit &#123;</span><br><span class="line">  @Input()</span><br><span class="line">  public comments: Comment[];</span><br><span class="line"></span><br><span class="line">  constructor(private router: Router,</span><br><span class="line">              private activateRoute: ActivatedRoute ) &#123;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit(): void &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>component-view.component.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;div *ngFor=&quot;let comment of comments&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;media&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;pull-left&quot;&gt;</span><br><span class="line">      &lt;span class=&quot;media-object&quot;&gt;&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;media-body&quot;&gt;</span><br><span class="line">      &lt;h4 class=&quot;media-heading&quot;&gt;&#123;&#123; comment.username &#125;&#125;</span><br><span class="line">        &lt;small class=&quot;pull-right&quot;&gt;&#123;&#123; comment.time &#125;&#125;&amp;nbsp;|&amp;nbsp;&lt;a href=&quot;#&quot; &gt;&#123;&#123; &apos;comment.reply&apos; | translate &#125;&#125;&lt;/a&gt;&lt;/small&gt;</span><br><span class="line">      &lt;/h4&gt;</span><br><span class="line">       &#123;&#123; comment.content &#125;&#125;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;comment-view *ngIf=&quot;comment.cComments != null&quot; [comments]=&quot;comment.cComments&quot;&gt;&lt;/comment-view&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<p>comonent-view.component.css<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.media &#123;</span><br><span class="line">  font-size: 14px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.media-object &#123;</span><br><span class="line">  padding-left: 10px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>这时的展示结果如下图所示：</p>
-<p><img src="https://1csh1.github.io/img/angular-comment-recursive-display/angular-comment-recursive-display.png" alt="angular-comment-recursive-display.png"></p>
+            <p><img src="https://img.hacpai.com/bing/20180426.jpg?imageView2/1/w/960/h/520/interlace/1/q/100" alt=""> </p>
+<p><img src="http://www.liebrother.com/upload/aaedb235a9d845b0bae828d9f20bd596_p708613284.jpg" alt="遗愿清单"> </p>
+<h2 id="电影简述"><a href="#电影简述" class="headerlink" title="电影简述"></a>电影简述</h2><p>遗愿清单里讲的是 2 位得了癌症的老人在一间病房发生的是事情。一位是黑人，名叫卡特，他来自一个相处非常融洽的家庭，一位是白人，名叫爱德华，他是一个富商，结果几次婚，但都离婚了。</p>
+<p>他们先后得了癌症进入了同一间病房，富人肯定不愿意有他人和他共处一间病房，但是他没法改变，因为医院就是他开的，规定是他开创的，并且外面的人都很反对这种规定，他不能自己住一间来打自己的脸。所以他们就这样开始相处。</p>
+<p>一开始富人还很淡定，化疗前还吃了很多美食，经历了第一次化疗后，富人吐了一整夜，终于感受到这种煎熬了。接下来的日子就是爱德华化疗，卡特暗自关注他的一举一动，卡特化疗，爱德华暗自关注他的一举一动，互相关注对方化疗后的煎熬。在没有煎熬的日子里就一起打牌，几次化疗后，俩人检查报告出来了，结果是：卡特只剩下半年时间，爱德华剩下半年到一年的时间。得到检查报告后，显然他们都很沮丧，卡特拿了笔在写“遗愿清单”，这个是他大一的哲学老师给他们布置过的一个人生规划作业，把这辈子想做的事情列下来。当初他写了赚一百万美元，成为首位黑人总统这些事情，而现在他在面对死亡时想重新写这份清单，他写了如下清单：</p>
+<ol>
+<li>出于善意帮助陌生人</li>
+<li>笑到流眼泪</li>
+<li>开一次野马跑车<br>…</li>
+</ol>
+<p>爱德华了解到后，也写下了他的清单：</p>
+<ol>
+<li>亲吻世界上最漂亮的女生</li>
+<li>刺一个纹身</li>
+<li>跳一次伞<br>…</li>
+</ol>
+<p>在爱德华的怂恿下，他们开始了执行他们清单上的每一件事。</p>
+<p>首先就是去跳伞，接着开野马跑车，去金字塔（这期间，爱德华透露出他有个女儿的消息，而且他和女儿关系不好，互不来往），去泰姬陵，去喜马拉雅山（因为风暴，没去爬山）。在卡特的组织下，他将爱德华带到他女儿家，想让爱德华和女儿重归于好，不料却遭到爱德华的强烈抵触，最后不欢而散，卡特回到了自己的家庭，结束了这次遗愿清单之旅。</p>
+<p>回到家后，卡特和家人聚餐，聚完餐要睡觉时突然病发，又进入医院治疗，这时癌细胞已经扩散到全身，命在旦夕。而他还有 2 个清单未完成，就是：笑到流眼泪和出于善意帮助别人。</p>
+<p>作为生命最后时光相处的朋友，爱德华得知消息后立马赶到医院，卡特即将做手术，卡特递了一张猫屎咖啡介绍给爱德华（爱德华很喜欢喝咖啡），里面讲是猫吃了咖啡豆后排出来的咖啡豆制作成这种咖啡，这时俩人哈哈大笑，卡特向爱德华要了那张清单，划掉<strong>笑到流眼泪</strong>。卡特写了一封信给爱德华，放在卡特妻子那，是打算卡特去世后再给爱德华，卡特妻子没有按照丈夫吩咐的，直接拿给爱德华。信里面对上次不欢而散表示道歉，并让爱德华去找他生命中的快乐。爱德华由此自己去找了他女儿，冲破他们过去一段时间的沉静，重归于好，在和他孙女玩时，亲吻了他孙女，而后他划掉了<strong>亲吻世界上最漂亮的女生</strong>。</p>
+<p>爱德华在葬礼中发表悼词，感谢卡特拯救了他的生活（让他得以和女儿重归于好），这时他拿起清单，划掉卡特写的那行：<strong>出于善意帮助陌生人</strong>。</p>
+<p>结局：两位主角相继病逝，最终他们的骨灰被爱德华助手放在了珠穆朗玛峰，完成他们最后一个清单：<strong>爬珠穆朗玛峰</strong>。</p>
+<h2 id="感受"><a href="#感受" class="headerlink" title="感受"></a>感受</h2><p>还记得乔布斯曾经说过：<strong>他的每一天都当做生命中最后一天来过</strong>。罗胖也讲过：<strong>人这一生，最后留下的是墓碑上怎么描述你</strong>。</p>
+<p>在面对死亡时，我们每个人如何去总结这一生，我们会有哪些遗憾？有那么一个故事：一位 80 岁的老太太后悔在 60 岁的时候没学钢琴。<strong>种一棵树最好的时间是十年前，其次是现在！</strong> </p>
+<p>列下想做的事情，开始干起来！！！</p>
 
           
         
@@ -543,8 +670,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/07/03/angular-add-clean-blog-template/" itemprop="url">
-                  在 Angular 项目中添加 clean-blog 模板
+                <a class="post-title-link" href="/2019/08/29/movie_life_is_beautiful/" itemprop="url">
+                  『电影』美丽人生
                 </a>
               
             
@@ -557,50 +684,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-07-03T23:00:00+08:00" content="2017-07-03">
-              2017-07-03
+            <time itemprop="dateCreated" datetime="2019-08-29T08:52:45+08:00" content="2019-08-29">
+              2019-08-29
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/" itemprop="url" rel="index">
-                    <span itemprop="name">Angular</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
-                    <span itemprop="name">James-Blog</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/07/03/angular-add-clean-blog-template/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/03/angular-add-clean-blog-template/" itemprop="commentsCount"></span>
+                <a href="/2019/08/29/movie_life_is_beautiful/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/08/29//movie_life_is_beautiful/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -610,7 +706,7 @@
 
           
           
-             <span id="/2017/07/03/angular-add-clean-blog-template/" class="leancloud_visitors" data-flag-title="在 Angular 项目中添加 clean-blog 模板">
+             <span id="/2019/08/29/movie_life_is_beautiful/" class="leancloud_visitors" data-flag-title="『电影』美丽人生">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -633,17 +729,22 @@
       
         
           
-            <blockquote>
-<p>摘要：本文将介绍在 Angular4 项目中添加网上开源 Bootstrap 博客模板 <strong> clean-blog </strong></p>
-</blockquote>
-<h3 id="clean-blog-博客模板下载"><a href="#clean-blog-博客模板下载" class="headerlink" title="clean-blog 博客模板下载"></a>clean-blog 博客模板下载</h3><p><a href="https://startbootstrap.com/template-overviews/clean-blog/" target="_blank" rel="noopener">clean-blog</a><br>或者在下面链接下载<br><a href="https://1csh1.github.io/file/angular-add-clean-blog-template/startbootstrap-clean-blog-4-dev.zip">startbootstrap-clean-blog-4-dev.zip</a></p>
-<h3 id="解压并拷贝"><a href="#解压并拷贝" class="headerlink" title="解压并拷贝"></a>解压并拷贝</h3><p>解压下载的文件,将所有文件拷贝到 <strong> assets/clean-blog </strong> 目录下<br><img src="https://1csh1.github.io/img/angular-add-clean-blog-template/angular-add-clean-blog-template-1.png" alt="angular-add-clean-blog-template-1.png"></p>
-<h3 id="拷贝代码"><a href="#拷贝代码" class="headerlink" title="拷贝代码"></a>拷贝代码</h3><h4 id="将-clean-blog-的-index-html-内容拷贝到-app-component-html"><a href="#将-clean-blog-的-index-html-内容拷贝到-app-component-html" class="headerlink" title="将 clean-blog 的 index.html 内容拷贝到 app.component.html"></a>将 clean-blog 的 index.html 内容拷贝到 app.component.html</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--The whole content below can be removed with the new code.--&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Navigation --&gt;</span><br><span class="line">&lt;nav class=&quot;navbar fixed-top navbar-toggleable-md navbar-light&quot; id=&quot;mainNav&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">    &lt;button class=&quot;navbar-toggler navbar-toggler-right&quot; type=&quot;button&quot; data-toggle=&quot;collapse&quot;</span><br><span class="line">            data-target=&quot;#navbarResponsive&quot; aria-controls=&quot;navbarResponsive&quot; aria-expanded=&quot;false&quot;</span><br><span class="line">            aria-label=&quot;Toggle navigation&quot;&gt;</span><br><span class="line">      Menu &lt;i class=&quot;fa fa-bars&quot;&gt;&lt;/i&gt;</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">    &lt;a class=&quot;navbar-brand&quot; href=&quot;index.html&quot;&gt;Start Bootstrap&lt;/a&gt;</span><br><span class="line">    &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navbarResponsive&quot;&gt;</span><br><span class="line">      &lt;ul class=&quot;navbar-nav ml-auto&quot;&gt;</span><br><span class="line">        &lt;li class=&quot;nav-item&quot;&gt;</span><br><span class="line">          &lt;a class=&quot;nav-link&quot; href=&quot;index.html&quot;&gt;Home&lt;/a&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;nav-item&quot;&gt;</span><br><span class="line">          &lt;a class=&quot;nav-link&quot; href=&quot;../assets/clean-blog/about.html&quot;&gt;About&lt;/a&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;nav-item&quot;&gt;</span><br><span class="line">          &lt;a class=&quot;nav-link&quot; href=&quot;../assets/clean-blog/post.html&quot;&gt;Sample Post&lt;/a&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">        &lt;li class=&quot;nav-item&quot;&gt;</span><br><span class="line">          &lt;a class=&quot;nav-link&quot; href=&quot;../assets/clean-blog/contact.html&quot;&gt;Contact&lt;/a&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">      &lt;/ul&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/nav&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Page Header --&gt;</span><br><span class="line">&lt;header class=&quot;masthead&quot; style=&quot;background-image: url(&apos;../assets/clean-blog/img/home-bg.jpg&apos;)&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">      &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line">        &lt;div class=&quot;site-heading&quot;&gt;</span><br><span class="line">          &lt;h1&gt;Clean Blog&lt;/h1&gt;</span><br><span class="line">          &lt;span class=&quot;subheading&quot;&gt;A Blog Theme by Start Bootstrap&lt;/span&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/header&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Main Content --&gt;</span><br><span class="line">&lt;div class=&quot;container&quot;&gt;</span><br><span class="line">  &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line">      &lt;div class=&quot;post-preview&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;../assets/clean-blog/post.html&quot;&gt;</span><br><span class="line">          &lt;h2 class=&quot;post-title&quot;&gt;</span><br><span class="line">            Man must explore, and this is exploration at its greatest</span><br><span class="line">          &lt;/h2&gt;</span><br><span class="line">          &lt;h3 class=&quot;post-subtitle&quot;&gt;</span><br><span class="line">            Problems look mighty small from 150 miles up</span><br><span class="line">          &lt;/h3&gt;</span><br><span class="line">        &lt;/a&gt;</span><br><span class="line">        &lt;p class=&quot;post-meta&quot;&gt;Posted by &lt;a href=&quot;#&quot;&gt;Start Bootstrap&lt;/a&gt; on September 24, 2017&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;div class=&quot;post-preview&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;../assets/clean-blog/post.html&quot;&gt;</span><br><span class="line">          &lt;h2 class=&quot;post-title&quot;&gt;</span><br><span class="line">            I believe every human has a finite number of heartbeats. I don&apos;t intend to waste any of mine.</span><br><span class="line">          &lt;/h2&gt;</span><br><span class="line">        &lt;/a&gt;</span><br><span class="line">        &lt;p class=&quot;post-meta&quot;&gt;Posted by &lt;a href=&quot;#&quot;&gt;Start Bootstrap&lt;/a&gt; on September 18, 2017&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;div class=&quot;post-preview&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;../assets/clean-blog/post.html&quot;&gt;</span><br><span class="line">          &lt;h2 class=&quot;post-title&quot;&gt;</span><br><span class="line">            Science has not yet mastered prophecy</span><br><span class="line">          &lt;/h2&gt;</span><br><span class="line">          &lt;h3 class=&quot;post-subtitle&quot;&gt;</span><br><span class="line">            We predict too much for the next year and yet far too little for the next ten.</span><br><span class="line">          &lt;/h3&gt;</span><br><span class="line">        &lt;/a&gt;</span><br><span class="line">        &lt;p class=&quot;post-meta&quot;&gt;Posted by &lt;a href=&quot;#&quot;&gt;Start Bootstrap&lt;/a&gt; on August 24, 2017&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;div class=&quot;post-preview&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;../assets/clean-blog/post.html&quot;&gt;</span><br><span class="line">          &lt;h2 class=&quot;post-title&quot;&gt;</span><br><span class="line">            Failure is not an option</span><br><span class="line">          &lt;/h2&gt;</span><br><span class="line">          &lt;h3 class=&quot;post-subtitle&quot;&gt;</span><br><span class="line">            Many say exploration is part of our destiny, but it’s actually our duty to future generations.</span><br><span class="line">          &lt;/h3&gt;</span><br><span class="line">        &lt;/a&gt;</span><br><span class="line">        &lt;p class=&quot;post-meta&quot;&gt;Posted by &lt;a href=&quot;#&quot;&gt;Start Bootstrap&lt;/a&gt; on July 8, 2017&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;hr&gt;</span><br><span class="line">      &lt;!-- Pager --&gt;</span><br><span class="line">      &lt;div class=&quot;clearfix&quot;&gt;</span><br><span class="line">        &lt;a class=&quot;btn btn-secondary float-right&quot; href=&quot;#&quot;&gt;Older Posts &amp;rarr;&lt;/a&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;hr&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- Footer --&gt;</span><br><span class="line">&lt;footer&gt;</span><br><span class="line">  &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;row&quot;&gt;</span><br><span class="line">      &lt;div class=&quot;col-lg-8 offset-lg-2 col-md-10 offset-md-1&quot;&gt;</span><br><span class="line">        &lt;ul class=&quot;list-inline text-center&quot;&gt;</span><br><span class="line">          &lt;li class=&quot;list-inline-item&quot;&gt;</span><br><span class="line">            &lt;a href=&quot;#&quot;&gt;</span><br><span class="line">              &lt;span class=&quot;fa-stack fa-lg&quot;&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-circle fa-stack-2x&quot;&gt;&lt;/i&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-twitter fa-stack-1x fa-inverse&quot;&gt;&lt;/i&gt;</span><br><span class="line">              &lt;/span&gt;</span><br><span class="line">            &lt;/a&gt;</span><br><span class="line">          &lt;/li&gt;</span><br><span class="line">          &lt;li class=&quot;list-inline-item&quot;&gt;</span><br><span class="line">            &lt;a href=&quot;#&quot;&gt;</span><br><span class="line">              &lt;span class=&quot;fa-stack fa-lg&quot;&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-circle fa-stack-2x&quot;&gt;&lt;/i&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-facebook fa-stack-1x fa-inverse&quot;&gt;&lt;/i&gt;</span><br><span class="line">              &lt;/span&gt;</span><br><span class="line">            &lt;/a&gt;</span><br><span class="line">          &lt;/li&gt;</span><br><span class="line">          &lt;li class=&quot;list-inline-item&quot;&gt;</span><br><span class="line">            &lt;a href=&quot;#&quot;&gt;</span><br><span class="line">              &lt;span class=&quot;fa-stack fa-lg&quot;&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-circle fa-stack-2x&quot;&gt;&lt;/i&gt;</span><br><span class="line">                  &lt;i class=&quot;fa fa-github fa-stack-1x fa-inverse&quot;&gt;&lt;/i&gt;</span><br><span class="line">              &lt;/span&gt;</span><br><span class="line">            &lt;/a&gt;</span><br><span class="line">          &lt;/li&gt;</span><br><span class="line">        &lt;/ul&gt;</span><br><span class="line">        &lt;p class=&quot;copyright text-muted&quot;&gt;Copyright &amp;copy; Your Website 2017&lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/footer&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="styles-css-添加代码"><a href="#styles-css-添加代码" class="headerlink" title=" styles.css  添加代码"></a><strong> styles.css </strong> 添加代码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/* clean-blog */</span><br><span class="line">@import &quot;assets/clean-blog/vendor/font-awesome/css/font-awesome.min.css&quot;;</span><br><span class="line">@import &quot;https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic&quot;;</span><br><span class="line">@import &quot;https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&quot;;</span><br><span class="line">@import &quot;assets/clean-blog/css/clean-blog.min.css&quot;;</span><br><span class="line"></span><br><span class="line">.navbar-toggler &#123;</span><br><span class="line">  z-index: 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@media (max-width: 576px) &#123;</span><br><span class="line">  nav &gt; .container &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="index-html-添加-JS-引用"><a href="#index-html-添加-JS-引用" class="headerlink" title=" index.html  添加 JS 引用"></a><strong> index.html </strong> 添加 JS 引用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- clean-blog --&gt;</span><br><span class="line">&lt;script src=&quot;assets/clean-blog/js/clean-blog.min.js&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p><img src="https://1csh1.github.io/img/angular-add-clean-blog-template/angular-add-clean-blog-template-2.png" alt="angular-add-clean-blog-template-2.png"></p>
-<p><strong> 提示: </strong>  文中的配置只是把 clean-blog 给搭建在 Angular4 的项目中，但是并没有大改其中的东西，比如链接等，现在还是一个静态的网页，后期才会添加自己的代码上去</p>
-<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/4505a4fa26e2835b33914be1976b5aaac1254e20" target="_blank" rel="noopener">angular + clean-blog</a></p>
+            <p><img src="http://www.liebrother.com/upload/1922f85245c24718b9869fd81470a301_p510861873.jpg" alt="美丽人生"> </p>
+<h2 id="电影简述"><a href="#电影简述" class="headerlink" title="电影简述"></a>电影简述</h2><p>电影是以一个滑稽搞笑的方式来演绎一份美好的爱情故事，主人翁以他乐观的性格捕获了美女的芳心以及给他儿子带来了游戏般的童年。</p>
+<p>圭多是一个犹太青年，邂逅了青年教师多拉，每次见到多拉，都会大声打招呼：“早安！公主！”经历了很多啼笑皆非的场合，和多拉产生了感情，多拉放弃一段即将到来的婚姻，和圭多在一起。</p>
+<p>并不富裕的圭多为啥能赢得多拉的芳心呢？我猜是他的生活态度，以及对待多拉的方式，他把多拉当做公主一般，每个女孩子心里都有个公主梦，正是圭多能给予的。</p>
+<p>他们一起生活，虽然不富裕，但很是温馨。圭多的这份积极乐观的生活态度不仅仅影响他的妻子多拉，还深深影响他的儿子。</p>
+<p>在法西斯政权下，圭多和他儿子作为犹太人被强行送往犹太人集中营，他的妻子多拉虽没有犹太人血统，但因为丈夫和儿子在集中营，她也主动请示要去集中营。</p>
+<p>在去集中营的途中，恰巧当天是儿子的生日，儿子不明白发生了什么事，问了他爸爸要去哪里。圭多便跟他说：你不是一直说要去旅行，为了这次旅行，他筹备了几个月，还不能揭晓去哪个地方。并以他夸张的笑容去掩盖现实的一切。</p>
+<p>在集中营中，几十个人住在一起，环境非常恶劣。圭多给儿子讲了大家来这里是来玩游戏，得到积分，谁先得到 1000 分就可以得到一等奖：坦克一辆。为了圆他的谎，官员在找一个会德语来做翻译的犹太人时，圭多并不会德语，但他还是上去了，并把官员所说的全部翻译成获取积分的游戏规则，儿子这才当真。</p>
+<p>每天圭多都很辛苦，搬铁块去烧等等各种苦力活，有一次他儿子跑出来，见到圭多，很惊讶爸爸在做的事情，圭多跟他解释道：他在做坦克。。。。。。。每天圭多都和他儿子计算已经获得的分数，让他儿子即使在集中营这么恶劣的环境还能过得很开心，每天都有期盼的事。还有一次路过广播间，见到没人，他跑进去喊了那句熟悉的“早安！公主！”，他老婆多拉那会在干杂活，听到了这句，非常的兴奋。圭多就是这样，不放弃任何机会去让他的家庭充满欢乐。还有一次，去做服侍时，他让儿子混入法西斯的小孩群里，去吃了一份好的晚餐。</p>
+<p>在法西斯政权即将倾覆，纳粹的集中营要接受接受最后的清理，他带儿子跑出去，为了救他妻子，他让儿子躲进一个铁箱子，并告知：不用出来，直到一个人都没有。自己跑去找他妻子，最终没找到还被纳粹抓到，被枪杀了。</p>
+<p>第二天，纳粹清理后走了。小孩子走出来，这时美军刚好赶到，一辆坦克缓缓地开过来，小孩很是惊讶，<strong>真的如他父亲说的，他赢得了坦克</strong>。一位帅气的美军把他抱到坦克上，载着他开出集中营，在路途中，小孩看到他妈妈，跑到他妈妈怀里大声喊：妈妈，我们赢了。</p>
+<p>全剧终。。。</p>
+<h2 id="感受"><a href="#感受" class="headerlink" title="感受"></a>感受</h2><p>在黑暗的社会里，不管外面的世界多糟，主人翁像漏斗一样，把一切不好的过滤掉，并尽他所能的把一切转为美好的事情，展现给他的妻子和儿子，为他们营造温馨快乐的环境，使他们对未来充满希望。</p>
+<p>反观咱们现实生活中，要做到这一点不容易，很多人则相反的，在外头当沙包，回到家则把家庭当沙包，把外头受的气发泄在自己的家庭里。我想我有点像这类人，把工作中的低落情绪带到家庭里，最近在反省，也在做改变，尝试去把好的一方面展现给家庭，这部电影也给了我很大的启示，生活是自己给的，你想活成怎么样由你自己决定。<strong>想明白工作是为了什么？不就是为了更好的生活，既然想要更好的生活，那就更好地去生活。</strong></p>
+<p>很推荐大家看看这部电影！大家有什么让生活更好的技巧也可以留言分享。</p>
+<p><strong>你的人生应该如此美丽</strong></p>
 
           
         
@@ -689,8 +790,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/07/02/angular-add-ng-bootstrap/" itemprop="url">
-                  在 Angular 项目中添加插件 ng-bootstrap
+                <a class="post-title-link" href="/2019/08/27/movie_rudy/" itemprop="url">
+                  『电影』追梦赤子心
                 </a>
               
             
@@ -703,62 +804,19 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-07-02T20:00:00+08:00" content="2017-07-02">
-              2017-07-02
+            <time itemprop="dateCreated" datetime="2019-08-27T21:46:44+08:00" content="2019-08-27">
+              2019-08-27
             </time>
           </span>
 
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/" itemprop="url" rel="index">
-                    <span itemprop="name">Angular</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
-                    <span itemprop="name">James-Blog</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/James-Blog/ng-bootstrap/" itemprop="url" rel="index">
-                    <span itemprop="name">ng-bootstrap</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
           
 
           
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/07/02/angular-add-ng-bootstrap/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/02/angular-add-ng-bootstrap/" itemprop="commentsCount"></span>
+                <a href="/2019/08/27/movie_rudy/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/08/27//movie_rudy/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -768,7 +826,7 @@
 
           
           
-             <span id="/2017/07/02/angular-add-ng-bootstrap/" class="leancloud_visitors" data-flag-title="在 Angular 项目中添加插件 ng-bootstrap">
+             <span id="/2019/08/27/movie_rudy/" class="leancloud_visitors" data-flag-title="『电影』追梦赤子心">
                &nbsp; | &nbsp;
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -791,183 +849,54 @@
       
         
           
-            <blockquote>
-<p>摘要：本文将介绍在 Angular4 项目中配置 ng-bootstrap</p>
-</blockquote>
-<h3 id="npm-安装-ng-bootstrap-模块"><a href="#npm-安装-ng-bootstrap-模块" class="headerlink" title="npm 安装 ng-bootstrap 模块"></a>npm 安装 ng-bootstrap 模块</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @ng-bootstrap/ng-bootstrap --save</span><br></pre></td></tr></table></figure>
-<h3 id="在-Angular-项目配置"><a href="#在-Angular-项目配置" class="headerlink" title="在 Angular 项目配置"></a>在 Angular 项目配置</h3><h4 id="app-module-ts"><a href="#app-module-ts" class="headerlink" title="app.module.ts"></a>app.module.ts</h4><p>添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import &#123; NgbModule &#125; from &quot;@ng-bootstrap/ng-bootstrap&quot;;</span><br><span class="line"></span><br><span class="line">  imports: [</span><br><span class="line">    /**</span><br><span class="line">     * ngx-bootstrap</span><br><span class="line">     */</span><br><span class="line">    NgbModule.forRoot()</span><br><span class="line">  ],</span><br></pre></td></tr></table></figure></p>
-<h4 id="添加-bootstrap-min-css-样式"><a href="#添加-bootstrap-min-css-样式" class="headerlink" title="添加 bootstrap.min.css 样式"></a>添加 bootstrap.min.css 样式</h4><p>在 <strong> assets </strong> 文件夹下 <strong> bootstrap/bootstrap.min.css </strong>， 并在 <strong> style.css </strong> 文件中添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@import &quot;assets/bootstrap/bootstrap.min.css&quot;;</span><br></pre></td></tr></table></figure>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="app-component-html"><a href="#app-component-html" class="headerlink" title="app.component.html"></a>app.component.html</h4><p>添加代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">  &lt;span&gt; test the ng-bootstrap&lt;/span&gt;</span><br><span class="line">  &lt;div [(ngModel)]=&quot;model&quot; ngbRadioGroup name=&quot;radioBasic&quot;&gt;</span><br><span class="line">    &lt;label class=&quot;btn btn-primary&quot;&gt;</span><br><span class="line">      &lt;input type=&quot;radio&quot; [value]=&quot;1&quot;&gt; Left (pre-checked)</span><br><span class="line">    &lt;/label&gt;</span><br><span class="line">    &lt;label class=&quot;btn btn-primary&quot;&gt;</span><br><span class="line">      &lt;input type=&quot;radio&quot; value=&quot;middle&quot;&gt; Middle</span><br><span class="line">    &lt;/label&gt;</span><br><span class="line">    &lt;label class=&quot;btn btn-primary&quot;&gt;</span><br><span class="line">      &lt;input type=&quot;radio&quot; [value]=&quot;false&quot;&gt; Right</span><br><span class="line">    &lt;/label&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;hr&gt;</span><br><span class="line">  &lt;pre&gt;&#123;&#123;model&#125;&#125;&lt;/pre&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<h3 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h3><p><img src="https://1csh1.github.io/img/angular-add-ng-bootstrap/angular-ng-bootstrap-result.png" alt="angular-ng-bootstrap-result"></p>
-<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/6c2c1503b4102c28b14f8b9e7fb447f8d52e1548" target="_blank" rel="noopener">angular + ng-bootstrap</a></p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://github.com/ng-bootstrap/ng-bootstrap" target="_blank" rel="noopener">NG Bootstrap - Angular directives specific to Bootstrap 4</a><br><a href="https://ng-bootstrap.github.io/#/home" target="_blank" rel="noopener">Bootstrap 4 components, powered by Angular</a><br><a href="https://github.com/ngx-translate/core" target="_blank" rel="noopener">ngx-translate core</a></p>
+            <p><img src="http://www.liebrother.com/upload/cac8efc499d145ccbe046d3a4cd03e00_p452578349.jpg" alt="追梦赤子心"> </p>
+<div align="center"><br><iframe height="498" width="510" src="http://player.youku.com/embed/XMzc3NzY5MTY5Mg==" frameborder="0" 'allowfullscreen'=""></iframe><br></div>
 
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/07/01/angular-add-ngx-translate/" itemprop="url">
-                  在 Angular 项目中添加 i18n 插件 ngx-translate
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-07-01T18:00:00+08:00" content="2017-07-01">
-              2017-07-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/" itemprop="url" rel="index">
-                    <span itemprop="name">Angular</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/James-Blog/" itemprop="url" rel="index">
-                    <span itemprop="name">James-Blog</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Angular/James-Blog/ngx-translate/" itemprop="url" rel="index">
-                    <span itemprop="name">ngx-translate</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/07/01/angular-add-ngx-translate/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/01/angular-add-ngx-translate/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-             <span id="/2017/07/01/angular-add-ngx-translate/" class="leancloud_visitors" data-flag-title="在 Angular 项目中添加 i18n 插件 ngx-translate">
-               &nbsp; | &nbsp;
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               <span class="post-meta-item-text">阅读次数 </span>
-               <span class="leancloud-visitors-count"></span>
-              </span>
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>摘要：本文将介绍在 Angular4 项目中配置 ngx-translate i18n 国际化组件</p>
-</blockquote>
-<h3 id="npm-安装-ngx-translate-模块"><a href="#npm-安装-ngx-translate-模块" class="headerlink" title="npm 安装 ngx-translate 模块"></a>npm 安装 ngx-translate 模块</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install @ngx-translate/core --save</span><br><span class="line">npm install @ngx-translate/http-loader --save</span><br></pre></td></tr></table></figure>
-<h3 id="在-Angular-项目配置"><a href="#在-Angular-项目配置" class="headerlink" title="在 Angular 项目配置"></a>在 Angular 项目配置</h3><h4 id="app-module-ts"><a href="#app-module-ts" class="headerlink" title="app.module.ts"></a>app.module.ts</h4><p>添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import &#123; TranslateLoader, TranslateModule&#125; from &apos;@ngx-translate/core&apos;;</span><br><span class="line">import &#123; TranslateHttpLoader &#125; from &apos;@ngx-translate/http-loader&apos;;</span><br><span class="line"></span><br><span class="line">  imports: [</span><br><span class="line">    TranslateModule.forRoot(&#123;</span><br><span class="line">      loader: &#123;</span><br><span class="line">        provide: TranslateLoader,</span><br><span class="line">        useFactory: (createTranslateHttpLoader),</span><br><span class="line">        deps: [Http]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure></p>
-<p>结果如下： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">import &#123; BrowserModule &#125; from &apos;@angular/platform-browser&apos;;</span><br><span class="line">import &#123; NgModule &#125; from &apos;@angular/core&apos;;</span><br><span class="line">import &#123; HttpModule, Http &#125; from &apos;@angular/http&apos;;</span><br><span class="line">import &#123; TranslateLoader, TranslateModule&#125; from &apos;@ngx-translate/core&apos;;</span><br><span class="line">import &#123; TranslateHttpLoader &#125; from &apos;@ngx-translate/http-loader&apos;;</span><br><span class="line"></span><br><span class="line">import &#123; AppComponent &#125; from &apos;./app.component&apos;;</span><br><span class="line"></span><br><span class="line">export function createTranslateHttpLoader(http: Http) &#123;</span><br><span class="line">  return new TranslateHttpLoader(http, &apos;./assets/i18n/&apos;, &apos;.json&apos;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@NgModule(&#123;</span><br><span class="line">  declarations: [</span><br><span class="line">    AppComponent</span><br><span class="line">  ],</span><br><span class="line">  imports: [</span><br><span class="line">    BrowserModule,</span><br><span class="line">    HttpModule,</span><br><span class="line">    TranslateModule.forRoot(&#123;</span><br><span class="line">      loader: &#123;</span><br><span class="line">        provide: TranslateLoader,</span><br><span class="line">        useFactory: (createTranslateHttpLoader),</span><br><span class="line">        deps: [Http]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  ],</span><br><span class="line">  providers: [],</span><br><span class="line">  bootstrap: [AppComponent]</span><br><span class="line">&#125;)</span><br><span class="line">export class AppModule &#123; &#125;</span><br></pre></td></tr></table></figure>
-<h4 id="app-component-ts"><a href="#app-component-ts" class="headerlink" title="app.component.ts"></a>app.component.ts</h4><p>添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import &#123; TranslateService &#125; from &quot;@ngx-translate/core&quot;;</span><br><span class="line"></span><br><span class="line">  constructor(public translateService: TranslateService) &#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  ngOnInit() &#123;</span><br><span class="line">    // --- set i18n begin ---</span><br><span class="line">    this.translateService.addLangs([&quot;zh&quot;, &quot;en&quot;]);</span><br><span class="line">    this.translateService.setDefaultLang(&quot;zh&quot;);</span><br><span class="line">    const browserLang = this.translateService.getBrowserLang();</span><br><span class="line">    this.translateService.use(browserLang.match(/zh|en/) ? browserLang : &apos;zh&apos;);</span><br><span class="line">    // --- set i18n end ---</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Component &#125; from &apos;@angular/core&apos;;</span><br><span class="line">import &#123; TranslateService &#125; from &quot;@ngx-translate/core&quot;;</span><br><span class="line"></span><br><span class="line">@Component(&#123;</span><br><span class="line">  selector: &apos;app-root&apos;,</span><br><span class="line">  templateUrl: &apos;./app.component.html&apos;,</span><br><span class="line">  styleUrls: [&apos;./app.component.css&apos;]</span><br><span class="line">&#125;)</span><br><span class="line">export class AppComponent &#123;</span><br><span class="line">  title = &apos;app&apos;;</span><br><span class="line"></span><br><span class="line">  constructor(public translateService: TranslateService) &#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ngOnInit() &#123;</span><br><span class="line">    // --- set i18n begin ---</span><br><span class="line">    this.translateService.addLangs([&quot;zh&quot;, &quot;en&quot;]);</span><br><span class="line">    this.translateService.setDefaultLang(&quot;zh&quot;);</span><br><span class="line">    const browserLang = this.translateService.getBrowserLang();</span><br><span class="line">    this.translateService.use(browserLang.match(/zh|en/) ? browserLang : &apos;zh&apos;);</span><br><span class="line">    // --- set i18n end ---</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="添加多语言文件"><a href="#添加多语言文件" class="headerlink" title="添加多语言文件"></a>添加多语言文件</h4><p>在 <strong> src/app/assets/ </strong> 下创建 <strong> i18n </strong> 文件夹，并在文件夹内创建 <strong> en.json </strong> 和 <strong> zh.json </strong> 文件<br><img src="https://1csh1.github.io/img/angular-add-ngx-translate/angular-i18n-folder.png" alt="angular-i18n-folder"></p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="app-component-html"><a href="#app-component-html" class="headerlink" title="app.component.html"></a>app.component.html</h4><p>添加代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">  &lt;span&gt; test the i18n module: ngx-translate&lt;/span&gt;</span><br><span class="line">  &lt;h1&gt;&#123;&#123; &apos;hello&apos; | translate &#125;&#125;&lt;/h1&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<h4 id="在-en-json-和-zh-json-文件中添加配置"><a href="#在-en-json-和-zh-json-文件中添加配置" class="headerlink" title="在 en.json 和 zh.json 文件中添加配置"></a>在 en.json 和 zh.json 文件中添加配置</h4><p><strong> en.json </strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;hello&quot;: &quot;the word is hello&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong> zh.json </strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;hello&quot;: &quot;你好&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h3><p>在中文下<br><img src="https://1csh1.github.io/img/angular-add-ngx-translate/angular-i18n-result-zh.png" alt="angular-i18n-result-zh"></p>
-<p>在英文下<br><img src="https://1csh1.github.io/img/angular-add-ngx-translate/angular-i18n-result-en.png" alt="angular-i18n-result-en"></p>
-<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p><a href="https://github.com/1CSH1/james-blog-ui/tree/7d2a64c3bc97d33e1b696019536f7627bcc3f3c4" target="_blank" rel="noopener">angular + ngx-translate</a></p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://github.com/ngx-translate/core" target="_blank" rel="noopener">ngx-translate core</a></p>
+<p>第一听到这首歌时的心理“这 TM 唱的是什么？”</p>
+<p><img src="http://www.liebrother.com/upload/413d7c6b772640a2a1a3999a910ab233_31Z129150318.jpg" alt="问号脸"> </p>
+<p>直到有一天去朋友家听到这首歌『真香』。</p>
+<p><img src="http://www.liebrother.com/upload/4757478d35ba41f0ac87fdc86a2ff9f8_33456db59952d1468fd6e44c38df71bf1400fa26.jpg" alt="真香"> </p>
+<p>有人说年少时听歌听的是曲，长大后听歌听的是词。我想：<strong>可能词能描绘出情景，更容易去反应情感</strong>。</p>
+<h2 id="电影简述"><a href="#电影简述" class="headerlink" title="电影简述"></a>电影简述</h2><h3 id="公开梦想"><a href="#公开梦想" class="headerlink" title="公开梦想"></a>公开梦想</h3><p>这部电影是从真实的故事改编过来的。主人翁 Rudy 全家人都是圣母大学橄榄球队的球迷，Rudy 从小是家里个头最小的，小小的身躯拥有大大的梦想，在一次看球赛的过程中他向全家人透露了自己的梦想：<strong>长大要为圣母大学橄榄球踢球</strong>。父亲摸摸了他的头，全家人不以为然，唯有他的好友 Peter 一直记着他的这个梦。</p>
+<h3 id="坚持持有梦想"><a href="#坚持持有梦想" class="headerlink" title="坚持持有梦想"></a>坚持持有梦想</h3><p>高中毕业后，成绩不佳的 Rudy 和他的兄弟一样，待在钢铁厂里打工，在他 22 岁的时候，他的好友 Peter 送了他一件圣母大学橄榄球队服，并说了一句能激起 Rudy 情绪的话：<strong>你 TM 天生就是穿这件衣服的料！</strong>Rudy 非常感激 Peter 一直把他的话记在心里并当真了，Peter 回了一句他爸经常说的话：<strong>梦想使生活得以忍受。</strong></p>
+<p><img src="http://www.liebrother.com/upload/ce197765cea14061977607a33524889f_1294753_0.jpg" alt=""> </p>
+<h3 id="决定追梦，放弃所拥有的"><a href="#决定追梦，放弃所拥有的" class="headerlink" title="决定追梦，放弃所拥有的"></a>决定追梦，放弃所拥有的</h3><p>过了不久，不幸的事情发生，Peter 在一次生产事故中身亡，这世界上或者说是 Rudy 的世界里，也就再也没有人相信他能在圣母大学踢球。可能是这种孤独感或者是觉得意外随时都可能发生，人随时可能离开，让他决定去追逐那个梦想。</p>
+<p>追梦是有代价的，他选择离开他的女朋友；追梦也是有准备的，他一直在攒钱，攒了 1000 多美元。接着就是需要一个导火线，这里就是好友的突然离世，触动了他。</p>
+<h3 id="走出第一步"><a href="#走出第一步" class="headerlink" title="走出第一步"></a>走出第一步</h3><p>Rudy 开始追随他的梦想，第一站是坐车到圣母大学，找了大学的神父，神父给他一个方向：先到圣十字学院读书，如果成绩好就可以转学到圣母大学，第一学年他只有一个学科是 A，其他都是 B，不足以去到圣母大学。为什么成绩只有一门 A 呢？因为他花了很多时间去参与关于橄榄球的活动，比如去圣母橄榄球场干杂活，去冒充圣母大学学生进入圣母橄榄球后勤给球员修头盔等等。</p>
+<h3 id="尽可能靠近梦想"><a href="#尽可能靠近梦想" class="headerlink" title="尽可能靠近梦想"></a>尽可能靠近梦想</h3><p>在收到 N 多张圣母大学申请不通过的信，几乎快要放弃的时候，圣母大学终于给了通过。进入圣母大学只是走进梦想的第一步，离梦想又近了一些。</p>
+<p>进入圣母大学后，第一件事就是参加橄榄球选拔赛，90 个人淘汰 30 人，选拔赛最终因为他的勤奋被助教看中（主教练则没看中他）。进入了预选名单后，他一如既往的勤奋，甚至被队友埋怨，教练一直拿他的勤奋去数落那些有天赋却不勤奋的队员，“如果你有 Rudy 十分之一的勤奋就好了”教练经常这样子说。在我们生活中，总有一些长辈会这样子教育小孩，也总有被教育的小孩埋怨被举例子的小孩。Rudy 没去理睬埋怨的队友，只是看着他的梦想，一步一步靠近。</p>
+<h3 id="放弃的边缘"><a href="#放弃的边缘" class="headerlink" title="放弃的边缘"></a>放弃的边缘</h3><p>Rudy 经历了好长一段时间的努力，还是进不了替补席，没能出现在赛场上。他情绪很低落，因为自己很努力，而且他的家人一直不相信他是圣母大学的橄榄球球员，毕竟他的家人只能通过电视看到圣母大学橄榄球球员，而他从来没出现在赛场上。Rudy 打算放弃了，他没去训练，跑去当初那个给他机会在圣母球场打杂的黑人朋友那，跟他述说这些事情，黑人朋友用自己的经历说服了 Rudy 重新回到训练场，黑人朋友当初也是橄榄球队员，一直没机会上场，自认为是因为皮肤不同被排斥，后面他就跟现在的 Rudy 一样，真的放弃了，现在十分后悔。Rudy 听到这么真实的劝导，整理了心情，换好衣服重新上训练场。</p>
+<p>在大学快毕业的时候，Rudy 还是没有机会上替补席，进入大众的视野。在一场重要的比赛前，队长带领其他队员到了主教练办公室，恳请教练给 Rudy 一次上场的机会，最后主教练只能妥协，给了 Rudy 进入替补席的机会。</p>
+<h3 id="梦想实现"><a href="#梦想实现" class="headerlink" title="梦想实现"></a>梦想实现</h3><p>Rudy 的梦想就在这一刻快实现了，Rudy 请来了他的家人（包括那位一直看低他的哥哥），好友们以及那位在圣母大学打理橄榄球场的黑人。队友们安排让 Rudy 带领他们从球员通道走出来，Rudy 从小就无数次的想象这个场景：从球员通道跑出来，接受所有观众的欢呼。尽管进了大众的视野，但是还是踢不上球，主教练不让他上场，即使是大比分领先也不给机会，这时有球员带头喊 Rudy 名字，一传十十传百，最后全场球迷都在高喊 Rudy，主教练不得已，在最后换上 Rudy，Rudy 也不负众望，打进了一球。哨声响起，全场结束，圣母大学以大比分赢下这场关键的球，而 Rudy 被所有队友围起来，他被抬着走向球员通道（Rudy 这也是至今为止唯一一个享有这待遇的球员）。</p>
+<p>全剧终。。。</p>
+<h2 id="触动了那根弦"><a href="#触动了那根弦" class="headerlink" title="触动了那根弦"></a>触动了那根弦</h2><p>从这部电影我看到了不少自己的影子，虽然我远没有他达到的高度，但是追梦的过程都是相通的。这过程往往需要经受身边的人的不信任、竞争者的排斥还有过程中的种种信心打击。</p>
+<p>我们可以看到 Rudy 的梦想是成为圣母大学橄榄球员，这个过程他经历了很多个阶段：</p>
+<ol>
+<li><p>进入圣十字学院读书（神父表示成绩好就可以进入圣母大学）</p>
+</li>
+<li><p>和一个学生成为好朋友（因为这个人能帮他拿好成绩）</p>
+</li>
+<li><p>主动请缨到圣母大学球场打杂</p>
+</li>
+<li><p>冒充圣母大学学生进入圣母大学橄榄球学生后勤修头盔</p>
+</li>
+<li><p>进入圣母大学</p>
+</li>
+<li><p>加入橄榄球新生选拔赛</p>
+</li>
+<li><p>进入最终 90 人名单</p>
+</li>
+<li><p>进入后部</p>
+</li>
+<li><p>进不了替补，接近放弃边缘</p>
+</li>
+<li><p>重整心气，坚持训练</p>
+</li>
+<li><p>梦想成真</p>
+</li>
+</ol>
+<p>还记得高中年级主任的那句话：<strong>什么是成功？成功是别人认为你干不成的事情，你干成了。</strong></p>
+<p>你干过哪些<strong>成功</strong>的事呢？欢迎留言分享一下。</p>
 
           
         
@@ -996,7 +925,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1037,7 +966,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-count">120</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1054,7 +983,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">62</span>
+                <span class="site-state-item-count">138</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
